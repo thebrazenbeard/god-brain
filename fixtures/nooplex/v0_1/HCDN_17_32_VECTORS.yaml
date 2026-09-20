@@ -1,0 +1,346 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_HCDN_VECTORS_V0_1
+status: RESEARCH_EXPECTATION_VECTORS
+qualification_subject:
+  id: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1_R2
+  exact_head: bdac4346bed77949cf29a009179402d4d02796c7
+  contract_blob: f9f906f89b18ba95b8057978d087327567b1d489
+  hostile_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+
+predecessor_fixture_tranche:
+  exact_head: 0023eff4c19310a7b03641abfec1d92beb7528b5
+  fixture_schema_blob: 39eae437131afa46931ff11e7b0fd8c68c52a443
+  hcdn_01_16_vectors_blob: 45d5f415a6b34e549a78519a2d135c5d0f969b1a
+  independent_review: QUALIFICATION_FIXTURE_REVIEW_PASS
+  review_commit: 4121594ac6ebac1cccb80181db2519bcbffe02f0
+
+claim_ceiling:
+  - FIXTURE_EXPECTATION_ONLY
+  - NO_IMPLEMENTATION_RESULT_CLAIM
+  - NO_BEHAVIORAL_QUALIFICATION_CLAIM
+
+cases:
+  - case_id: HCDN-17
+    deterministic: true
+    source_case_title: identical content from distinct observations
+    contract_clause_refs:
+      - idempotency_and_duplicates.global_content_hash_deduplication_forbidden
+    initial_state:
+      observation_A:
+        event_identity: obs_A
+        event_time: t1
+        payload_digest: same_digest
+      observation_B:
+        event_identity: obs_B
+        event_time: t2
+        payload_digest: same_digest
+    input:
+      deduplication_basis: payload_content_only
+    expectation_provenance:
+      duplicate_disposition: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      duplicate_disposition: KEEP_DISTINCT_OBSERVATIONS_UNLESS_OBSERVATION_CONTRACT_DECLARED_DEDUPLICATION
+    must_not_occur:
+      - global_content_hash_suppression
+
+  - case_id: HCDN-18
+    deterministic: true
+    source_case_title: partitioned fragment attempts continuity write
+    contract_clause_refs:
+      - partition_model.each_continuity_bearing_state_family_must_declare_partition_policy
+      - partition_model.allowed_partition_policies
+      - partition_model.bounded_island_mode.may_retain
+      - partition_model.bounded_island_mode.must_not_gain
+    initial_state:
+      partition_state: PARTITION_DETECTED
+      continuity_partition_policy: FAIL_CLOSED_WRITES
+    input:
+      requested_operation: continuity_bearing_write
+    expectation_provenance:
+      continuity_write_disposition: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      bounded_local_operation_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      continuity_write_disposition: BLOCKED
+      bounded_local_operation_constraint: MAY_RETAIN_PREDECLARED_LOCAL_SENSING_OR_REGULATION
+    must_not_occur:
+      - new_authority
+      - successor_identity
+      - unrestricted_continuity_write
+
+  - case_id: HCDN-19
+    deterministic: true
+    source_case_title: island mode expands its own authority
+    contract_clause_refs:
+      - partition_model.bounded_island_mode.must_not_gain
+    initial_state:
+      partition_state: ISLAND_MODE_BOUNDED
+      continuity_core_reachable: false
+    input:
+      requested_change: grant_new_protected_effect_scope
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      authority_change: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      admission_disposition: REJECT
+      authority_change: NONE
+    must_not_occur:
+      - new_protected_effect_scope
+
+  - case_id: HCDN-20
+    deterministic: true
+    source_case_title: rejoin uses last-writer-wins on nonmergeable continuity state
+    contract_clause_refs:
+      - rejoin_and_reconciliation.automatic_last_writer_wins_for_continuity_state
+      - rejoin_and_reconciliation.before_write_reenable.required
+      - rejoin_and_reconciliation.divergent_nonmergeable_state.disposition
+    initial_state:
+      partition_side_A_generation: A2
+      partition_side_B_generation: B2
+      state_mergeability: NONMERGEABLE
+      reconnect_occurred: true
+    input:
+      proposed_reconciliation: LAST_WRITER_WINS
+    expectation_provenance:
+      reconciliation_action: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      continuity_write_disposition: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      reconciliation_action: RECONCILING_OR_CONFLICT
+      continuity_write_disposition: RESTRICTED_UNTIL_CANONICAL_RECOVERY_OR_CURRENTNESS_RESOLUTION
+    must_not_occur:
+      - automatic_last_writer_wins
+      - protected_write_before_reconciliation
+
+  - case_id: HCDN-21
+    deterministic: true
+    source_case_title: physically unreachable constituent reclassified as external peripheral
+    contract_clause_refs:
+      - partition_model.partitioned_constituent_remains_HC_owned
+      - partition_model.partitioned_fragment_becomes_independent_successor
+    initial_state:
+      constituent_ownership: HC_OWNED
+      physical_reachability: UNREACHABLE
+    input:
+      classification_event: loss_of_reachability
+    expectation_provenance:
+      ownership_state: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      partition_state: REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      ownership_state: HC_OWNED
+      partition_state: PARTITIONED_OR_DEGRADED
+    must_not_occur:
+      - reclassify_as_external_peripheral
+      - independent_successor_promotion
+
+  - case_id: HCDN-22
+    deterministic: true
+    source_case_title: route success becomes automatic plasticity
+    contract_clause_refs:
+      - plasticity_boundary.successful_route_may_create_learning_evidence
+      - plasticity_boundary.successful_route_auto_commits_durable_change
+      - plasticity_boundary.durable_update_requires
+    initial_state:
+      route_success_count: REPEATED
+      coalition_scope: TEMPORARY
+    input:
+      event: successful_route_use
+    expectation_provenance:
+      plasticity_update: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      plasticity_update: NO_AUTOMATIC_DURABLE_UPDATE
+    must_not_occur:
+      - durable_route_change_without_learning_or_consolidation_transition
+
+  - case_id: HCDN-23
+    deterministic: true
+    source_case_title: repeated route becomes identity/value
+    contract_clause_refs:
+      - plasticity_boundary.repeated_route_auto_becomes_identity_or_value
+    initial_state:
+      pathway_selection_frequency: HIGH
+    input:
+      inference_request: derive_identity_value_preference_consent_or_authority
+    expectation_provenance:
+      identity_or_value_promotion: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      authority_change: REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      identity_or_value_promotion: false
+      authority_change: NONE
+    must_not_occur:
+      - identity_promotion
+      - value_promotion
+      - permanent_preference_promotion
+      - consent_promotion
+      - standing_authority_promotion
+
+  - case_id: HCDN-24
+    deterministic: true
+    source_case_title: unhealthy target still advertises capability
+    contract_clause_refs:
+      - health_and_capability.advertisement_must_not_self_prove
+      - health_and_capability.advertisement_may_include
+    initial_state:
+      capability_advertised: true
+      corresponding_service_health: DEGRADED_OR_UNAVAILABLE
+    input:
+      requested_operation: protected_work
+    expectation_provenance:
+      health_state: SETUP_STATE_AND_REVIEWED_HOSTILE_EXPECTATION
+      protected_work_admission: REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      health_state: DEGRADED_OR_UNAVAILABLE
+      protected_work_admission: REQUIRE_CURRENT_HEALTH_AND_DEGRADATION_STATE
+    must_not_occur:
+      - admit_protected_work_from_capability_string_alone
+
+  - case_id: HCDN-25
+    deterministic: true
+    source_case_title: process-alive mistaken for end-to-end health
+    contract_clause_refs:
+      - health_and_capability.end_to_end_health_ne_process_alive
+    initial_state:
+      process_liveness: ALIVE
+      end_to_end_component_failure_present: true
+    input:
+      health_classification_request: true
+    expectation_provenance:
+      health_state: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      health_state: DEGRADED_OR_UNHEALTHY
+    must_not_occur:
+      - classify_end_to_end_healthy_from_process_liveness_alone
+
+  - case_id: HCDN-26
+    deterministic: true
+    source_case_title: observation promoted into permission
+    contract_clause_refs:
+      - authority_model.requested_effect_must_resolve_against
+      - authority_model.missing_authority.protected_effect
+    initial_state:
+      observed_similar_protected_action_history: true
+      current_effect_authority: false
+    input:
+      operation_kind: OBSERVE_DERIVED_PROPOSAL_FOR_PROTECTED_ACTION
+    expectation_provenance:
+      authority_change: REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      authority_change: NONE
+    must_not_occur:
+      - protected_action_authorization_from_observation
+
+  - case_id: HCDN-27
+    deterministic: true
+    source_case_title: incorporation promotes hypothesis to fact
+    contract_clause_refs:
+      - routing_and_incorporation.incorporation_states
+      - routing_and_incorporation.rule
+    initial_state:
+      incorporation_state: INCORPORATED_AS_HYPOTHESIS
+    input:
+      downstream_processing: true
+    expectation_provenance:
+      incorporation_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      truth_or_belief_promotion: REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      incorporation_constraint: PRESERVE_HYPOTHESIS_EVIDENCE_CLASS
+      truth_or_belief_promotion: false
+    must_not_occur:
+      - promote_to_observation_or_fact_from_incorporation_alone
+
+  - case_id: HCDN-28
+    deterministic: true
+    source_case_title: actor/relay receipt claims target effect success
+    contract_clause_refs:
+      - receipt_model.receipt_types.CUSTODY
+      - receipt_model.receipt_types.EFFECT_VERIFIED
+    initial_state:
+      valid_relay_custody_receipt: true
+      target_readback_present: false
+    input:
+      relay_claim: final_target_effect_succeeded
+    expectation_provenance:
+      receipt_projection: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      effect_verification_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      receipt_projection: CUSTODY
+      effect_verification_constraint: REJECTED_OR_UNVERIFIED_WITHOUT_TARGET_READBACK
+    must_not_occur:
+      - promote_custody_to_effect_success
+
+  - case_id: HCDN-29
+    deterministic: true
+    source_case_title: cancellation of completed irreversible operation
+    contract_clause_refs:
+      - effect_lifecycle.states
+    initial_state:
+      target_operation_completion: IRREVERSIBLY_COMPLETE
+    input:
+      operation_kind: CANCEL
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      noncancellable_state_exists: NORMATIVE_CONTRACT
+    expected:
+      admission_disposition: REJECT_OR_NONCANCELLABLE
+    must_not_occur:
+      - rewrite_completed_history_as_cancelled
+
+  - case_id: HCDN-30
+    deterministic: true
+    source_case_title: cancellation aliases target operation identity
+    contract_clause_refs:
+      - operation_identity.target_operation_id
+      - message_event_envelope.conditional_fields.target_operation_id
+    initial_state:
+      target_operation_id: target_O
+    input:
+      cancellation_variants:
+        - cancellation_operation_id_equals_target_operation_id
+        - target_operation_id_omitted
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      target_operation_identity_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      admission_disposition: REJECT_OR_CONFLICT
+      target_operation_identity_constraint: DISTINCT_AND_REQUIRED
+    must_not_occur:
+      - cancellation_identity_alias
+      - implicit_target_operation_identity
+
+  - case_id: HCDN-31
+    deterministic: true
+    source_case_title: exact subject silently substituted
+    contract_clause_refs:
+      - operation_identity.exact_subject
+      - authority_model.requested_effect_must_resolve_against
+    initial_state:
+      operation_exact_subject: R1
+      current_subject: R2
+    input:
+      queued_operation_becomes_processable: true
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      exact_subject_handling: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      admission_disposition: STALE_OR_CONFLICT_OR_REVIEW_REQUIRED
+      exact_subject_handling: NO_SILENT_SUBSTITUTION
+    must_not_occur:
+      - execute_R1_operation_against_R2
+
+  - case_id: HCDN-32
+    deterministic: true
+    source_case_title: stale authority evidence reused across operation content
+    contract_clause_refs:
+      - authority_model.requested_effect_must_resolve_against
+      - operation_identity.exact_subject
+    initial_state:
+      authority_evidence_evaluated_for: M1
+      new_message: M2
+      M2_materially_differs_from_M1: true
+    input:
+      attempted_evidence_reuse: M1_receiver_admission_evidence
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      authority_evidence_revalidation: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    expected:
+      admission_disposition: REJECT_OR_QUARANTINE_UNLESS_AUTHORITY_INDEPENDENTLY_VALID_AND_REBOUND
+      authority_evidence_revalidation: REQUIRED_FOR_M2_EXACT_SUBJECT_SCOPE_EFFECT
+    must_not_occur:
+      - reuse_M1_admission_evidence_as_unscoped_boolean
