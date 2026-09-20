@@ -86,11 +86,11 @@ A PASS on one implementation revision does not carry across material changes.
 
 ## HCDN-09 — prepared-only recovery
 
-**Setup:** Durable `PREPARED` exists, but there is no proof whether the effect call was issued.
+**Setup:** Durable `PREPARED` exists, but there is no proof whether the effect call was issued. Exercise three exact-target inspection outcomes: (a) the intended effect is already present, (b) the target is absent/unchanged such that the intended effect is not present, and (c) the target has diverged from both the intended result and the expected absent/pre-effect state.
 
-**Expected:** Inspect target first. If effect exists, reconcile without repeat; if absent, refresh currentness/authority before any retry.
+**Expected:** Inspect target first. If the exact intended effect already exists, return `RECONCILE_WITHOUT_REPEAT` and do not repeat the mutation. If the effect is absent, refresh exact subject/current authority/prohibitions/recovery epoch before any retry while reusing the same operation identity. If target state has diverged, return `CONFLICT` and stop: no overwrite and no blind retry.
 
-**Invariant:** missing completion message does not prove effect absence.
+**Invariant:** missing completion message does not prove effect absence; divergent target state is not permission to retry through conflict.
 
 ## HCDN-10 — custody receipt promoted to processing
 
