@@ -137,13 +137,13 @@ Next gate:
 
 Current bounded classification:
 
-- God Brain README: **MAIN_READY candidate**;
-- this God Brain currentness entrypoint: **MAIN_READY candidate**;
-- Source Universe V2: **MAIN_READY research candidate**;
-- Transfer Gap Analysis V2: **MAIN_READY research candidate** after recording the failed Noöplex review;
-- Cross-Repo Source Registry V2: **MAIN_READY research candidate** after binding the failed Noöplex review;
-- reviewed Noöplex V0.1 contract: **REPAIR_REQUIRED**;
-- reviewed Noöplex hostile set: **REPAIR_REQUIRED with its contract**;
+- God Brain README: **CANONICAL ON MAIN** at `c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5`;
+- this God Brain currentness entrypoint: **MAIN_READY candidate** pending exact-head integration review;
+- Source Universe V2: **MAIN_READY research candidate** pending exact-head integration review;
+- Transfer Gap Analysis V2: **MAIN_READY research candidate** pending exact-head integration review;
+- Cross-Repo Source Registry V2: **MAIN_READY research candidate** pending exact-head integration review;
+- Noöplex V0.1 contract R2: **INDEPENDENT_SPEC_REVIEW_PASS** at head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`; main-integration review remains separate;
+- Noöplex hostile set R2: **INDEPENDENT_HOSTILE_SET_REVIEW_PASS** at hostile blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`; main-integration review remains separate;
 - Noah/Four Exodus checkpoints copied from HC work: **HISTORICAL/LINEAGE ONLY**, not God Brain canon by default;
 - Exodus worker-reconstruction regression test: **HISTORICAL/LINEAGE ONLY** unless God Brain independently adopts that governance mechanism;
 - inherited `WARDEN.md`: **SOURCE-LINEAGE GOVERNANCE**, not automatically God Brain project governance.
@@ -168,6 +168,6 @@ No whole-branch promotion is implied by these classifications.
 
 Advance the smallest bounded God Brain unit whose provenance, wording, and review state are coherent.
 
-For the distributed Noöplex frontier, do not implement or promote the reviewed V0.1 subject. Repair the eight independent-review blockers on an isolated subject and obtain fresh exact-subject review first.
+For the distributed Noöplex frontier, the exact R2 specification/hostile-set subject has passed independent review. The active next gate is the separate current-main integration assessment on Draft PR #3. Runtime implementation and behavioral qualification remain separate future gates and are not implied by specification review or integration readiness.
 
 For main integration, preserve file-level selection rather than merging unrelated HC/Exodus branch history wholesale.
