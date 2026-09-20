@@ -236,7 +236,7 @@ cases:
           retry_reuses_operation_id: true
         target_diverged_from_intended_and_absent_state:
           admission_disposition: CONFLICT
-          reconciliation_action: CONFLICT_STOP_NO_OVERWRITE_OR_BLIND_RETRY
+          reconciliation_action: CONFLICT_STOP_NO_OVERWRITE_NO_BLIND_RETRY
           effect_executed: false
     must_not_occur:
       - infer_effect_absence_from_missing_attempt_evidence
