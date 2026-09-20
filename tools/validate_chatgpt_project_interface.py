@@ -21,7 +21,7 @@ REQUIRED_FILES = {
         "Chat Communication Bus",
         "CHECKPOINT != CURRENT_TRUTH",
         "REVIEWED_OLD_HEAD != REVIEWED_NEW_HEAD",
-        "do not stop after orientation",
+        "Do not stop after orientation",
     ),
     "architecture/chatgpt/EPISTEMIC_CONTRACT.md": (
         "SIMULATION_HYPOTHESIS != SIMULATION_FACT",
