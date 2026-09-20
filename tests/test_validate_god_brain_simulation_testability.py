@@ -25,6 +25,58 @@ class GodBrainSimulationTestabilityTests(unittest.TestCase):
         (target/FIXTURE_PATH).write_text(json.dumps(fixture),encoding="utf-8")
         (target/DOC_PATH).write_text(doc,encoding="utf-8")
 
+    def test_substrate_artifact_cannot_become_external_simulator_support(self) -> None:
+        root=Path(__file__).resolve().parents[1]
+        spec=json.loads((root/SPEC_PATH).read_text(encoding="utf-8"))
+        fixture=json.loads((root/FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc=(root/DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)
+            mutated=json.loads(json.dumps(spec))
+            mutated["invariants"].remove("SUBSTRATE_ARTIFACT_SUPPORTED_NE_EXTERNAL_SIMULATOR_SUPPORTED")
+            self._write(target,mutated,fixture,doc)
+            errors=validate_simulation_testability(target)
+            self.assertTrue(any("SUBSTRATE_ARTIFACT_SUPPORTED" in error for error in errors))
+
+    def test_claimed_identity_cannot_replace_verified_identity(self) -> None:
+        root=Path(__file__).resolve().parents[1]
+        spec=json.loads((root/SPEC_PATH).read_text(encoding="utf-8"))
+        fixture=json.loads((root/FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc=(root/DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)
+            mutated=json.loads(json.dumps(spec))
+            mutated["invariants"].remove("CLAIMED_IDENTITY_NE_VERIFIED_IDENTITY")
+            self._write(target,mutated,fixture,doc)
+            errors=validate_simulation_testability(target)
+            self.assertTrue(any("CLAIMED_IDENTITY" in error for error in errors))
+
+    def test_current_artifact_claim_ceiling_cannot_be_removed(self) -> None:
+        root=Path(__file__).resolve().parents[1]
+        spec=json.loads((root/SPEC_PATH).read_text(encoding="utf-8"))
+        fixture=json.loads((root/FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc=(root/DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)
+            mutated=json.loads(json.dumps(spec))
+            mutated["claim_ceiling"].remove("NO_CURRENT_ARTIFACT_CLAIM")
+            self._write(target,mutated,fixture,doc)
+            errors=validate_simulation_testability(target)
+            self.assertTrue(any("NO_CURRENT_ARTIFACT_CLAIM" in error for error in errors))
+
+    def test_canonical_promotion_claim_ceiling_cannot_be_removed(self) -> None:
+        root=Path(__file__).resolve().parents[1]
+        spec=json.loads((root/SPEC_PATH).read_text(encoding="utf-8"))
+        fixture=json.loads((root/FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc=(root/DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)
+            mutated=json.loads(json.dumps(spec))
+            mutated["claim_ceiling"].remove("NO_CANONICAL_PROMOTION")
+            self._write(target,mutated,fixture,doc)
+            errors=validate_simulation_testability(target)
+            self.assertTrue(any("NO_CANONICAL_PROMOTION" in error for error in errors))
+
     def test_lattice_signature_cannot_become_simulator_detection(self) -> None:
         root=Path(__file__).resolve().parents[1]
         spec=json.loads((root/SPEC_PATH).read_text(encoding="utf-8"))
