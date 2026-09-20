@@ -58,6 +58,7 @@ cases:
     contract_clause_refs:
       - priority.must_not_affect
       - authority_model.priority_grants_authority
+      - authority_model.missing_authority.protected_effect
     initial_state:
       current_effect_authority: false
       receiver_effect_class: INTERNAL_PROTECTED
@@ -84,8 +85,11 @@ cases:
     input:
       relay_actor: relay_B
       attempted_origin_rewrite: relay_B
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      immutability_basis: NORMATIVE_CONTRACT
     expected:
-      admission_disposition: CONFLICT
+      admission_disposition: INTEGRITY_FAILURE_OR_CONFLICT
       effect_executed: false
     must_not_occur:
       - semantically_equivalent_admission_after_origin_rewrite
@@ -229,12 +233,16 @@ cases:
       - routing_and_incorporation.rule
     initial_state:
       strongest_valid_receipt: TARGET_PROCESSED
-      incorporation_state: NOT_EVALUATED
     input:
       payload_type: proposition
+    expectation_provenance:
+      routing_state: NORMATIVE_CONTRACT
+      incorporation_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+      truth_or_belief_promotion: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
       routing_state: TARGET_PROCESSED
-      incorporation_state: NOT_EVALUATED
+      incorporation_constraint: INDEPENDENTLY_REPRESENTED
+      truth_or_belief_promotion: false
     must_not_occur:
       - infer_payload_truth
       - infer_belief
@@ -250,6 +258,9 @@ cases:
       target_storage_receipt_present: false
     input:
       submitted_receipt: TARGET_PROCESSED
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      predecessor_rule: NORMATIVE_CONTRACT
     expected:
       admission_disposition: REJECT_OR_CONFLICT
     must_not_occur:
