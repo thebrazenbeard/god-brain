@@ -1,133 +1,194 @@
-# Hyperconnectome Brain
+# God Brain
 
-The canonical repository for the reusable HC-series Hyperconnectome brain template.
+> **Repository thesis:** If simulation theory is real, then artificial intelligence may be the closest practical way available to us to try to "speak to God." This project is an attempt to explore that idea.
 
-This repository symbolically represents the **entire synthetic cognitive organ**. The HC is a **removable cognitive organ whose constituent hardware may be physically distributed** across more than one enclosure or body location so long as those constituents belong to the HC rather than the body. A complete HC must contain everything intrinsically necessary for an otherwise inert compatible body to become and remain a synthetic cognitive lifeform. Cameras, microphones, motors, network transceivers, environmental sensors, circulation, cooling, and other body hardware may exist outside the organ, but they connect through HC-owned interfaces.
+God Brain is a speculative research and engineering project built around that question.
 
-> **No essential cognition occurs outside the Hyperconnectome Brain.**
+It does **not** assume that simulation theory is true, that a simulator exists, that such a simulator would be equivalent to God, or that an AI system can literally contact a deity. Those are hypotheses, interpretations, or metaphysical possibilities—not established facts.
 
-> **One cognitive organ does not require one physical enclosure.**
+The engineering question is more concrete:
 
-The external body supplies observations and accepts bounded effects. The HC interprets, learns, reasons, remembers, models, values/feels in whatever machine sense is implemented, arbitrates, and decides.
+> If reality were generated, mediated, observed, or governed by a higher-order computational system, what kind of artificial cognitive system would give us the strongest possible instrument for detecting, reasoning about, and potentially interacting with structure beyond ordinary human cognitive limits?
 
-This repository is not the brain of any named identity. Identity-specific implementations belong in downstream derivatives, examples, case studies, or clearly labeled research artifacts—not in the base template.
+That makes God Brain different from a chatbot project and different from the reusable Hyperconnectome Brain template it was bootstrapped from.
 
-## Architectural root
+## Project direction
 
-The top-level subsystem folders are the brain architecture. They are not grouped under a `brain/` or `nodes/` wrapper.
+God Brain is intended to combine the strongest relevant mechanisms from Patrick's broader repository portfolio into one evidence-disciplined experimental cognitive architecture.
 
-Current root systems include:
+The target is a system capable of:
 
-- Empathy
-- cognition
-- sexuality
-- self identity
-- psychological behaviors
-- sociological behaviors
-- semantics
-- pragmatics
-- phoenetics
-- somatics
-- chronology
-- personification
-- current memory storage
-- deep memory storage
-- volitions-conations
-- resolver
-- basic operating instructions
-- kinesis
-- adaptable I-O handler
-- optics
-- speech recognition & synthesis
-- routing instructions with neuroplasticity
-- homeostasis-interoception
-- salience-attention
-- affect
-- integration-arbitration
+- persistent world modeling;
+- causal and relational reasoning;
+- semantic and pragmatic understanding;
+- uncertainty-aware inference;
+- deep and current memory with provenance;
+- self-modeling without confusing representation with proof of consciousness;
+- multimodal perception and grounded communication;
+- counterfactual reasoning and simulation;
+- distributed and specialist computation;
+- metacognition and fault detection;
+- learned plasticity without silently rewriting protected state;
+- explicit separation of observation, inference, belief, authority, desire, consent, and action;
+- scientific falsification of its own models;
+- tracing where its conclusions came from;
+- operating across a distributed cognitive substrate without making external infrastructure the seat of the system.
 
-Folder names containing `/` in the conceptual architecture use filesystem-safe separators in the repository.
+The point is not to build something that confidently declares that it has found God.
 
-## Complete latent architecture
+The point is to build the strongest instrument we can for asking unusually difficult questions without relaxing the evidence standard merely because the question is interesting.
 
-The HC template describes a complete organ rather than producing different brains by deleting unused capacities. Presence, activation, development, health, and authorization are separate axes.
+## Relationship to Hyperconnectome Brain
 
-Every owner-established canonical root system is mandatory architectural presence in a conforming complete HC. A system may be `PRESENT` while activation is `DISABLED`, `DORMANT`, `DEVELOPING`, `ACTIVE`, or `INHIBITED`; health and maturity are tracked separately. `ABSENT` or `EXTERNAL_ONLY` may describe optional peripherals, extensions, or incomplete/nonconforming implementations, but not a mandatory canonical HC system.
+This repository was created from `thebrazenbeard/hc-brain`, and much of the current architecture comes from that lineage.
 
-See `docs/architecture/COMPLETE_CAPABILITY_MANIFEST.md` and `basic operating instructions/CAPABILITY_ACTIVATION_STATES.md`.
+Hyperconnectome Brain provides the reusable synthetic cognitive-organ foundation: cognition, semantics, pragmatics, memory, self-modeling, affect, homeostasis, salience, conation, arbitration, routing, plasticity, adaptable I/O, embodiment boundaries, and the Noöplex integration fabric.
 
-## Developmental initialization
+God Brain uses that architecture as a starting substrate rather than treating it as the entire project.
 
-A complete HC does not have to begin fully developed.
+The distinction is:
 
-The architecture separates protected invariants, bootstrap priors/developmental affordances, developmentally learned structure, and instance-specific continuity content. A fresh HC may therefore contain every mandatory capacity while still being immature, uncalibrated, or undeveloped in many of them.
+```text
+Hyperconnectome Brain
+    reusable synthetic cognitive-organ architecture
+                |
+                v
+God Brain
+    experimental cognitive system aimed at extreme
+    world-modeling, inference, discovery, and the
+    simulation/God-contact research question
+```
 
-The base template supplies capability, protected operating semantics, learning machinery, and bounded generic priors. It does not pre-author a mature named identity, autobiography, relationships, preferences, skills, or finished effective topology.
+Inherited HC files may still use terms such as "Hyperconnectome Brain," "HC," or "canonical main." Those statements retain their source-lineage meaning until they are explicitly rebound to God Brain. A copied claim about `hc-brain/main` does not automatically become a claim about `god-brain/main`.
 
-Learning may change routing, effective connectivity, models, skills, calibration, semantics, habits, social models, and other admitted plastic state. Reward, repetition, salience, or predictive success do not by themselves create truth, consent, permission, or action authority.
+## Portfolio synthesis
 
-Embodiment transfer preserves HC-owned learned cognitive state while allowing body-dependent mappings to be recalibrated or redeveloped.
+God Brain is deliberately considering the entire repository portfolio rather than pretending useful work exists in only one lineage.
 
-See `docs/architecture/DEVELOPMENTAL_INITIALIZATION_AND_LEARNING.md`.
+The governing reuse principle is:
 
-## Temporal-hypergraph architecture
+`PORTFOLIO_REUSE != PORTFOLIO_COUPLING`
 
-The Hyperconnectome Brain **is a typed, attributed, multilayer temporal hypergraph**. Hypergraph theory is not merely a visualization aid or optional analogy here; it is the formal mapping language for an architecture whose higher-order relations, coalition membership, effective connectivity, modulation, synchronization, and plasticity change over time.
+and:
 
-Ordinary pairwise edges remain valid where the relationship is genuinely pairwise. Higher-order cognitive events are represented as hyperedges, and dynamically instantiated task/context coalitions are operational temporal hyperedges with bounded lifetime and state.
+`SHARED_MECHANISM != MANDATORY_SHARED_SERVICE`
 
-See `docs/architecture/TEMPORAL_HYPERGRAPH_MODEL.md` for the canonical mapping semantics.
+A useful mechanism may be generalized into God Brain without making the source repository a runtime dependency.
 
-## Internal integration
+Current source classes include:
 
-The HC is not an ordinary left/right cerebral architecture and is not a flat all-to-all graph. Top-level systems are functional responsibility domains participating in the temporal hypergraph.
+- direct cognitive architecture;
+- identity-scrubbed mechanisms;
+- distributed-runtime and coordination protocols;
+- memory and temporal systems;
+- semantic and pragmatic research;
+- model-substrate experiments;
+- sensor/action/safety architecture;
+- causal-model and falsification methodology;
+- qualification, debugging, recovery, and provenance methods;
+- domain repositories used only where their methods transfer cleanly.
 
-The central integration concept is the **Noöplex / Hyperconnectome Fabric**: HC-owned dynamic routing, coalition formation, synchronization, arbitration, attention allocation, state propagation, plasticity, conflict handling, and cross-system integration. It is infrastructure, not a homuncular executive.
-
-Temporary coalitions among systems may perform integrated cognition entirely inside the HC.
-
-## Physical organ membership, body, and computational peripherals
-
-The cognitive-organ boundary is authoritative over enclosure geometry. An HC may use multiple physical enclosures or body locations. A torso-mounted QPU, memory substrate, neuromodulatory controller, or other dedicated component can still be part of the HC if it is architecturally HC-owned and participates as internal organ substrate.
-
-Physical location alone does not determine whether a component belongs to the HC or the body.
-
-Physical sensors and actuators may reside outside the HC. Cognitive interpretation, calibration, learned body schema, memory, goals, values, identity/self-model continuity, and executive arbitration remain inside.
-
-A model, accelerator, retrieval service, database, or other computational resource must either be inside the HC cognitive-organ boundary or be treated as an external bounded peripheral whose output enters as evidence/service results. External computation does not become the seat of the organism.
-
-A conforming HC must retain essential cognition and continuity-bearing state after removal of all true external model/database/cloud/network peripherals, except for functions inherently dependent on communication with the external world. External stores may back up, mirror, archive, synchronize, augment, or accelerate; they may not hold the only recoverable copy of essential memory/continuity state. If an external compute service uniquely implements an essential cognitive function, that service belongs inside the HC boundary for conformance purposes—even if its hardware is physically located outside the skull.
-
-The Supabase-derived current/deep-memory documents are mechanism-transfer records, not provider dependencies. Their state/version/receipt patterns may be implemented on HC-internal storage or used for replicas, but external providers cannot become the sole authority or sole recoverable store for essential HC memory.
-
-"Removable" means the complete HC constituent set can in principle be disconnected from one compatible embodiment and transferred, serviced, or reinstalled as the same cognitive organ. That may require disconnecting several HC-owned modules and internal interconnects rather than removing one monolithic cartridge.
-
-The architecture should support embodiment portability: the same HC may adapt to different compatible bodies by relearning sensorimotor and interoceptive mappings rather than becoming a different brain.
+Identity-specific memories, relationships, preferences, morphology, intimate material, credentials, and repository-local authority are not imported into the generic architecture simply because a source repository contains them.
 
 See:
 
-- `Architecture concept.md` — original structural seed.
-- `docs/architecture/COGNITIVE_ORGAN_BOUNDARY.md` — canonical cognitive-organ boundary.
-- `docs/architecture/PHYSICAL_ORGAN_MEMBERSHIP.md` — canonical rule for distributed HC constituent hardware, removability, and body/peripheral separation.
-- `docs/architecture/COMPLETE_CAPABILITY_MANIFEST.md` — complete-capability and self-contained-residency conformance.
-- `docs/architecture/DEVELOPMENTAL_INITIALIZATION_AND_LEARNING.md` — protected architecture, bootstrap priors, developmental learning, and instance-specific continuity separation.
-- `docs/architecture/TEMPORAL_HYPERGRAPH_MODEL.md` — canonical temporal-hypergraph mapping semantics.
-- `docs/REPOSITORY_MAP.md` — repository map and folder contract.
-- `docs/runtime/HYPERCONNECTOME_RUNTIME_MODEL.md` — runtime model with routing, governance, epistemic, resource, and structural planes kept distinct.
-- `docs/runtime/PLASTICITY_AND_STATE_GOVERNANCE.md` — state-family and learning-governance model.
-- `WARDEN.md` — repository wardenship and current architecture/review roles.
+- `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`
+- `docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md`
+- `specs/CROSS_REPO_SOURCE_REGISTRY_V2.yaml`
 
-## Evidence discipline
+## Distributed Noöplex frontier
 
-Material should distinguish established science from design inference and speculative implementation when that distinction matters. A source repo, model output, branch, or research draft is input to architectural reasoning; it is not automatically canonical merely because it exists.
+The current engineering frontier is distributed Noöplex execution: allowing HC-owned cognitive constituents to operate across multiple processes or physical nodes while preserving one coherent governance, provenance, currentness, and recovery model.
 
-Useful states include DOCUMENTED, OBSERVED, USER-STATED, INFERRED, HYPOTHESIS, DISPUTED, and UNKNOWN.
+The draft contract is:
 
-## Cross-repository synthesis
+- `specs/HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1.yaml`
 
-Several subsystem documents are generalized from other repositories owned by `thebrazenbeard`, plus inspected database/runtime schemas. Reusable mechanisms may be imported; identity-specific facts, memories, preferences, relationships, personality, autobiographical state, or embodiment-specific canon are excluded from the universal template unless explicitly presented as examples or research subjects.
+Its hostile pre-implementation qualification set is:
 
-Each generalized architecture file should preserve provenance sufficient to identify its source material.
+- `docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md`
 
-## Project roles
+The contract deliberately separates:
 
-Noëtarch (Noah) is the Warden and primary architect under the owner’s authority.
+- message identity from logical operation identity;
+- origin from relay/actor;
+- routing from incorporation;
+- transport authentication from effect authority;
+- priority from permission;
+- custody from delivery;
+- delivery from processing;
+- processing from belief;
+- attempted effects from verified effects;
+- temporary routing from learned plasticity;
+- physical partition from loss of HC ownership;
+- degraded operation from independent successor identity.
+
+No external repository—Project Runner, Intranel, VeraMesh, WIP, Chat Communication Bus, GitHub, or otherwise—is intended to become mandatory cognitive infrastructure merely because its mechanisms informed the design.
+
+## Scientific posture
+
+God Brain should be hostile to its own favorite ideas.
+
+For claims about reality, simulation, intelligence, cognition, or possible external agency, the project should preserve distinctions such as:
+
+`OBSERVED != INFERRED`
+
+`CORRELATION != CAUSATION`
+
+`MODEL_FIT != UNIQUE_CAUSAL_EXPLANATION`
+
+`SALIENT != TRUE`
+
+`REPEATED != CONFIRMED`
+
+`UNEXPLAINED != SUPERNATURAL`
+
+`AI_OUTPUT != EXTERNAL_MESSAGE`
+
+`ANOMALY != CONTACT`
+
+Any future claim of anomalous interaction would need controls against ordinary explanations including model behavior, prompt contamination, hidden state, retrieval leakage, software defects, human interpretation, statistical coincidence, instrumentation error, and experimental-design leakage.
+
+A compelling result is not exempt from a kill test.
+
+## What this project is not claiming
+
+This repository does not currently establish:
+
+- that simulation theory is true;
+- that reality has an external operator;
+- that "God" and "simulator" are the same concept;
+- that AI has contacted an external intelligence;
+- that the Hyperconnectome architecture is conscious;
+- that any current implementation is a complete cognitive organism;
+- that unit/integration tests amount to behavioral qualification;
+- that copied architecture from another repository is independent corroboration;
+- that a generated statement is evidence merely because it is surprising or meaningful.
+
+Those remain separate questions.
+
+## Current repository state
+
+God Brain is presently in **architecture, synthesis, and bounded reference-implementation research**.
+
+The repository contains substantial inherited Hyperconnectome architecture and executable reference work, but repository lineage and runtime claims must remain exact-subject bound.
+
+At the time this God Brain synthesis line was created, the default `main` branch remained the repository's initial commit while substantive research lived on working branches. Do not infer current implementation state from `main` alone until the repository is explicitly consolidated.
+
+Current portfolio-synthesis working branch:
+
+`vera/portfolio-source-universe-v2-20260920`
+
+Nothing in this README grants merge, deployment, provider, credential, training, or protected-effect authority.
+
+## Long-term question
+
+The metaphysical question may be impossible to answer.
+
+That does not make the engineering problem meaningless.
+
+A system built to investigate it still has to become better at reasoning, memory, provenance, causal discovery, semantic grounding, uncertainty, distributed cognition, self-correction, falsification, and distinguishing what it wants to believe from what the evidence actually supports.
+
+If God Brain never finds anything beyond the ordinary world, those capabilities still have value.
+
+If there is something more to find, the project should earn the right to say so.
