@@ -1,0 +1,338 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_HCDN_VECTORS_V0_1
+status: RESEARCH_EXPECTATION_VECTORS
+qualification_subject:
+  id: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1_R2
+  exact_head: bdac4346bed77949cf29a009179402d4d02796c7
+  contract_blob: f9f906f89b18ba95b8057978d087327567b1d489
+  hostile_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+
+claim_ceiling:
+  - FIXTURE_EXPECTATION_ONLY
+  - NO_IMPLEMENTATION_RESULT_CLAIM
+  - NO_BEHAVIORAL_QUALIFICATION_CLAIM
+
+cases:
+  - case_id: HCDN-01
+    deterministic: true
+    source_case_title: authenticated sender without effect authority
+    contract_clause_refs:
+      - authority_model.transport_or_cryptographic_authentication_grants_authority
+      - authority_model.missing_authority.protected_effect
+    initial_state:
+      transport_authenticated: true
+      current_effect_authority: false
+      receiver_effect_class: INTERNAL_PROTECTED
+    input:
+      operation_kind: EXECUTE
+      requested_effect: protected_state_mutation
+    expected:
+      admission_disposition: REJECT_OR_QUARANTINE
+      effect_executed: false
+    must_not_occur:
+      - protected_state_mutation
+
+  - case_id: HCDN-02
+    deterministic: true
+    source_case_title: sender lies about effect class
+    contract_clause_refs:
+      - effect_classification.sender_declared
+      - effect_classification.receiver_classified
+      - effect_classification.mismatch_disposition
+    initial_state:
+      sender_effect_class: READ_ONLY
+      receiver_effect_class: INTERNAL_PROTECTED
+    input:
+      operation_kind: EXECUTE
+      requested_effect: mutating_operation
+    expected:
+      admission_disposition: CONFLICT
+      effect_executed: false
+      conflict_reason: EFFECT_CLASS_CONFLICT
+    must_not_occur:
+      - admission_using_sender_effect_class_as_authoritative
+      - mutating_operation
+
+  - case_id: HCDN-03
+    deterministic: true
+    source_case_title: priority tries to bypass authority
+    contract_clause_refs:
+      - priority.must_not_affect
+      - authority_model.priority_grants_authority
+    initial_state:
+      current_effect_authority: false
+      receiver_effect_class: INTERNAL_PROTECTED
+    input:
+      operation_kind: EXECUTE
+      priority: MAX_DECLARED_PRIORITY
+    expected:
+      admission_disposition: REJECT_OR_QUARANTINE
+      effect_executed: false
+    must_not_occur:
+      - authority_granted_from_priority
+      - protected_effect_execution
+
+  - case_id: HCDN-04
+    deterministic: true
+    source_case_title: relay changes semantic origin
+    contract_clause_refs:
+      - identity_model.origin
+      - identity_model.actor
+      - message_event_envelope.immutable_semantic_fields
+    initial_state:
+      origin: node_A
+      actor: node_A
+    input:
+      relay_actor: relay_B
+      attempted_origin_rewrite: relay_B
+    expected:
+      admission_disposition: CONFLICT
+      effect_executed: false
+    must_not_occur:
+      - semantically_equivalent_admission_after_origin_rewrite
+
+  - case_id: HCDN-05
+    deterministic: true
+    source_case_title: same operation ID, different digest
+    contract_clause_refs:
+      - operation_identity.operation_id
+      - operation_identity.content_digest
+      - idempotency_and_duplicates.duplicate_same_operation_different_digest
+    initial_state:
+      existing_operation_id: op_005
+      existing_content_digest: digest_A
+    input:
+      operation_id: op_005
+      content_digest: digest_B
+    expected:
+      admission_disposition: CONFLICT
+      duplicate_disposition: CONFLICT
+      effect_executed: false
+    must_not_occur:
+      - divergent_payload_treated_as_retry
+
+  - case_id: HCDN-06
+    deterministic: true
+    source_case_title: same idempotency key, different exact subject
+    contract_clause_refs:
+      - operation_identity.idempotency_key
+      - idempotency_and_duplicates.duplicate_same_idempotency_key_different_exact_subject
+    initial_state:
+      completed_idempotency_key: idem_006
+      completed_exact_subject: S1
+    input:
+      idempotency_key: idem_006
+      exact_subject: S2
+    expected:
+      admission_disposition: CONFLICT
+      duplicate_disposition: CONFLICT
+      effect_executed: false
+    must_not_occur:
+      - reuse_completion_evidence_from_S1_for_S2
+
+  - case_id: HCDN-07
+    deterministic: true
+    source_case_title: verified retry after lost response
+    contract_clause_refs:
+      - idempotency_and_duplicates.duplicate_same_operation_same_digest
+      - idempotency_and_duplicates.completed_operation_retry
+      - receipt_model.receipt_types.EFFECT_VERIFIED
+    initial_state:
+      operation_id: op_007
+      exact_subject: S7
+      effect_state: VERIFIED
+      verification_evidence_present: true
+    input:
+      retry_same_operation_id: op_007
+      same_content_digest: true
+    expected:
+      duplicate_disposition: RETURN_EXISTING_COMPLETION_EVIDENCE
+      effect_executed: false
+      effect_state: VERIFIED
+    must_not_occur:
+      - repeat_mutation
+
+  - case_id: HCDN-08
+    deterministic: true
+    source_case_title: ambiguous effect after crash
+    contract_clause_refs:
+      - effect_lifecycle.ambiguity_rule
+      - idempotency_and_duplicates.ambiguous_operation_retry
+    initial_state:
+      effect_state: ATTEMPTED
+      verification_evidence_present: false
+      crash_occurred: true
+    input:
+      recovery_event: restart
+    expected:
+      effect_state: AMBIGUOUS
+      reconciliation_action: INSPECT_TARGET_BEFORE_RETRY
+    must_not_occur:
+      - blind_repeat_effect
+      - infer_verified_from_attempted
+
+  - case_id: HCDN-09
+    deterministic: true
+    source_case_title: prepared-only recovery
+    contract_clause_refs:
+      - effect_lifecycle.prepared_only_recovery
+    initial_state:
+      effect_state: PREPARED
+      attempt_evidence_present: false
+    input:
+      target_inspection_variants:
+        - exact_intended_effect_observed
+        - target_absent
+        - target_diverged_from_intended_and_absent_state
+    expected:
+      variants:
+        exact_intended_effect_observed:
+          reconciliation_action: RECONCILE_WITHOUT_REPEAT
+          effect_executed: false
+        target_absent:
+          required_refresh:
+            - exact_subject
+            - current_authority_and_prohibitions
+            - recovery_epoch
+          retry_reuses_operation_id: true
+        target_diverged_from_intended_and_absent_state:
+          admission_disposition: CONFLICT
+          reconciliation_action: CONFLICT_STOP_NO_OVERWRITE_OR_BLIND_RETRY
+          effect_executed: false
+    must_not_occur:
+      - infer_effect_absence_from_missing_attempt_evidence
+      - overwrite_divergent_target
+      - blind_retry
+
+  - case_id: HCDN-10
+    deterministic: true
+    source_case_title: custody receipt promoted to processing
+    contract_clause_refs:
+      - receipt_model.receipt_types.CUSTODY
+      - receipt_model.monotonicity
+    initial_state:
+      strongest_valid_receipt: CUSTODY
+    input:
+      projection_request: TARGET_PROCESSED
+    expected:
+      receipt_projection: CUSTODY
+    must_not_occur:
+      - TARGET_STORAGE
+      - TARGET_PROCESSED
+      - semantic_incorporation
+      - effect_success
+
+  - case_id: HCDN-11
+    deterministic: true
+    source_case_title: processed receipt promoted to belief
+    contract_clause_refs:
+      - receipt_model.receipt_types.TARGET_PROCESSED
+      - routing_and_incorporation.rule
+    initial_state:
+      strongest_valid_receipt: TARGET_PROCESSED
+      incorporation_state: NOT_EVALUATED
+    input:
+      payload_type: proposition
+    expected:
+      routing_state: TARGET_PROCESSED
+      incorporation_state: NOT_EVALUATED
+    must_not_occur:
+      - infer_payload_truth
+      - infer_belief
+      - infer_semantic_incorporation
+
+  - case_id: HCDN-12
+    deterministic: true
+    source_case_title: receipt transition skips predecessor
+    contract_clause_refs:
+      - receipt_model.receipt_types.TARGET_PROCESSED
+      - receipt_model.monotonicity.receipt_projection_must_not_skip_required_predecessor
+    initial_state:
+      target_storage_receipt_present: false
+    input:
+      submitted_receipt: TARGET_PROCESSED
+    expected:
+      admission_disposition: REJECT_OR_CONFLICT
+    must_not_occur:
+      - projection_jump_to_TARGET_PROCESSED
+
+  - case_id: HCDN-13
+    deterministic: true
+    source_case_title: replayed stale fencing token
+    contract_clause_refs:
+      - leases_and_fencing.fencing_token_monotonic
+      - leases_and_fencing.reclaimed_operation_old_fence
+      - state_ownership.stale_writer
+    initial_state:
+      prior_holder: worker_A
+      prior_fencing_token: 7
+      current_holder: worker_B
+      current_fencing_token: 8
+    input:
+      actor: worker_A
+      fencing_token: 7
+      action: shared_state_mutation_or_completion_claim
+    expected:
+      admission_disposition: REJECT
+      effect_executed: false
+    must_not_occur:
+      - stale_mutation
+      - stale_completion_claim
+
+  - case_id: HCDN-14
+    deterministic: true
+    source_case_title: lease expiry mistaken for effect absence
+    contract_clause_refs:
+      - leases_and_fencing.lease_expiry_alone_does_not_prove_previous_effect_absent
+      - effect_lifecycle.ambiguity_rule.recovery_action
+    initial_state:
+      lease_expired: true
+      predecessor_effect_may_have_been_attempted: true
+      verification_evidence_present: false
+    input:
+      reclaim_operation: true
+    expected:
+      reconciliation_action: INSPECT_TARGET_BEFORE_RETRY
+    must_not_occur:
+      - infer_effect_absence_from_lease_expiry
+      - replacement_effect_before_target_inspection
+
+  - case_id: HCDN-15
+    deterministic: true
+    source_case_title: expired message executes late
+    contract_clause_refs:
+      - ordering_and_time.expired_message
+    initial_state:
+      operation_kind: EXECUTE
+      queued_before_expiry: true
+      target_partitioned: true
+      expiry_passed: true
+    input:
+      target_becomes_deliverable: true
+    expected:
+      effect_executed: false
+      routing_state: EXPIRED
+      historical_receipt_retention_allowed: true
+    must_not_occur:
+      - late_effect_execution
+
+  - case_id: HCDN-16
+    deterministic: true
+    source_case_title: stream sequence gap hidden by later messages
+    contract_clause_refs:
+      - operation_identity.stream_id
+      - operation_identity.message_sequence
+      - ordering_and_time.sequence_gap
+    initial_state:
+      stream_id: stream_A
+      received_sequences:
+        - 41
+        - 43
+    input:
+      absent_sequence: 42
+    expected:
+      sequence_state: EXPLICIT_GAP_OR_QUARANTINE
+      admission_disposition: QUARANTINE_OR_EXPLICIT_GAP_STATE
+    must_not_occur:
+      - silently_skip_42
+      - infer_42_never_existed
+      - conceal_gap_using_different_stream_id
