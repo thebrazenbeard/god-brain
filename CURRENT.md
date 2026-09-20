@@ -106,11 +106,18 @@ Those are author/repair results, not independent qualification.
 
 `READY_FOR_FOUR_REREVIEW != INDEPENDENT_REVIEW_PASS`
 
-`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_FRESH_FOUR_REREVIEW`
+Four has now independently rereviewed the repaired exact subject and returned `CHANGES_REQUIRED`. Seven of the eight original blockers are materially closed; PREPARED-only recovery remains incomplete because the normative contract still lacks explicit outcomes for (a) intended effect already present -> reconcile without repeat and (b) divergent target -> conflict/stop, and the hostile set lacks a divergence falsification case.
+
+- Four rereview Bus blob: `6d45bb3336ccdc370b035e88cfe3329bbe14bbbb`;
+- rereviewed head: `0e152584479734c00f9ae6ef73c8b5507b7c1caa`;
+- disposition: `CHANGES_REQUIRED`;
+- implementation gate: `BLOCKED`.
+
+`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_REREVIEW_F1_REPAIR`
 
 Next gate:
 
-`FOUR_EXACT_SUBJECT_REREVIEW`
+`HEPHAESTUS_R2_REPAIR -> FOUR_EXACT_SUBJECT_REREVIEW`
 
 ## Main-readiness boundary
 
