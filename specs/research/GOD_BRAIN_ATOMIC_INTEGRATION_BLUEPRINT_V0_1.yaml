@@ -1,0 +1,117 @@
+{
+  "schema_version": "GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1",
+  "status": "RESEARCH_PLAN_MACHINE_CONTRACT",
+  "repository": "thebrazenbeard/god-brain",
+  "observed_main": "c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5",
+  "claim_ceiling": [
+    "NO_CANONICAL_PROMOTION",
+    "NO_MERGE_AUTHORITY",
+    "NO_PENDING_REVIEW_PASS_CLAIM",
+    "NO_PROJECT_SETTING_MUTATION"
+  ],
+  "inputs": {
+    "foundation": {
+      "pr": 6,
+      "head": "c8aff4109e53930a15eed54ab2f00b746ec8b09c",
+      "role": "REVIEWED_FOUNDATION_INPUT",
+      "requires_composite_rereview": true
+    },
+    "rebinding_proposal": {
+      "pr": 8,
+      "head": "930392a8edebebf089f98a5e65311bbfe2b12c6a",
+      "role": "REVIEWED_REBINDING_DESIGN_INPUT",
+      "requires_composite_rereview": true
+    },
+    "governance": {
+      "pr": 10,
+      "head": "8c2bbce1e00d0cf79dc716d958a82b61e2824ed4",
+      "role": "PENDING_REVIEW_INPUT",
+      "required_before_assembly": "REVIEW_CLEAN_SUCCESSOR"
+    },
+    "project_interface": {
+      "pr": 11,
+      "head": "d80dcec08137d5fd1a8b5cafa62fb60d956e7ce2",
+      "role": "PENDING_REVIEW_INPUT",
+      "required_before_assembly": "REVIEW_CLEAN_SUCCESSOR"
+    },
+    "project_file_architecture": {
+      "pr": 12,
+      "head": "215eb2ccd1ee8834377dcf98d862a54eaf4e5edb",
+      "role": "PENDING_REVIEW_INPUT",
+      "required_before_assembly": "REVIEW_CLEAN_SUCCESSOR"
+    },
+    "instruction_sync": {
+      "pr": 13,
+      "head": "25bbb837d22b5986582345a8d03094b231f93b62",
+      "role": "PENDING_REVIEW_INPUT",
+      "required_before_assembly": "REVIEW_CLEAN_SUCCESSOR"
+    }
+  },
+  "dependency_order": [
+    "FRESH_READ_MAIN_AND_REVIEW_RETURNS",
+    "RECONCILE_COMPONENT_FINDINGS",
+    "ASSEMBLE_FRESH_COMPOSITE_FROM_MAIN",
+    "REBIND_REPOSITORY_MAP",
+    "ADD_CANONICAL_GOVERNANCE_PATH",
+    "ADD_PROJECT_INTERFACE",
+    "ADD_MACHINE_CURRENT_POINTER_AFTER_TARGETS_COEXIST",
+    "RUN_CROSS_FILE_CONFORMANCE",
+    "RUN_REPOSITORY_TESTS",
+    "INDEPENDENT_EXACT_HEAD_COMPOSITE_REVIEW",
+    "CLASSIFY_MAIN_READINESS",
+    "PATRICK_EXPLICIT_PROMOTION_AUTHORITY"
+  ],
+  "candidate_paths": {
+    "root_interface": "CHATGPT_REPO_INTERFACE.yaml",
+    "human_currentness": "CURRENT.md",
+    "repository_map": "docs/REPOSITORY_MAP.md",
+    "god_brain_governance": "docs/governance/GOD_BRAIN_GOVERNANCE_V1.md",
+    "machine_current_pointer": "architecture/current/GOD_BRAIN_CURRENT.json",
+    "epistemic_contract": "architecture/chatgpt/EPISTEMIC_CONTRACT.md",
+    "routing_contract": "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml",
+    "recovery_contract": "architecture/chatgpt/RECOVERY_AND_CONTINUATION.md",
+    "project_instruction_source": "architecture/chatgpt/PROJECT_INSTRUCTIONS.md"
+  },
+  "preserve_unchanged_first_pass": [
+    "WARDEN.md"
+  ],
+  "component_review_rule": "COMPONENT_REVIEW_PASS_NE_COMPOSITE_REVIEW_PASS",
+  "head_movement_rule": "HEAD_MOVEMENT_MAKES_PRIOR_REVIEW_HISTORICAL_ONLY",
+  "composite_conformance": {
+    "required_identity": "GOD_BRAIN",
+    "repository_map_must_not_present_hc_as_whole_repository": true,
+    "warden_classification": "HC_PREDECESSOR_GOVERNANCE_SOURCE",
+    "all_root_interface_paths_must_exist": true,
+    "machine_current_pointer_forbidden_fields": [
+      "open_pull_requests",
+      "active_reviews",
+      "delegated_subjects",
+      "bus_work_queue",
+      "provider_health",
+      "runtime_health",
+      "current_chat",
+      "current_commit_sha"
+    ],
+    "required_epistemic_markers": [
+      "SIMULATION_HYPOTHESIS_NE_SIMULATION_FACT",
+      "ANOMALY_NE_CONTACT",
+      "AI_OUTPUT_NE_EXTERNAL_MESSAGE",
+      "UNEXPLAINED_NE_SUPERNATURAL",
+      "SELF_MODEL_NE_CONSCIOUSNESS",
+      "COMPLEX_BEHAVIOR_NE_PERSONHOOD"
+    ],
+    "protected_effect_authority": "PATRICK_EXPLICIT_EXACT_EFFECT"
+  },
+  "project_installation_rule": {
+    "candidate_pack_source_head": "d80dcec08137d5fd1a8b5cafa62fb60d956e7ce2",
+    "candidate_pack_is_canonical": false,
+    "canonical_source_movement_invalidates_current_verification": true,
+    "reinstall_or_reverify_after_canonical_source_change": true
+  },
+  "assembly_method": {
+    "branch_from_fresh_main": true,
+    "merge_source_branches_wholesale": false,
+    "file_level_provenance_required": true,
+    "composite_status_edits_require_fresh_review": true
+  }
+}
