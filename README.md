@@ -40,13 +40,11 @@ The point is to build the strongest instrument we can for asking unusually diffi
 
 ## Relationship to Hyperconnectome Brain
 
-This repository was created from `thebrazenbeard/hc-brain`, and much of the current architecture comes from that lineage.
+This repository was created from the `thebrazenbeard/hc-brain` template. The initial God Brain commit therefore contains a snapshot of the Hyperconnectome architecture but has its own Git history.
 
-Hyperconnectome Brain provides the reusable synthetic cognitive-organ foundation: cognition, semantics, pragmatics, memory, self-modeling, affect, homeostasis, salience, conation, arbitration, routing, plasticity, adaptable I/O, embodiment boundaries, and the Noöplex integration fabric.
+Hyperconnectome Brain supplies the reusable synthetic cognitive-organ foundation: cognition, semantics, pragmatics, memory, self-modeling, affect, homeostasis, salience, conation, arbitration, routing, plasticity, adaptable I/O, embodiment boundaries, and the Noöplex integration fabric.
 
-God Brain uses that architecture as a starting substrate rather than treating it as the entire project.
-
-The distinction is:
+God Brain uses that foundation as a starting substrate rather than treating it as the entire project.
 
 ```text
 Hyperconnectome Brain
@@ -59,69 +57,47 @@ God Brain
     simulation/God-contact research question
 ```
 
-Inherited HC files may still use terms such as "Hyperconnectome Brain," "HC," or "canonical main." Those statements retain their source-lineage meaning until they are explicitly rebound to God Brain. A copied claim about `hc-brain/main` does not automatically become a claim about `god-brain/main`.
+Inherited HC files may still say "Hyperconnectome Brain," "HC," or refer to historical HC canonical state. Those statements retain their source-lineage meaning until explicitly rebound to God Brain. A copied claim about `hc-brain/main` does not automatically become a claim about `god-brain/main`.
 
 ## Portfolio synthesis
 
-God Brain is deliberately considering the entire repository portfolio rather than pretending useful work exists in only one lineage.
+God Brain considers the full repository portfolio, but repository existence is not architectural admission.
 
-The governing reuse principle is:
+The governing reuse principles are:
 
 `PORTFOLIO_REUSE != PORTFOLIO_COUPLING`
 
-and:
-
 `SHARED_MECHANISM != MANDATORY_SHARED_SERVICE`
 
-A useful mechanism may be generalized into God Brain without making the source repository a runtime dependency.
+Useful mechanisms may be generalized into God Brain without turning their source repositories into runtime dependencies.
 
-Current source classes include:
-
-- direct cognitive architecture;
-- identity-scrubbed mechanisms;
-- distributed-runtime and coordination protocols;
-- memory and temporal systems;
-- semantic and pragmatic research;
-- model-substrate experiments;
-- sensor/action/safety architecture;
-- causal-model and falsification methodology;
-- qualification, debugging, recovery, and provenance methods;
-- domain repositories used only where their methods transfer cleanly.
-
-Identity-specific memories, relationships, preferences, morphology, intimate material, credentials, and repository-local authority are not imported into the generic architecture simply because a source repository contains them.
-
-See:
+Current portfolio intake and transfer analysis:
 
 - `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`
 - `docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md`
 - `specs/CROSS_REPO_SOURCE_REGISTRY_V2.yaml`
 
+Identity-specific memories, relationships, preferences, morphology, intimate material, credentials, and repository-local authority are not imported into the generic architecture merely because a source repository contains them.
+
 ## Distributed Noöplex frontier
 
-The current engineering frontier is distributed Noöplex execution: allowing HC-owned cognitive constituents to operate across multiple processes or physical nodes while preserving one coherent governance, provenance, currentness, and recovery model.
+A major current engineering gap is distributed Noöplex execution: allowing HC-owned cognitive constituents to operate across multiple processes or physical nodes while preserving coherent governance, provenance, currentness, recovery, and partition safety.
 
-The draft contract is:
+A V0.1 distributed-operation contract and hostile test set were drafted on a research branch and independently reviewed. The first independent review found blocking semantic defects, so that draft is **not main-ready and implementation remains blocked** until repaired and re-reviewed.
 
-- `specs/HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1.yaml`
+The intended contract must preserve distinctions including:
 
-Its hostile pre-implementation qualification set is:
-
-- `docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md`
-
-The contract deliberately separates:
-
-- message identity from logical operation identity;
-- origin from relay/actor;
-- routing from incorporation;
-- transport authentication from effect authority;
-- priority from permission;
-- custody from delivery;
-- delivery from processing;
-- processing from belief;
-- attempted effects from verified effects;
-- temporary routing from learned plasticity;
-- physical partition from loss of HC ownership;
-- degraded operation from independent successor identity.
+- message identity versus logical operation identity;
+- semantic origin versus relay/actor;
+- routing versus semantic incorporation;
+- transport authentication versus effect authority;
+- priority versus permission;
+- custody versus storage/processing;
+- processing versus belief;
+- attempted effects versus verified effects;
+- temporary routing versus learned plasticity;
+- physical partition versus loss of HC ownership;
+- degraded operation versus independent successor identity.
 
 No external repository—Project Runner, Intranel, VeraMesh, WIP, Chat Communication Bus, GitHub, or otherwise—is intended to become mandatory cognitive infrastructure merely because its mechanisms informed the design.
 
@@ -129,7 +105,7 @@ No external repository—Project Runner, Intranel, VeraMesh, WIP, Chat Communica
 
 God Brain should be hostile to its own favorite ideas.
 
-For claims about reality, simulation, intelligence, cognition, or possible external agency, the project should preserve distinctions such as:
+For claims about reality, simulation, intelligence, cognition, or possible external agency, preserve distinctions such as:
 
 `OBSERVED != INFERRED`
 
@@ -165,21 +141,13 @@ This repository does not currently establish:
 - that copied architecture from another repository is independent corroboration;
 - that a generated statement is evidence merely because it is surprising or meaningful.
 
-Those remain separate questions.
+## Repository state
 
-## Current repository state
+God Brain is presently in **architecture, portfolio synthesis, and bounded reference-implementation research**.
 
-God Brain is presently in **architecture, synthesis, and bounded reference-implementation research**.
+The repository's HC-derived baseline is useful source material, but God Brain-specific claims and additions must remain provenance-bound and independently reviewable. Main integration should move bounded, verified project artifacts rather than merging unrelated HC branch histories wholesale.
 
-The repository contains substantial inherited Hyperconnectome architecture and executable reference work, but repository lineage and runtime claims must remain exact-subject bound.
-
-At the time this God Brain synthesis line was created, the default `main` branch remained the repository's initial commit while substantive research lived on working branches. Do not infer current implementation state from `main` alone until the repository is explicitly consolidated.
-
-Current portfolio-synthesis working branch:
-
-`vera/portfolio-source-universe-v2-20260920`
-
-Nothing in this README grants merge, deployment, provider, credential, training, or protected-effect authority.
+Nothing in this README grants merge, deployment, provider, credential, training, installation, or other protected-effect authority.
 
 ## Long-term question
 
