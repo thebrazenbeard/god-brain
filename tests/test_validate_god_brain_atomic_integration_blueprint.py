@@ -68,6 +68,23 @@ class GodBrainAtomicIntegrationBlueprintTests(unittest.TestCase):
             errors = validate_atomic_integration_blueprint(target)
             self.assertTrue(any("candidate Project pack" in error for error in errors))
 
+    def test_current_must_remain_mandatory_rebinding_target(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
+            (target / DOC_PATH).parent.mkdir(parents=True)
+            mutated = json.loads(json.dumps(spec))
+            mutated["root_surface_audit"]["surfaces"]["CURRENT.md"]["disposition"] = "GOD_BRAIN_CORRECT"
+            (target / SPEC_PATH).write_text(json.dumps(mutated), encoding="utf-8")
+            (target / DOC_PATH).write_text(
+                (root / DOC_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            errors = validate_atomic_integration_blueprint(target)
+            self.assertTrue(any("CURRENT.md" in error and "disposition drifted" in error for error in errors))
+
 
 if __name__ == "__main__":
     unittest.main()
