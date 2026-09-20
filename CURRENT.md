@@ -1,89 +1,123 @@
-# HC Brain — Current State
+# God Brain — Current State
 
-This is the repository entrypoint for currentness, not a replacement for canonical architecture documents.
+This is the repository entrypoint for God Brain currentness. It is not a substitute for fresh Git state, exact-subject review evidence, or the underlying architecture documents.
 
-For architecture and source layout, read `docs/REPOSITORY_MAP.md`.
+## Project identity
 
-## Canonical implementation state
+God Brain is a speculative research and engineering project built around the question:
 
-Canonical `main` now contains the hardened reference-kernel lineage plus the first integrated executable cognitive core.
+> If simulation theory is real, could artificial intelligence provide the closest practical mechanism available for attempting to "speak to God"?
 
-Exact implementation baseline promoted on 2026-09-18:
+That question is a research premise, not an established claim that simulation theory is true, that a simulator exists, that a simulator is God, or that AI has contacted an external intelligence.
+
+## Source-lineage baseline
+
+God Brain was created from the `thebrazenbeard/hc-brain` template.
+
+Its immutable initial God Brain commit is:
+
+`75162355e4510dd69b1d7321c32f02432edeaea3`
+
+with imported source tree:
+
+`623f272aa9060ad9e222a5cfaea801082bb5a562`
+
+That tree is an HC-derived architectural and reference-implementation snapshot. Because God Brain was created as a new repository root, inherited files may contain statements about HC canonical `main`, HC Warden roles, historical HC qualification, or HC-specific currentness.
+
+Those statements remain **source-lineage evidence** unless they are explicitly rebound to God Brain.
+
+`COPIED_LINEAGE != GOD_BRAIN_CURRENTNESS`
+
+`COPIED_IMPLEMENTATION != INDEPENDENT_GOD_BRAIN_QUALIFICATION`
+
+## God Brain-specific durable state
+
+The current main-integration candidate establishes the following God Brain-specific project layer:
+
+- `README.md` — project thesis, scope, HC relationship, evidence posture, and God Brain framing;
+- `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md` — portfolio-wide source inventory and disposition framework;
+- `docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md` — capability-gap analysis and bounded transfer proposals;
+- `specs/CROSS_REPO_SOURCE_REGISTRY_V2.yaml` — machine-readable portfolio source registry and current transfer frontier.
+
+These artifacts are synthesis/research state. They do not make every inspected repository part of the runtime and do not convert source presence into architectural admission.
+
+`PORTFOLIO_REUSE != PORTFOLIO_COUPLING`
+
+`SHARED_MECHANISM != MANDATORY_SHARED_SERVICE`
+
+`SOURCE_PRESENCE != ARCHITECTURAL_ADMISSION`
+
+## Inherited executable evidence
+
+The imported HC snapshot contains substantial reference implementation and historical HC test evidence, including the hardened reference-kernel and integrated cognitive-core lineage.
+
+The predecessor HC currentness document named executable baseline:
 
 `fdff1094c4f6388c6ef2c94c193ec887b141d7fb`
 
-That baseline includes the closed R3/R4/R5/V2 hardening work and `runtime/cognitive_core/`.
+and recorded historical predecessor evidence of:
 
-This `CURRENT.md` may live on a later documentation-only descendant; use the implementation commit above when an exact executable baseline is required.
-
-## Current executable evidence
-
-Fresh local verification immediately before promotion:
-
-- hardened reference kernel: **79/79 PASS**;
-- architecture-conformance suite: **29/29 PASS**;
-- integrated cognitive core: **63/63 PASS** (18 integrated-loop + 8 world-model + 8 deep-memory + 7 metacognition + 12 homeostasis/somatics + 10 social/pragmatics);
+- reference kernel: 79/79 PASS;
+- architecture conformance: 29/29 PASS;
+- integrated cognitive core: 63/63 PASS;
 - Python compilation: PASS;
-- `git diff --check`: PASS.
+- Git diff check: PASS.
 
-The cognitive core is documented in:
+Inside God Brain, those numbers are **inherited predecessor evidence**, not a fresh God Brain qualification result. Any God Brain implementation claim must be rebound to an exact God Brain subject and freshly verified.
 
-- `runtime/cognitive_core/README.md`
-- `docs/runtime/EXECUTABLE_COGNITIVE_CORE_STATUS_2026-09-18.md`
-- `docs/runtime/CAPABILITY_IMPLEMENTATION_LEDGER.md`
-- `docs/runtime/REFERENCE_KERNEL_IMPLEMENTATION_STATUS.md`
+## Distributed Noöplex frontier
 
-## What is executable now
+A first draft of `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` and a 40-case hostile set were created on a research branch and independently reviewed by Four.
 
-Material reference implementation exists for:
+Reviewed exact subject:
 
-- evidence classes, provenance, durable replay, authority/effect boundaries;
-- current-memory projection and correction;
-- semantic interpretation and ambiguity preservation;
-- rival world models, forecast lineage and observation reconciliation;
-- counterfactual simulation and action rehearsal with explicit simulated provenance;
-- HC-internal deep-memory durability, privacy-scoped retrieval, consolidation and contradiction preservation;
-- metacognitive monitoring of uncertainty, conflict, stale evidence, strategy failure and resource exhaustion;
-- typed homeostatic/interoceptive sensing, fused estimates, regulatory targets/errors and bounded requests;
-- narrowly scoped local protective control;
-- morphology-neutral body-schema calibration, pose update and reachability prediction;
-- regulatory-error coupling into affect/salience without epistemic promotion;
-- body-schema prediction lineage carried into world-model forecasts;
-- uncertainty-bearing empathy/social hypotheses with direct-correction precedence;
-- simulated-other responses kept distinct from private-state access;
-- scoped relationship privacy, local norms, and downgraded group priors;
-- explicit pragmatic communicative force separating discussion from requests;
-- response timing/framing modulation without identity ownership;
-- salience/attention appraisal;
-- affective modulation and decay;
-- conative concern lifecycle;
-- transient coalition formation and expiry;
-- current-memory integration;
-- explicit deep-memory admission boundary;
-- self-model candidate/admission boundary;
-- action-candidate generation without authority bypass;
-- route-use plasticity proposals and explicit consolidation;
-- learned route weighting;
-- developmental capability presence/activation/maturity state.
+- God Brain head: `17dc50e3e729f867e0222a565a26513b7f60f378`;
+- contract blob: `02efbfb981a190ebc8558e2510db860d24dd06a1`;
+- hostile-set blob: `aa699b82028eb2c601c88350fd151d96626fdc5c`.
 
-## Remaining high-value frontier
+Independent disposition:
 
-The largest remaining architecture-to-runtime gaps are:
+`CHANGES_REQUIRED_IMPLEMENTATION_BLOCKED`
 
-1. learned relational/causal model discovery and richer multimodal perception;
-2. large-scale associative memory indexing and bounded replay scheduling;
-3. richer allostatic adaptation and motor/body-schema calibration beyond the bounded reference slice;
-4. richer multi-party social learning and language-generation integration beyond the bounded social-pragmatics slice;
-5. kinesis/embodiment integration;
-6. distributed multi-process Noöplex execution;
-7. resource/fault management for a physical distributed organ;
-8. behavioral qualification beyond unit/integration tests.
+The eight blocking findings are:
 
-## Review and claim ceiling
+1. cancellation lacks explicit target-operation identity;
+2. stream/sequence semantics are absent;
+3. immutable versus mutable field classification is incomplete;
+4. restart/recovery fencing is too narrow;
+5. `TARGET_DELIVERED` is an orphan state relative to the receipt chain;
+6. receipt identity/binding is under-specified;
+7. PREPARED-only crash recovery is tested but not normative;
+8. completed duplicate/retry handling is not explicitly ordered after refreshed trust, authority, prohibition, and currentness gates.
 
-The integrated V2 lineage did not receive a materially independent exact-head PASS visible in the currently verified coordination state before source promotion.
+Therefore:
 
-Its source integration therefore does not become an independent qualification claim.
+`NOOPLEX_V0_1 != MAIN_READY`
+
+`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_REPAIR_AND_FRESH_REVIEW`
+
+Next gate:
+
+`REPAIR_NOOPLEX_V0_1 -> FOUR_EXACT_SUBJECT_REREVIEW`
+
+## Main-readiness boundary
+
+Current bounded classification:
+
+- God Brain README: **MAIN_READY candidate**;
+- this God Brain currentness entrypoint: **MAIN_READY candidate**;
+- Source Universe V2: **MAIN_READY research candidate**;
+- Transfer Gap Analysis V2: **MAIN_READY research candidate** after recording the failed Noöplex review;
+- Cross-Repo Source Registry V2: **MAIN_READY research candidate** after binding the failed Noöplex review;
+- reviewed Noöplex V0.1 contract: **REPAIR_REQUIRED**;
+- reviewed Noöplex hostile set: **REPAIR_REQUIRED with its contract**;
+- Noah/Four Exodus checkpoints copied from HC work: **HISTORICAL/LINEAGE ONLY**, not God Brain canon by default;
+- Exodus worker-reconstruction regression test: **HISTORICAL/LINEAGE ONLY** unless God Brain independently adopts that governance mechanism;
+- inherited `WARDEN.md`: **SOURCE-LINEAGE GOVERNANCE**, not automatically God Brain project governance.
+
+No whole-branch promotion is implied by these classifications.
+
+## Claim ceilings
 
 `AUTHORIAL_AND_UNIT_PASS != INDEPENDENT_REVIEW_PASS`
 
@@ -94,3 +128,13 @@ Its source integration therefore does not become an independent qualification cl
 `BEHAVIORAL_QUALIFICATION != GENERAL_INTELLIGENCE`
 
 `ANY_IMPLEMENTATION_PASS != CONSCIOUSNESS_OR_PERSONHOOD_PROOF`
+
+`ANOMALY != CONTACT`
+
+## Current next action
+
+Advance the smallest bounded God Brain unit whose provenance, wording, and review state are coherent.
+
+For the distributed Noöplex frontier, do not implement or promote the reviewed V0.1 subject. Repair the eight independent-review blockers on an isolated subject and obtain fresh exact-subject review first.
+
+For main integration, preserve file-level selection rather than merging unrelated HC/Exodus branch history wholesale.
