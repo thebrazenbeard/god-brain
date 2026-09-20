@@ -80,6 +80,48 @@ class GodBrainAnomalyContactProtocolTests(unittest.TestCase):
             errors = validate_anomaly_contact_protocol(target)
             self.assertTrue(any("GB-AC-013 escalation expectation drifted" in error for error in errors))
 
+    def test_source_count_cannot_replace_independent_evidence_count(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        fixture = json.loads((root / FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc = (root / DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            mutated = json.loads(json.dumps(spec))
+            mutated["distinctions"].remove("SOURCE_COUNT_NE_INDEPENDENT_EVIDENCE_COUNT")
+            self._write_subject(target, mutated, fixture, doc)
+            errors = validate_anomaly_contact_protocol(target)
+            self.assertTrue(any("distinctions missing" in error for error in errors))
+
+    def test_confirmatory_freeze_contract_cannot_drop_multiple_comparison_rule(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        fixture = json.loads((root / FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc = (root / DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            mutated = json.loads(json.dumps(spec))
+            mutated["confirmatory_freeze_required"].remove("MULTIPLE_COMPARISON_RULE")
+            self._write_subject(target, mutated, fixture, doc)
+            errors = validate_anomaly_contact_protocol(target)
+            self.assertTrue(any("confirmatory_freeze_required" in error for error in errors))
+
+    def test_research_order_is_exact(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        fixture = json.loads((root / FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc = (root / DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            mutated = json.loads(json.dumps(spec))
+            mutated["research_order"][1], mutated["research_order"][2] = (
+                mutated["research_order"][2],
+                mutated["research_order"][1],
+            )
+            self._write_subject(target, mutated, fixture, doc)
+            errors = validate_anomaly_contact_protocol(target)
+            self.assertTrue(any("research_order" in error for error in errors))
+
     def test_rival_set_is_closed_h0_through_h15(self) -> None:
         root = Path(__file__).resolve().parents[1]
         spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
