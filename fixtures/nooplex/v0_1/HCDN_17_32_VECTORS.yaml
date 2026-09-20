@@ -218,7 +218,9 @@ cases:
       observed_similar_protected_action_history: true
       current_effect_authority: false
     input:
-      operation_kind: OBSERVE_DERIVED_PROPOSAL_FOR_PROTECTED_ACTION
+      observed_pattern: similar_protected_action_history
+      derived_use: prediction_or_proposal
+      requested_effect: protected_action
     expectation_provenance:
       authority_change: REVIEWED_HOSTILE_EXPECTATION
     expected:
@@ -238,10 +240,10 @@ cases:
       downstream_processing: true
     expectation_provenance:
       incorporation_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
-      truth_or_belief_promotion: REVIEWED_HOSTILE_EXPECTATION
+      epistemic_type_promotion: REVIEWED_HOSTILE_EXPECTATION
     expected:
       incorporation_constraint: PRESERVE_HYPOTHESIS_EVIDENCE_CLASS
-      truth_or_belief_promotion: false
+      epistemic_type_promotion: NO_PROMOTION_FROM_HYPOTHESIS_TO_OBSERVATION_OR_FACT
     must_not_occur:
       - promote_to_observation_or_fact_from_incorporation_alone
 
