@@ -1,0 +1,45 @@
+{
+  "schema_version": "GOD_BRAIN_PROJECT_INSTRUCTION_INSTALLATION_RECEIPT_V0_1",
+  "status": "OBSERVED_EXTERNAL_EFFECT_WITH_PARTIAL_VERIFICATION",
+  "observed_at": "2026-09-20T11:53:09-04:00",
+  "repository": "thebrazenbeard/god-brain",
+  "source_pr": 11,
+  "canonical_source_commit": null,
+  "candidate_source_head": "d80dcec08137d5fd1a8b5cafa62fb60d956e7ce2",
+  "source_path": "architecture/chatgpt/PROJECT_INSTRUCTIONS.md",
+  "source_git_blob": "a0c272143f67637c03baca9eb910908ab4fba84c",
+  "normalized_source_sha256": "7565fad390c422d2debe9d9610f37fb632c5ffce1841cbb9f9e0b0285d6d5177",
+  "target_project_label": "God Brain ChatGPT Project",
+  "action_type": "INSTALL_FILES_AND_PROJECT_INSTRUCTIONS_REPORTED_BY_PATRICK",
+  "installer_identity": "Patrick",
+  "verification_method": {
+    "project_files": "LOCAL_PROJECT_CONTEXT_FILE_BYTES_SHA256_COMPARED_TO_INSTALLED_PACK_MANIFEST",
+    "project_instruction_setting": "USER_REPORT_ONLY_NO_INDEPENDENT_SETTING_BYTE_READBACK"
+  },
+  "project_file_verification": {
+    "result": "EXACT_PACK_MATCH",
+    "files": {
+      "CHATGPT_REPO_INTERFACE.yaml": "fab008acd7e076277f0ac61d8319d38a079709af8594dc66ec5fb52310eecaf2",
+      "PROJECT_INSTRUCTIONS.md": "7565fad390c422d2debe9d9610f37fb632c5ffce1841cbb9f9e0b0285d6d5177",
+      "BOOTSTRAP.md": "64467d0c11fd23c2ea3d37d3ee8ce7a1870d4090b441c43492182aaee1ab7842",
+      "EPISTEMIC_CONTRACT.md": "5ba94c53f4ed51692f7fb68f05e3bacab33067e49c2505ccef587cc7e5d7d92a",
+      "RECOVERY_AND_CONTINUATION.md": "588dcb5d1d0f3ba619c56131e69800f9730832096a0ceb39de5f5e4416f3705a",
+      "ROUTING_AND_DELEGATION.yaml": "40a29ca823ff9a28eebcc640e4673c552734b72fb271cf283583c1a25d6c915e"
+    }
+  },
+  "comparison_result": "PROJECT_FILES_EXACT_SOURCE_VERIFIED__INSTRUCTION_SETTING_INSTALLATION_REPORTED_UNVERIFIED",
+  "sync_state": "INSTALLATION_REPORTED_UNVERIFIED",
+  "limitations": [
+    "The Project instruction setting's installed bytes are not independently exposed for cryptographic comparison in this execution surface.",
+    "Exact Project-file byte verification does not prove the Project instruction setting equals PROJECT_INSTRUCTIONS.md.",
+    "This receipt does not prove that this or any later chat consumed a particular instruction byte sequence.",
+    "PR #11 remains a Draft candidate and is not canonical main."
+  ],
+  "claim_ceiling": [
+    "PROJECT_FILES_EXACT_MATCH_IS_VERIFIED",
+    "INSTRUCTION_INSTALLATION_IS_USER_REPORTED_NOT_BYTE_VERIFIED",
+    "INSTALLATION_RECEIPT_NE_PROOF_CURRENT_CHAT_CONSUMED_TEXT",
+    "NO_CANONICAL_PROMOTION",
+    "NO_MERGE_AUTHORITY"
+  ]
+}
