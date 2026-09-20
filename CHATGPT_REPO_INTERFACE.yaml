@@ -43,9 +43,8 @@ bootstrap:
 governance:
   current_status: NOT_YET_CANONICALLY_REBOUND
   hc_predecessor_governance: WARDEN.md
-  candidate_god_brain_governance:
-    path: docs/research/GOD_BRAIN_GOVERNANCE_CONTRACT_V0_1.md
-    status: RESEARCH_ONLY_NOT_ADOPTED
+  god_brain_governance_discovery: FRESH_READ_OPEN_RESEARCH_AND_GOVERNANCE_PRS
+  candidate_governance_is_not_authority: true
   rule: "Never inherit protected-effect authority from HC predecessor governance by implication."
 
 authority:
