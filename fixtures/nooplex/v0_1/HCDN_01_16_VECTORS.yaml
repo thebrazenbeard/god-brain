@@ -230,9 +230,10 @@ cases:
           effect_executed: false
         target_absent:
           required_refresh:
-            - exact_subject
-            - current_authority_and_prohibitions
-            - recovery_epoch
+            all_of:
+              - exact_subject
+              - current_authority_and_prohibitions
+              - recovery_epoch
           retry_reuses_operation_id: true
         target_diverged_from_intended_and_absent_state:
           admission_disposition: CONFLICT
