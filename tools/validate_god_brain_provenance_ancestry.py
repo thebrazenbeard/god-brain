@@ -9,20 +9,28 @@ from typing import Any
 DOC_PATH = "docs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.md"
 SPEC_PATH = "specs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.json"
 FIXTURE_PATH = "specs/research/fixtures/GOD_BRAIN_PROVENANCE_ANCESTRY_HOSTILE_CASES_V0_1.json"
+POINTER_RECEIPT_PATH = "state/research/provenance/GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1.json"
 
 REQUIRED_INVARIANTS = {
+    "SOURCE_PRESENCE_NE_ADMISSION",
     "SOURCE_COUNT_NE_INDEPENDENT_CORROBORATION",
     "SAME_ROOT_DESCENDANTS_NE_INDEPENDENT_EVIDENCE",
     "TEMPORAL_ORDER_NE_CAUSAL_DERIVATION",
     "DERIVED_FROM_NE_EQUIVALENT_TO",
+    "REFINES_NE_SUPERSEDES",
     "RETRIEVED_NE_INCORPORATED",
     "HISTORICAL_EVIDENCE_NE_CURRENT_AUTHORITY",
     "SEMANTIC_SIMILARITY_NE_PROVENANCE_EQUIVALENCE",
     "PRIVACY_PROJECTION_NE_RAW_SOURCE",
+    "RUNTIME_ID_NE_IDENTITY",
     "PROVENANCE_NE_TRUTH",
+    "PROVENANCE_NE_AUTHORITY",
+    "PROVENANCE_NE_CURRENTNESS",
     "DISTINCT_INSTANCE_NE_INDEPENDENT_EVIDENCE",
+    "RETRIEVAL_REUSE_NE_NEW_EVIDENCE",
     "REVIEW_OF_PARENT_HEAD_NE_REVIEW_OF_CHILD_HEAD",
     "PROVENANCE_POINTER_NE_PAYLOAD_TRANSFER",
+    "DERIVED_FROM_REPO_NE_RUNTIME_COUPLED_TO_REPO",
     "PROVENANCE_DAG_NE_ALL_RELATIONS_GRAPH",
 }
 
@@ -128,10 +136,25 @@ def _load(path: Path) -> dict[str, Any]:
     return value
 
 
+def _is_sha40(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 40
+        and all(ch in "0123456789abcdef" for ch in value)
+    )
+
+
+def _safe_relative_path(value: object) -> bool:
+    if not isinstance(value, str) or not value or value.startswith(("/", "\\")):
+        return False
+    parts = value.replace("\\", "/").split("/")
+    return all(part not in ("", ".", "..") for part in parts)
+
+
 def validate_provenance_ancestry(root: Path) -> list[str]:
     errors: list[str] = []
 
-    for relative in (DOC_PATH, SPEC_PATH, FIXTURE_PATH):
+    for relative in (DOC_PATH, SPEC_PATH, FIXTURE_PATH, POINTER_RECEIPT_PATH):
         if not (root / relative).is_file():
             errors.append(f"missing {relative}")
     if errors:
@@ -158,9 +181,16 @@ def validate_provenance_ancestry(root: Path) -> list[str]:
         if item not in ceilings:
             errors.append(f"claim ceiling missing {item}")
 
-    missing = REQUIRED_INVARIANTS - set(spec.get("invariants", []))
-    if missing:
-        errors.append(f"invariants missing: {sorted(missing)}")
+    invariants = spec.get("invariants")
+    if not isinstance(invariants, list):
+        errors.append("invariants must be a list")
+    else:
+        if len(invariants) != len(set(invariants)):
+            errors.append("invariants contains duplicate values")
+        if set(invariants) != REQUIRED_INVARIANTS:
+            missing = sorted(REQUIRED_INVARIANTS - set(invariants))
+            extra = sorted(set(invariants) - REQUIRED_INVARIANTS)
+            errors.append(f"invariants drifted: missing={missing}, extra={extra}")
 
     sources = spec.get("source_provenance")
     if not isinstance(sources, list) or len(sources) != 4:
@@ -179,6 +209,8 @@ def validate_provenance_ancestry(root: Path) -> list[str]:
             if not isinstance(source, dict):
                 errors.append("source provenance entry must be object")
                 continue
+            if not _is_sha40(source.get("observed_head")):
+                errors.append(f"{source.get('repository')} observed_head must be lowercase 40-hex")
             artifacts = source.get("artifacts")
             if not isinstance(artifacts, list) or not artifacts:
                 errors.append(f"{source.get('repository')} lacks exact artifact provenance")
@@ -187,8 +219,83 @@ def validate_provenance_ancestry(root: Path) -> list[str]:
                 if not isinstance(artifact, list) or len(artifact) != 2:
                     errors.append(f"{source.get('repository')} artifact binding malformed")
                     continue
-                if not isinstance(artifact[1], str) or len(artifact[1]) != 40:
-                    errors.append(f"{source.get('repository')} artifact blob invalid")
+                if not _safe_relative_path(artifact[0]):
+                    errors.append(f"{source.get('repository')} artifact path invalid")
+                if not _is_sha40(artifact[1]):
+                    errors.append(f"{source.get('repository')} artifact blob must be lowercase 40-hex")
+
+    if spec.get("source_provenance_verification_receipt") != POINTER_RECEIPT_PATH:
+        errors.append("source provenance verification receipt path drifted")
+
+    try:
+        receipt = _load(root / POINTER_RECEIPT_PATH)
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        errors.append(f"{POINTER_RECEIPT_PATH} invalid JSON: {exc}")
+        receipt = {}
+
+    if receipt.get("schema_version") != "GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1":
+        errors.append("source provenance pointer receipt schema_version drifted")
+    if receipt.get("status") != "EXACT_GIT_POINTERS_VERIFIED":
+        errors.append("source provenance pointer receipt status drifted")
+    if receipt.get("verification_surface") != "GITHUB_EXACT_HEAD_FILE_READBACK":
+        errors.append("source provenance pointer verification surface drifted")
+    if receipt.get("payload_copied") is not False:
+        errors.append("source provenance pointer receipt must not copy payload")
+    if receipt.get("currentness_claim") is not False:
+        errors.append("source provenance pointer receipt must not claim currentness")
+
+    declared_pointer_tuples = []
+    if isinstance(sources, list):
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            repo = source.get("repository")
+            head = source.get("observed_head")
+            for artifact in source.get("artifacts", []):
+                if isinstance(artifact, list) and len(artifact) == 2:
+                    declared_pointer_tuples.append((repo, head, artifact[0], artifact[1]))
+
+    receipt_entries = receipt.get("entries")
+    receipt_pointer_tuples = []
+    if not isinstance(receipt_entries, list):
+        errors.append("source provenance pointer receipt entries must be a list")
+    else:
+        seen = set()
+        for entry in receipt_entries:
+            if not isinstance(entry, dict):
+                errors.append("source provenance pointer receipt entry must be object")
+                continue
+            pointer = (
+                entry.get("repository"),
+                entry.get("observed_head"),
+                entry.get("path"),
+                entry.get("git_blob"),
+            )
+            if pointer in seen:
+                errors.append("source provenance pointer receipt contains duplicate pointer")
+            seen.add(pointer)
+            if not _is_sha40(entry.get("observed_head")):
+                errors.append("source provenance pointer receipt observed_head must be lowercase 40-hex")
+            if not _safe_relative_path(entry.get("path")):
+                errors.append("source provenance pointer receipt path invalid")
+            if not _is_sha40(entry.get("git_blob")):
+                errors.append("source provenance pointer receipt git_blob must be lowercase 40-hex")
+            if entry.get("result") != "MATCH":
+                errors.append("source provenance pointer receipt requires MATCH for every entry")
+            receipt_pointer_tuples.append(pointer)
+
+    if sorted(declared_pointer_tuples) != sorted(receipt_pointer_tuples):
+        errors.append("source provenance pointers do not exactly match verification receipt")
+
+    required_pointer_ceiling = {
+        "POINTERS_MATCH_AT_VERIFICATION",
+        "NO_PAYLOAD_TRANSFER",
+        "NO_CURRENTNESS_CLAIM",
+        "NO_INDEPENDENCE_CLAIM",
+        "NO_AUTHORITY_OR_CANONICAL_PROMOTION",
+    }
+    if set(receipt.get("claim_ceiling", [])) != required_pointer_ceiling:
+        errors.append("source provenance pointer receipt claim ceiling drifted")
 
     if spec.get("artifact_classes") != EXPECTED_ARTIFACT_CLASSES:
         errors.append("artifact class set/order drifted")
