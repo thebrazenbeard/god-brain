@@ -80,6 +80,45 @@ class GodBrainProvenanceAncestryTests(unittest.TestCase):
             errors = validate_provenance_ancestry(target)
             self.assertTrue(any("privacy projection must retain lineage" in error for error in errors))
 
+    def _mutated_contract_errors(self, mutator) -> list[str]:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        fixture = json.loads((root / FIXTURE_PATH).read_text(encoding="utf-8"))
+        doc = (root / DOC_PATH).read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            mutated = json.loads(json.dumps(spec))
+            mutator(mutated)
+            self._write_subject(target, mutated, fixture, doc)
+            return validate_provenance_ancestry(target)
+
+    def test_provenance_edge_vocabulary_cannot_silently_weaken(self) -> None:
+        errors = self._mutated_contract_errors(
+            lambda spec: spec["provenance_edge_types"].remove("COPIED_FROM")
+        )
+        self.assertTrue(any("provenance_edge_types drifted" in error for error in errors))
+
+    def test_required_artifact_identity_field_cannot_be_deleted(self) -> None:
+        errors = self._mutated_contract_errors(
+            lambda spec: spec["required_artifact_fields"].remove("artifact_id")
+        )
+        self.assertTrue(any("required_artifact_fields drifted" in error for error in errors))
+
+    def test_independence_rule_cannot_be_deleted(self) -> None:
+        errors = self._mutated_contract_errors(
+            lambda spec: spec["independence_rules"].remove("INDEPENDENCE_IS_CLAIM_RELATIVE")
+        )
+        self.assertTrue(any("independence_rules drifted" in error for error in errors))
+
+    def test_currentness_and_query_surfaces_are_machine_bound(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["currentness_states"].remove("UNKNOWN")
+            spec["query_contracts"].remove("IS_THIS_CURRENT")
+
+        errors = self._mutated_contract_errors(mutate)
+        self.assertTrue(any("currentness_states drifted" in error for error in errors))
+        self.assertTrue(any("query_contracts drifted" in error for error in errors))
+
     def test_provenance_must_remain_dag(self) -> None:
         root = Path(__file__).resolve().parents[1]
         spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))

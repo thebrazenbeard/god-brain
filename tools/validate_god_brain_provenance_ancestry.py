@@ -46,6 +46,65 @@ EXPECTED_INDEPENDENCE_STATES = [
     "NOT_APPLICABLE",
 ]
 
+EXPECTED_PROVENANCE_EDGE_TYPES = {
+    "EXTRACTED_FROM",
+    "DERIVED_FROM",
+    "SUMMARIZED_FROM",
+    "TRANSLATED_FROM",
+    "NORMALIZED_FROM",
+    "REDACTED_FROM",
+    "COPIED_FROM",
+    "GENERATED_USING",
+    "AGGREGATED_FROM",
+    "RETRIEVED_FROM",
+    "REPLAYED_FROM",
+}
+
+EXPECTED_LIFECYCLE_EDGE_TYPES = {
+    "REFINES", "SUPERSEDES", "RETRACTS", "EVOLVED_FROM"
+}
+EXPECTED_EPISTEMIC_EDGE_TYPES = {"SUPPORTS", "CONTRADICTS"}
+EXPECTED_IDENTITY_EDGE_TYPES = {
+    "EQUIVALENT_TO", "DISTINCT_FROM", "RELATED_NOT_EQUIVALENT"
+}
+EXPECTED_TEMPORAL_EDGE_TYPES = {"PRECEDES", "FOLLOWS"}
+
+EXPECTED_INDEPENDENCE_RULES = {
+    "DIFFERENT_ARTIFACT_IDS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_REPOSITORY_PATHS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_CHATS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_AGENTS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_MODELS_DO_NOT_IMPLY_INDEPENDENCE_WITHOUT_RELEVANT_ANCESTRY_ANALYSIS",
+    "DIFFERENT_TIMESTAMPS_DO_NOT_IMPLY_INDEPENDENCE",
+    "PROJECTION_AND_SOURCE_ARE_NOT_INDEPENDENT",
+    "CORRECTION_AND_CORRECTED_SOURCE_ARE_NOT_INDEPENDENT_SUPPORT",
+    "COPIED_DOWNSTREAM_CITATION_IS_NOT_SECOND_SOURCE",
+    "INDEPENDENCE_IS_CLAIM_RELATIVE",
+}
+
+EXPECTED_CURRENTNESS_STATES = {
+    "CURRENT", "HISTORICAL", "SUPERSEDED", "RETRACTED", "UNRESOLVED", "UNKNOWN"
+}
+EXPECTED_REQUIRED_ARTIFACT_FIELDS = {
+    "artifact_id", "artifact_class", "created_at", "currentness", "privacy_class",
+    "parents", "root_family_ids", "independence_state", "provenance_ceiling",
+}
+EXPECTED_PARENT_EDGE_FIELDS = {"artifact_id", "edge_type"}
+EXPECTED_QUERY_CONTRACTS = {
+    "WHY_DO_WE_BELIEVE_THIS",
+    "WHERE_DID_THIS_COME_FROM",
+    "ARE_THESE_RESULTS_INDEPENDENT",
+    "WHAT_CHANGED",
+    "IS_THIS_CURRENT",
+}
+EXPECTED_NEXT_GATE = {
+    "INDEPENDENT_REVIEW",
+    "MACHINE_SCHEMA",
+    "HOSTILE_ANCESTRY_FIXTURES",
+    "REFERENCE_GRAPH_EVALUATOR",
+    "CROSS_REPO_TRANSFER_RECEIPT_INTEGRATION",
+}
+
 REQUIRED_INVALID_STATES = {
     "SELF_PARENT_EDGE",
     "UNKNOWN_PROVENANCE_EDGE_TYPE",
@@ -136,6 +195,31 @@ def validate_provenance_ancestry(root: Path) -> list[str]:
 
     if spec.get("independence_states") != EXPECTED_INDEPENDENCE_STATES:
         errors.append("independence state set/order drifted")
+
+    exact_set_surfaces = (
+        ("provenance_edge_types", EXPECTED_PROVENANCE_EDGE_TYPES),
+        ("lifecycle_edge_types", EXPECTED_LIFECYCLE_EDGE_TYPES),
+        ("epistemic_edge_types", EXPECTED_EPISTEMIC_EDGE_TYPES),
+        ("identity_edge_types", EXPECTED_IDENTITY_EDGE_TYPES),
+        ("temporal_edge_types", EXPECTED_TEMPORAL_EDGE_TYPES),
+        ("independence_rules", EXPECTED_INDEPENDENCE_RULES),
+        ("currentness_states", EXPECTED_CURRENTNESS_STATES),
+        ("required_artifact_fields", EXPECTED_REQUIRED_ARTIFACT_FIELDS),
+        ("parent_edge_required_fields", EXPECTED_PARENT_EDGE_FIELDS),
+        ("query_contracts", EXPECTED_QUERY_CONTRACTS),
+        ("next_gate", EXPECTED_NEXT_GATE),
+    )
+    for field, expected in exact_set_surfaces:
+        value = spec.get(field)
+        if not isinstance(value, list):
+            errors.append(f"{field} must be a list")
+            continue
+        if len(value) != len(set(value)):
+            errors.append(f"{field} contains duplicate values")
+        if set(value) != expected:
+            missing = sorted(expected - set(value))
+            extra = sorted(set(value) - expected)
+            errors.append(f"{field} drifted: missing={missing}, extra={extra}")
 
     ancestry = spec.get("ancestry_rules")
     if not isinstance(ancestry, dict):
