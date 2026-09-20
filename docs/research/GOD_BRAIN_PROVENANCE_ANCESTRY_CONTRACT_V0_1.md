@@ -141,6 +141,24 @@ Disposition:
 
 No Vera personal/developmental content is transferred.
 
+### Exact pointer verification receipt
+
+The declared cross-repository provenance pointers are separately bound in:
+
+`state/research/provenance/GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1.json`
+
+That receipt records only repository, exact observed head, path, Git blob, and verification result. It carries no source payload. The validator requires exact tuple equality between the machine contract and the receipt, lowercase 40-hex object identifiers, safe relative paths, and `MATCH` for every entry.
+
+The receipt means only that the declared pointers resolved to those exact Git blobs when verified.
+
+`POINTER_VERIFIED_AT_T1 != SOURCE_CURRENT_AT_T2`
+
+`POINTER_VERIFICATION != INDEPENDENCE_PROOF`
+
+`POINTER_VERIFICATION != AUTHORITY`
+
+`POINTER_VERIFICATION != PAYLOAD_PUBLICATION_AUTHORITY`
+
 ## Contract scope
 
 The ancestry graph may track:
