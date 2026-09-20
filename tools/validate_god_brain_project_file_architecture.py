@@ -151,7 +151,7 @@ def _load_object(path: Path) -> dict[str, Any]:
     return value
 
 
-def _require_members(
+def _require_exact_members(
     entry: dict[str, Any],
     field: str,
     required: set[str],
@@ -163,9 +163,15 @@ def _require_members(
     if not isinstance(value, list):
         errors.append(f"{label}.{field} must be a list")
         return
-    missing = required - set(value)
+    if len(value) != len(set(value)):
+        errors.append(f"{label}.{field} must not contain duplicates")
+    observed = set(value)
+    missing = required - observed
+    unexpected = observed - required
     if missing:
         errors.append(f"{label}.{field} missing: {sorted(missing)}")
+    if unexpected:
+        errors.append(f"{label}.{field} unexpected: {sorted(unexpected)}")
 
 
 def _validate_stratum(
@@ -177,10 +183,19 @@ def _validate_stratum(
     label = f"stratum {stratum_id}"
     for field, expected in required.items():
         if isinstance(expected, set):
-            _require_members(entry, field, expected, label=label, errors=errors)
+            _require_exact_members(entry, field, expected, label=label, errors=errors)
         elif entry.get(field) != expected:
             errors.append(
                 f"{label}.{field} mismatch: expected {expected!r}"
+            )
+
+    owns = entry.get("owns")
+    forbidden = entry.get("forbidden")
+    if isinstance(owns, list) and isinstance(forbidden, list):
+        overlap = set(owns) & set(forbidden)
+        if overlap:
+            errors.append(
+                f"{label}.owns and {label}.forbidden overlap: {sorted(overlap)}"
             )
 
 
@@ -251,20 +266,29 @@ def validate_project_file_architecture(root: Path) -> list[str]:
             errors.append("future current pointer schema drifted")
         if future.get("proposed_path") != "architecture/current/GOD_BRAIN_CURRENT.json":
             errors.append("future current pointer path drifted")
-        _require_members(
+        _require_exact_members(
             future,
             "required_fields",
             REQUIRED_CURRENT_POINTER_FIELDS,
             label="future_current_pointer_contract",
             errors=errors,
         )
-        _require_members(
+        _require_exact_members(
             future,
             "forbidden_fields",
             REQUIRED_FORBIDDEN_CURRENT_POINTER_FIELDS,
             label="future_current_pointer_contract",
             errors=errors,
         )
+        required_fields = future.get("required_fields")
+        forbidden_fields = future.get("forbidden_fields")
+        if isinstance(required_fields, list) and isinstance(forbidden_fields, list):
+            overlap = set(required_fields) & set(forbidden_fields)
+            if overlap:
+                errors.append(
+                    "future_current_pointer_contract required_fields and "
+                    f"forbidden_fields overlap: {sorted(overlap)}"
+                )
         truth_ceiling = future.get("required_truth_ceiling", "")
         if (
             truth_ceiling
