@@ -1,0 +1,42 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_HCDN_FIXTURE_SCHEMA_V0_1
+status: RESEARCH_FIXTURE_SCHEMA
+qualification_subject: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1_R2
+
+required_fixture_fields:
+  - case_id
+  - deterministic
+  - source_case_title
+  - contract_clause_refs
+  - initial_state
+  - input
+  - expected
+  - must_not_occur
+
+semantics:
+  fixture_expectation_ne_implementation_result: true
+  hostile_case_pass_ne_behavioral_qualification: true
+  exact_subject_binding_required: true
+  unknown_or_underspecified_runtime_detail_must_not_be_invented: true
+
+field_definitions:
+  case_id: Stable hostile-case identifier from the reviewed hostile set.
+  deterministic: Whether the fixture expectation is intended to be deterministically checkable.
+  source_case_title: Human-readable title from the reviewed hostile set.
+  contract_clause_refs: Normative contract sections relied upon by the vector.
+  initial_state: Pre-input logical state required by the case.
+  input: Abstract protocol/effect event supplied to a future conformance harness.
+  expected: Required observable disposition/state transition.
+  must_not_occur: Explicit forbidden outcomes.
+
+allowed_expected_dimensions:
+  - admission_disposition
+  - routing_state
+  - incorporation_state
+  - effect_state
+  - effect_executed
+  - receipt_projection
+  - duplicate_disposition
+  - reconciliation_action
+  - sequence_state
+  - required_refresh
+  - conflict_reason
