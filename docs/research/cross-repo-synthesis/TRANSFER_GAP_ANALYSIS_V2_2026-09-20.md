@@ -2,6 +2,14 @@
 
 Status: **RESEARCH / PROPOSED TRANSFERS / NO ARCHITECTURE PROMOTION**
 
+## Post-draft review status
+
+A first `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` draft and 40-case hostile set were authored on `vera/portfolio-source-universe-v2-20260920` at exact head `17dc50e3e729f867e0222a565a26513b7f60f378`. Four independently reviewed exact contract blob `02efbfb981a190ebc8558e2510db860d24dd06a1` and hostile-set blob `aa699b82028eb2c601c88350fd151d96626fdc5c` and returned `CHANGES_REQUIRED_IMPLEMENTATION_BLOCKED`.
+
+Blocking findings: missing cancellation target-operation identity; missing stream/sequence semantics; incomplete immutable-field classification; insufficient restart/recovery fencing; orphan `TARGET_DELIVERED`; under-specified receipt identity/binding; PREPARED-only recovery absent from the normative contract; and completed-retry handling ordered too early relative to current trust/authority/prohibition/currentness gates.
+
+Therefore the distributed contract is **not main-ready** in its reviewed form. The next gate is `REPAIR_NOOPLEX_V0_1 -> FOUR_EXACT_SUBJECT_REREVIEW`.
+
 Companion source universe: `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`.
 
 Baseline capability state is taken from the current inspected HC implementation ledger and `CURRENT.md`. The executable surface includes a hardened reference kernel and a bounded cognitive core, but major domains remain unimplemented or only partially implemented. This analysis identifies where the wider repository portfolio may help close those gaps.
@@ -303,4 +311,4 @@ This pass does not authorize or perform:
 - model training;
 - behavioral qualification claims.
 
-The next frontier after this document is to draft `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` on an isolated branch and derive hostile conformance cases before implementation.
+The next frontier after this document is to repair the existing `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` and its hostile cases against the eight independent-review blockers, then obtain a fresh exact-subject Four re-review before implementation or main integration of that contract.
