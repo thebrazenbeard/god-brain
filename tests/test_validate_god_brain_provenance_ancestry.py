@@ -8,6 +8,7 @@ from pathlib import Path
 from tools.validate_god_brain_provenance_ancestry import (
     DOC_PATH,
     FIXTURE_PATH,
+    POINTER_RECEIPT_PATH,
     SPEC_PATH,
     validate_provenance_ancestry,
 )
@@ -19,11 +20,16 @@ class GodBrainProvenanceAncestryTests(unittest.TestCase):
         self.assertEqual(validate_provenance_ancestry(root), [])
 
     def _write_subject(self, target: Path, spec: dict, fixture: dict, doc: str) -> None:
-        for relative in (SPEC_PATH, FIXTURE_PATH, DOC_PATH):
+        root = Path(__file__).resolve().parents[1]
+        for relative in (SPEC_PATH, FIXTURE_PATH, DOC_PATH, POINTER_RECEIPT_PATH):
             (target / relative).parent.mkdir(parents=True, exist_ok=True)
         (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
         (target / FIXTURE_PATH).write_text(json.dumps(fixture), encoding="utf-8")
         (target / DOC_PATH).write_text(doc, encoding="utf-8")
+        (target / POINTER_RECEIPT_PATH).write_text(
+            (root / POINTER_RECEIPT_PATH).read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
 
     def test_unknown_ancestry_cannot_default_to_independent(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -91,6 +97,40 @@ class GodBrainProvenanceAncestryTests(unittest.TestCase):
             mutator(mutated)
             self._write_subject(target, mutated, fixture, doc)
             return validate_provenance_ancestry(target)
+
+    def test_declared_invariant_set_is_exact(self) -> None:
+        errors = self._mutated_contract_errors(
+            lambda spec: spec["invariants"].remove("SOURCE_PRESENCE_NE_ADMISSION")
+        )
+        self.assertTrue(any("invariants drifted" in error for error in errors))
+
+    def test_nonhex_blob_pointer_fails_closed(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["source_provenance"][0]["artifacts"][0][1] = "z" * 40
+
+        errors = self._mutated_contract_errors(mutate)
+        self.assertTrue(any("artifact blob must be lowercase 40-hex" in error for error in errors))
+
+    def test_fake_valid_shape_head_fails_receipt_binding(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["source_provenance"][0]["observed_head"] = "0" * 40
+
+        errors = self._mutated_contract_errors(mutate)
+        self.assertTrue(any("do not exactly match verification receipt" in error for error in errors))
+
+    def test_nonexistent_path_fails_receipt_binding(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["source_provenance"][1]["artifacts"][0][0] = "does/not/exist.md"
+
+        errors = self._mutated_contract_errors(mutate)
+        self.assertTrue(any("do not exactly match verification receipt" in error for error in errors))
+
+    def test_correct_blob_rebound_to_wrong_head_fails_receipt_binding(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["source_provenance"][2]["observed_head"] = spec["source_provenance"][0]["observed_head"]
+
+        errors = self._mutated_contract_errors(mutate)
+        self.assertTrue(any("do not exactly match verification receipt" in error for error in errors))
 
     def test_provenance_edge_vocabulary_cannot_silently_weaken(self) -> None:
         errors = self._mutated_contract_errors(
