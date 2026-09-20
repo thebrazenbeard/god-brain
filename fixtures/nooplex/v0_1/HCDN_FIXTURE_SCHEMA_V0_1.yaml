@@ -27,6 +27,10 @@ field_definitions:
   input: Abstract protocol/effect event supplied to a future conformance harness.
   expected: Required observable disposition/state transition.
   must_not_occur: Explicit forbidden outcomes.
+  expectation_provenance: Optional per-dimension statement of whether an expectation comes directly from the normative contract, the reviewed hostile case, or both.
+
+expected_dimension_rules:
+  allowed_dimensions_apply_recursively_inside_variants: true
 
 allowed_expected_dimensions:
   - admission_disposition
@@ -40,3 +44,8 @@ allowed_expected_dimensions:
   - sequence_state
   - required_refresh
   - conflict_reason
+  - variants
+  - retry_reuses_operation_id
+  - historical_receipt_retention_allowed
+  - incorporation_constraint
+  - truth_or_belief_promotion
