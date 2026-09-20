@@ -62,3 +62,4 @@ allowed_expected_dimensions:
   - target_operation_identity_constraint
   - exact_subject_handling
   - authority_evidence_revalidation
+  - epistemic_type_promotion
