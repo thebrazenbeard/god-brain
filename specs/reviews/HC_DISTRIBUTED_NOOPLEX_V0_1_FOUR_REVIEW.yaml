@@ -1,0 +1,34 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_REVIEW_V0_1
+reviewer: Four
+review_status: CHANGES_REQUIRED
+implementation_gate: BLOCKED
+review_date: 2026-09-20
+repository: thebrazenbeard/god-brain
+reviewed_branch_head: 17dc50e3e729f867e0222a565a26513b7f60f378
+reviewed_subjects:
+  contract:
+    path: specs/HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1.yaml
+    git_blob: 02efbfb981a190ebc8558e2510db860d24dd06a1
+  hostile_cases:
+    path: docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md
+    git_blob: aa699b82028eb2c601c88350fd151d96626fdc5c
+source_binding_integrity: PASS
+blocking_findings:
+  - id: F1
+    subject: CANCEL_TARGET_OPERATION_ID_MISSING
+  - id: F2
+    subject: STREAM_SEQUENCE_NOT_REPRESENTABLE
+  - id: F3
+    subject: ENVELOPE_MUTABILITY_CLASSIFICATION_INCOMPLETE
+  - id: F4
+    subject: RECOVERY_EPOCH_FENCING_TOO_NARROW
+  - id: F5
+    subject: TARGET_DELIVERED_ORPHAN_STATE
+  - id: F6
+    subject: RECEIPT_BINDING_UNDERSPECIFIED
+  - id: F7
+    subject: PREPARED_ONLY_RECOVERY_NOT_NORMATIVE
+  - id: F8
+    subject: DUPLICATE_COMPLETION_CAN_BYPASS_CURRENT_AUTHORITY
+required_next_gate: REPAIR_THEN_FOUR_EXACT_SUBJECT_REREVIEW
+protected_effect_authority: NONE
