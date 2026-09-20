@@ -1,0 +1,117 @@
+schema_version: god-brain.routing-and-delegation.v1
+status: CANDIDATE_PROJECT_INTERFACE
+
+roles:
+  god_brain_coordinator:
+    owns:
+      - project_thesis_and_meaning
+      - architecture_and_cross_repo_synthesis
+      - portfolio_source_admission
+      - provenance_and_repository_coherence
+      - research_planning
+      - main_readiness_classification
+      - bounded_integration_candidate_preparation
+      - reconciliation_of_bt2_results
+    does_not_own_by_role_alone:
+      - protected_effect_authority
+      - automatic_merge_authority
+
+  bt2_coordinator:
+    owns:
+      - worker_dispatch
+      - independent_review
+      - adversarial_testing
+      - bounded_implementation
+      - qualification_evidence
+      - engineering_coordination
+    does_not_own_by_role_alone:
+      - god_brain_architectural_admission
+      - canonical_promotion_authority
+
+delegation:
+  required_binding:
+    - repository
+    - starting_ref_or_exact_head
+    - exact_files_or_semantic_subject
+    - task
+    - allowed_effects
+    - prohibited_effects
+    - required_evidence
+    - return_format
+  ownership_rule: DELEGATED_SUBJECT_IS_DELEGATE_OWNED_UNTIL_RETURN_OR_EXPLICIT_CANCELLATION
+  coordinator_must_not:
+    - mutate_delegated_subject
+    - move_delegated_review_head
+    - silently_expand_delegated_scope
+  coordinator_may:
+    - continue_non_colliding_adjacent_work
+    - inspect_delegated_subject_read_only
+    - report_mechanical_observations_to_delegate
+    - reconcile_returned_evidence
+
+review:
+  exact_subject_binding_required: true
+  minimum_binding:
+    - repository
+    - base_when_applicable
+    - exact_head
+    - relevant_paths_or_blobs
+    - reviewer_identity
+    - reviewer_role
+    - disposition
+    - evidence_and_limitations
+  head_movement_rule: PRIOR_REVIEW_BECOMES_HISTORICAL_EVIDENCE_ONLY
+  pass_does_not_grant:
+    - merge_authority
+    - deployment_authority
+    - canonical_promotion
+    - next_stage_qualification
+
+bus:
+  repository: thebrazenbeard/chat-communication-bus
+  work_bearing_non_pr_coordination: REQUIRED
+  request_needing_response:
+    requires_reply: true
+    endthread_before_return: FORBIDDEN
+  source_prs_remain_in_source_repository: true
+  external_source_pr_mirror_to_bus: REQUIRED
+
+portfolio:
+  discovery_scope: PATRICKS_FULL_REPOSITORY_PORTFOLIO
+  default_loading: SMALLEST_RELEVANT_SOURCE_SET
+  guards:
+    - SOURCE_PRESENCE_NE_ARCHITECTURAL_ADMISSION
+    - PORTFOLIO_REUSE_NE_PORTFOLIO_COUPLING
+    - SHARED_MECHANISM_NE_MANDATORY_SHARED_SERVICE
+    - COPIED_LINEAGE_NE_INDEPENDENT_CORROBORATION
+  admission_classes:
+    - ADMIT_UNCHANGED
+    - ADAPT_WITH_PROVENANCE
+    - RESEARCH_ONLY
+    - HISTORICAL_ONLY
+    - DEFER
+    - REJECT
+
+main_readiness:
+  classifications:
+    - MAIN_READY
+    - REPAIR_REQUIRED
+    - RESEARCH_ONLY
+    - HISTORICAL_ONLY
+    - REDUNDANT
+    - REJECT
+  classification_is_not_effect_authority: true
+  promotion_unit: SMALLEST_COHERENT_UNIT
+  atomic_bundle_when:
+    - sequential_promotion_would_create_known_currentness_instability
+    - combined_exact_head_receives_fresh_review
+
+protected_effects:
+  require_patrick_exact_authorization: true
+  classes:
+    - merge_or_direct_main_mutation
+    - deployment_or_runtime_install
+    - credential_permission_provider_or_ruleset_change
+    - paid_service_or_compute
+    - destructive_or_irreversible_durable_state_change
+    - private_material_publication
