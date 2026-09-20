@@ -103,16 +103,16 @@ Observed repositories: **58**.
 
 The following tree identities were read directly during this V2 intake and may be used as exact content cuts for the stated branch:
 
-- `project-runner@main` tree `bc05812b560b4fcde3a362e72fba04c626cafac8`
-- `intranel@main` tree `42e7d7f4358833b9f00e83cfe194b76abdf93e8a`
-- `vera-mesh@work/vera-mesh-foundation-20260913` tree `20b2a9b68c702d5913404b21c5bbea048f495e33`
-- `roots@main` tree `7fab72635f319c633b480174c8a0687901ac1db2`
-- `driftguard@main` tree `2772aff77929ef1310b8bcf0b5103c466c8c8010`
-- `discovery@main` tree `96e6f8e9c776047f9068c897eab0406324187166`
-- `wip@main` tree `12a7c23dbe0482fd7bfe63659e54526778efef1e`
-- `bugops@main` tree `39eb19bcf7669466c22703fbae7cc226bd44f714`
-- `vera_model_training@main` tree `cdbc34b7242f730511a9f6dae130d6628969981d`
-- `rezon@main` tree `e3d7a41eccb49a9f403ef66f511faef677ceec1b`
+- `project-runner@main` commit `bc05812b560b4fcde3a362e72fba04c626cafac8`; tree `2c7b588b06c68f0a0ed63a79ed092b3132e462ca`
+- `intranel@main` commit `42e7d7f4358833b9f00e83cfe194b76abdf93e8a`; tree `89c98c5fbb066c2e0d94c71a9e14986362de2ce0`
+- `vera-mesh@work/vera-mesh-foundation-20260913` commit `20b2a9b68c702d5913404b21c5bbea048f495e33`; tree `3a103dc4e788f4630ae40080bb55a64b8ee06524`
+- `roots@main` commit `7fab72635f319c633b480174c8a0687901ac1db2`; tree `e0f43a5f9539a1f85ab52ac6b2e5dcf4d4d96a40`
+- `driftguard@main` commit `2772aff77929ef1310b8bcf0b5103c466c8c8010`; tree `adfebcf821ff5ba076a3dbbcf59282bbf14d7250`
+- `discovery@main` commit `96e6f8e9c776047f9068c897eab0406324187166`; tree `f1774c8fc6e1137d15c6cabe93e9edeeb3d54932`
+- `wip@main` commit `12a7c23dbe0482fd7bfe63659e54526778efef1e`; tree `e2527117c7d25f92d2e6aa7365ae8b3d3b9a3c08`
+- `bugops@main` commit `39eb19bcf7669466c22703fbae7cc226bd44f714`; tree `16209d56150f7341f39492f66dfa52263437575c`
+- `vera_model_training@main` commit `cdbc34b7242f730511a9f6dae130d6628969981d`; tree `9990bc38305e3787806002e3c8ad18178cfed4cf`
+- `rezon@main` commit `e3d7a41eccb49a9f403ef66f511faef677ceec1b`; tree `8a4353736fbbabe5071b80b2ea1b16e39c7a1712`
 
 Mosaic's current orientation document recorded foundation head `f13a1740a6c3e0040af35a47582babd9a44e20ee`, but it explicitly requires a fresh head check before carrying that state forward. World Zero likewise declares its working branch/PR currentness mutable. Those sources are therefore candidates, not exact-current bindings, until a transfer pass refreshes the required heads.
 
@@ -195,4 +195,4 @@ This pass establishes a portfolio-wide source universe and identifies the strong
 - establish consciousness/personhood;
 - transfer private identity payloads.
 
-`TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md` completed the first portfolio-to-capability mapping. A distributed Noöplex V0.1 contract was drafted and the first independent review returned CHANGES_REQUIRED with implementation blocked. Hephaestus subsequently returned a bounded two-file repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`. Four's fresh exact-subject rereview returned `CHANGES_REQUIRED`: seven original blockers were materially closed, while PREPARED-only recovery still lacks complete normative present/absent/divergent target outcomes and hostile divergence coverage. The implementation gate remains blocked pending a second bounded repair and fresh Four rereview.
+`TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md` completed the first portfolio-to-capability mapping. A distributed Noöplex V0.1 contract was drafted and the first independent review returned CHANGES_REQUIRED with implementation blocked. Hephaestus subsequently returned a bounded two-file repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`. Four's fresh exact-subject rereview returned `CHANGES_REQUIRED`: seven original blockers were materially closed. Hephaestus then returned a second bounded repair at exact head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`, hostile-set blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`. The R2 subject explicitly defines present/absent/divergent PREPARED-only recovery outcomes and is awaiting fresh Four exact-subject rereview. The implementation gate remains blocked until that rereview passes.
