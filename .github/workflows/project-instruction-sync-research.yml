@@ -1,0 +1,27 @@
+name: Project Instruction Sync Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.md"
+      - "specs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.yaml"
+      - "tools/validate_god_brain_project_instruction_sync.py"
+      - "tests/test_validate_god_brain_project_instruction_sync.py"
+      - ".github/workflows/project-instruction-sync-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.md"
+      - "specs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.yaml"
+      - "tools/validate_god_brain_project_instruction_sync.py"
+      - "tests/test_validate_god_brain_project_instruction_sync.py"
+      - ".github/workflows/project-instruction-sync-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run instruction sync tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_project_instruction_sync
+      - name: Validate instruction sync contract
+        run: python3 tools/validate_god_brain_project_instruction_sync.py --root .
