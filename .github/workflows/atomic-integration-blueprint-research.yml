@@ -1,0 +1,27 @@
+name: Atomic Integration Blueprint Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.md"
+      - "specs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.yaml"
+      - "tools/validate_god_brain_atomic_integration_blueprint.py"
+      - "tests/test_validate_god_brain_atomic_integration_blueprint.py"
+      - ".github/workflows/atomic-integration-blueprint-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.md"
+      - "specs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.yaml"
+      - "tools/validate_god_brain_atomic_integration_blueprint.py"
+      - "tests/test_validate_god_brain_atomic_integration_blueprint.py"
+      - ".github/workflows/atomic-integration-blueprint-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run atomic integration blueprint tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_atomic_integration_blueprint
+      - name: Validate atomic integration blueprint
+        run: python3 tools/validate_god_brain_atomic_integration_blueprint.py --root .
