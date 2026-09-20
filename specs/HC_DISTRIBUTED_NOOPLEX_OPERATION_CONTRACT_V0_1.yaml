@@ -500,10 +500,14 @@ effect_lifecycle:
   prepared_only_recovery:
     absence_of_attempt_evidence_does_not_prove_effect_absence: true
     recovery_action: INSPECT_TARGET_BEFORE_RETRY
-    if_target_absent_before_retry:
-      - refresh_exact_subject
-      - refresh_current_authority_and_prohibitions
-      - refresh_recovery_epoch
+    target_inspection_outcomes:
+      exact_intended_effect_observed: RECONCILE_WITHOUT_REPEAT
+      target_absent:
+        before_retry:
+          - refresh_exact_subject
+          - refresh_current_authority_and_prohibitions
+          - refresh_recovery_epoch
+      target_diverged_from_intended_and_absent_state: CONFLICT_STOP_NO_OVERWRITE_OR_BLIND_RETRY
     retry_reuses_operation_id: true
   prepared_record_must_bind:
     - operation_id
