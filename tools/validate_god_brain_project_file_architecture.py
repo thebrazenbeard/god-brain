@@ -9,15 +9,128 @@ from typing import Any
 SPEC_PATH = "specs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml"
 DOC_PATH = "docs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.md"
 
-REQUIRED_STRATA = {
-    "ROOT_DISCOVERY_MANIFEST",
-    "CONSTITUTIONAL_CONTRACTS",
-    "MACHINE_CURRENT_POINTER",
-    "HUMAN_CANONICAL_CURRENTNESS",
-    "MUTABLE_OPERATIONAL_STATE",
-    "REVIEW_EVIDENCE",
-    "CONTINUATION_CHECKPOINTS",
-    "RESEARCH_AND_PROPOSALS",
+REQUIRED_CLAIM_CEILING = {
+    "NO_CANONICAL_PROMOTION",
+    "NO_GOVERNANCE_ADOPTION",
+    "NO_RUNTIME_OR_PROVIDER_CURRENTNESS_CLAIM",
+}
+
+REQUIRED_STRATUM_GUARDS: dict[str, dict[str, Any]] = {
+    "ROOT_DISCOVERY_MANIFEST": {
+        "owns": {
+            "project_identity",
+            "bootstrap_routing",
+            "stable_authority_boundaries",
+            "freshness_requirement",
+        },
+        "forbidden": {
+            "open_pr_list",
+            "delegated_subject_list",
+            "latest_review_verdicts",
+            "live_provider_status",
+            "latest_checkpoint",
+        },
+        "truth_ceiling": "DISCOVERY_AND_BOOTSTRAP_CONTRACT",
+    },
+    "CONSTITUTIONAL_CONTRACTS": {
+        "owns": {
+            "governance",
+            "epistemic_policy",
+            "routing_and_collision_policy",
+            "privacy_and_provenance_policy",
+        },
+        "forbidden": {"volatile_operational_currentness"},
+        "truth_ceiling": "STABLE_RULES_NOT_LIVE_OPERATIONAL_FACTS",
+    },
+    "MACHINE_CURRENT_POINTER": {
+        "owns": {"canonical_source_contract_paths"},
+        "forbidden": {
+            "open_pr_state",
+            "current_review_assignments",
+            "bus_assignment_state",
+            "provider_health",
+            "runtime_reachability",
+            "self_commit_sha",
+        },
+        "truth_ceiling": "RESOLVES_CANONICAL_SOURCE_CONTRACTS_ONLY",
+    },
+    "HUMAN_CANONICAL_CURRENTNESS": {
+        "owns": {
+            "human_interpretation_of_canonical_main",
+            "durable_claim_ceilings",
+            "canonical_layer_summary",
+        },
+        "forbidden": {
+            "todays_work_queue",
+            "waiting_on_reviewer",
+            "volatile_pr_status",
+            "live_provider_health",
+        },
+        "truth_ceiling": "CANONICAL_INTERPRETATION_OF_MAIN",
+    },
+    "MUTABLE_OPERATIONAL_STATE": {
+        "sources": {
+            "github_pr_branch_head_state",
+            "review_surfaces",
+            "chat_communication_bus",
+            "ci_status",
+            "provider_runtime_readback",
+        },
+        "rule": "FRESH_READ",
+        "truth_ceiling": "OBSERVED_MUTABLE_STATE_ONLY",
+    },
+    "REVIEW_EVIDENCE": {
+        "required_binding": {
+            "repository",
+            "exact_head",
+            "base_when_applicable",
+            "paths_blobs_or_semantic_subject",
+            "reviewer_identity",
+            "reviewer_role",
+            "disposition",
+            "limitations",
+        },
+        "forbidden": {
+            "self_certification",
+            "automatic_successor_head_inheritance",
+        },
+        "truth_ceiling": "EXACT_SUBJECT_REVIEW_EVIDENCE",
+    },
+    "CONTINUATION_CHECKPOINTS": {
+        "owns": {
+            "recovery_snapshot",
+            "last_observed_frontier_pointers",
+        },
+        "forbidden": {
+            "canonical_currentness",
+            "worker_identity_authority",
+            "review_carry_forward",
+            "merge_authority",
+            "live_provider_proof",
+        },
+        "truth_ceiling": "RECOVERY_ACCELERATOR_ONLY",
+    },
+    "RESEARCH_AND_PROPOSALS": {
+        "owns": {
+            "candidate_mechanisms",
+            "unadopted_designs",
+            "research_results_with_provenance",
+        },
+        "forbidden": {"implicit_adoption"},
+        "truth_ceiling": "RESEARCH_ONLY_UNLESS_SEPARATELY_PROMOTED",
+    },
+}
+
+REQUIRED_CURRENT_POINTER_FIELDS = {
+    "schema",
+    "repository",
+    "canonical_branch",
+    "project_interface_path",
+    "governance_path",
+    "epistemic_contract_path",
+    "routing_contract_path",
+    "human_currentness_path",
+    "truth_ceiling",
 }
 
 REQUIRED_FORBIDDEN_CURRENT_POINTER_FIELDS = {
@@ -30,18 +143,45 @@ REQUIRED_FORBIDDEN_CURRENT_POINTER_FIELDS = {
     "current_commit_sha",
 }
 
-REQUIRED_CLAIM_CEILING = {
-    "NO_CANONICAL_PROMOTION",
-    "NO_GOVERNANCE_ADOPTION",
-    "NO_RUNTIME_OR_PROVIDER_CURRENTNESS_CLAIM",
-}
-
 
 def _load_object(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path} root must be an object")
     return value
+
+
+def _require_members(
+    entry: dict[str, Any],
+    field: str,
+    required: set[str],
+    *,
+    label: str,
+    errors: list[str],
+) -> None:
+    value = entry.get(field)
+    if not isinstance(value, list):
+        errors.append(f"{label}.{field} must be a list")
+        return
+    missing = required - set(value)
+    if missing:
+        errors.append(f"{label}.{field} missing: {sorted(missing)}")
+
+
+def _validate_stratum(
+    entry: dict[str, Any],
+    stratum_id: str,
+    required: dict[str, Any],
+    errors: list[str],
+) -> None:
+    label = f"stratum {stratum_id}"
+    for field, expected in required.items():
+        if isinstance(expected, set):
+            _require_members(entry, field, expected, label=label, errors=errors)
+        elif entry.get(field) != expected:
+            errors.append(
+                f"{label}.{field} mismatch: expected {expected!r}"
+            )
 
 
 def validate_project_file_architecture(root: Path) -> list[str]:
@@ -75,43 +215,64 @@ def validate_project_file_architecture(root: Path) -> list[str]:
         errors.append("strata must be a list")
         strata = []
 
-    ids = {item.get("id") for item in strata if isinstance(item, dict)}
-    missing_strata = REQUIRED_STRATA - ids
+    valid_entries = [item for item in strata if isinstance(item, dict)]
+    ids = [item.get("id") for item in valid_entries]
+    expected_ids = set(REQUIRED_STRATUM_GUARDS)
+    if len(valid_entries) != len(strata):
+        errors.append("every stratum must be an object")
+    if len(ids) != len(set(ids)):
+        errors.append("stratum ids must be unique")
+    missing_strata = expected_ids - set(ids)
+    unknown_strata = set(ids) - expected_ids
     if missing_strata:
         errors.append(f"missing strata: {sorted(missing_strata)}")
+    if unknown_strata:
+        errors.append(f"unknown strata: {sorted(unknown_strata)}")
+    if len(strata) != len(expected_ids):
+        errors.append(
+            f"expected exactly {len(expected_ids)} declared strata; observed {len(strata)}"
+        )
 
-    pointer_entries = [
-        item for item in strata
-        if isinstance(item, dict) and item.get("id") == "MACHINE_CURRENT_POINTER"
-    ]
-    if len(pointer_entries) != 1:
-        errors.append("exactly one MACHINE_CURRENT_POINTER stratum is required")
-    else:
-        forbidden = set(pointer_entries[0].get("forbidden", []))
-        required = {
-            "open_pr_state",
-            "current_review_assignments",
-            "bus_assignment_state",
-            "provider_health",
-            "runtime_reachability",
-            "self_commit_sha",
-        }
-        if not required.issubset(forbidden):
-            errors.append("machine current pointer stratum does not forbid all volatile state classes")
+    entries_by_id = {
+        item["id"]: item
+        for item in valid_entries
+        if item.get("id") in expected_ids
+    }
+    for stratum_id, required in REQUIRED_STRATUM_GUARDS.items():
+        entry = entries_by_id.get(stratum_id)
+        if entry is not None:
+            _validate_stratum(entry, stratum_id, required, errors)
 
     future = spec.get("future_current_pointer_contract")
     if not isinstance(future, dict):
         errors.append("future_current_pointer_contract must be an object")
     else:
-        forbidden_fields = set(future.get("forbidden_fields", []))
-        missing = REQUIRED_FORBIDDEN_CURRENT_POINTER_FIELDS - forbidden_fields
-        if missing:
-            errors.append(f"future current pointer missing forbidden fields: {sorted(missing)}")
+        if future.get("schema") != "GOD_BRAIN_CURRENT_POINTER_V1":
+            errors.append("future current pointer schema drifted")
         if future.get("proposed_path") != "architecture/current/GOD_BRAIN_CURRENT.json":
             errors.append("future current pointer path drifted")
+        _require_members(
+            future,
+            "required_fields",
+            REQUIRED_CURRENT_POINTER_FIELDS,
+            label="future_current_pointer_contract",
+            errors=errors,
+        )
+        _require_members(
+            future,
+            "forbidden_fields",
+            REQUIRED_FORBIDDEN_CURRENT_POINTER_FIELDS,
+            label="future_current_pointer_contract",
+            errors=errors,
+        )
         truth_ceiling = future.get("required_truth_ceiling", "")
-        if "must be freshly read" not in truth_ceiling:
-            errors.append("future current pointer truth ceiling must require fresh mutable-state reads")
+        if (
+            truth_ceiling
+            != "Resolves canonical source contracts only; mutable PR/review/delegation/provider/runtime state must be freshly read."
+        ):
+            errors.append(
+                "future current pointer truth ceiling must preserve the exact fresh-read boundary"
+            )
 
     if doc_path.is_file():
         doc = doc_path.read_text(encoding="utf-8")
