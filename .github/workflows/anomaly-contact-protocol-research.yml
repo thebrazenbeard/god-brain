@@ -1,0 +1,29 @@
+name: Anomaly Contact Protocol Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.md"
+      - "specs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_ANOMALY_CONTACT_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_anomaly_contact_protocol.py"
+      - "tests/test_validate_god_brain_anomaly_contact_protocol.py"
+      - ".github/workflows/anomaly-contact-protocol-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.md"
+      - "specs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_ANOMALY_CONTACT_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_anomaly_contact_protocol.py"
+      - "tests/test_validate_god_brain_anomaly_contact_protocol.py"
+      - ".github/workflows/anomaly-contact-protocol-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run anomaly/contact protocol tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_anomaly_contact_protocol
+      - name: Validate anomaly/contact protocol
+        run: python3 tools/validate_god_brain_anomaly_contact_protocol.py --root .
