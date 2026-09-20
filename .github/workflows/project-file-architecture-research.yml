@@ -1,0 +1,27 @@
+name: Project File Architecture Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.md"
+      - "specs/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml"
+      - "tools/validate_god_brain_project_file_architecture.py"
+      - "tests/test_validate_god_brain_project_file_architecture.py"
+      - ".github/workflows/project-file-architecture-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.md"
+      - "specs/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml"
+      - "tools/validate_god_brain_project_file_architecture.py"
+      - "tests/test_validate_god_brain_project_file_architecture.py"
+      - ".github/workflows/project-file-architecture-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run project file architecture tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_project_file_architecture
+      - name: Validate project file architecture contract
+        run: python3 tools/validate_god_brain_project_file_architecture.py --root .
