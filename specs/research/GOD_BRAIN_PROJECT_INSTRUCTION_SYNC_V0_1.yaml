@@ -1,0 +1,90 @@
+{
+  "schema_version": "GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1",
+  "status": "RESEARCH_PROPOSAL_MACHINE_CONTRACT",
+  "repository": "thebrazenbeard/god-brain",
+  "source_path": "architecture/chatgpt/PROJECT_INSTRUCTIONS.md",
+  "claim_ceiling": [
+    "NO_PROJECT_SETTING_MUTATION",
+    "NO_INSTALLATION_CLAIM",
+    "NO_CURRENT_CHAT_CONSUMPTION_CLAIM"
+  ],
+  "distinctions": [
+    "SOURCE_INSTRUCTIONS_NE_INSTALLED_PROJECT_INSTRUCTIONS",
+    "INSTALLED_PROJECT_INSTRUCTIONS_NE_CURRENT_CHAT_CONSUMPTION_PROOF",
+    "REPO_COMMIT_NE_PROJECT_SETTING_EFFECT",
+    "SOURCE_PROMOTION_NE_PROJECT_INSTALLATION",
+    "GIT_BLOB_SHA_NE_NORMALIZED_TEXT_SHA256"
+  ],
+  "sync_states": [
+    "SOURCE_DRAFT",
+    "SOURCE_CANONICAL_NOT_VERIFIED_INSTALLED",
+    "INSTALLATION_REPORTED_UNVERIFIED",
+    "INSTALLED_EXACT_SOURCE_VERIFIED",
+    "INSTALLATION_DRIFT",
+    "INSTALLATION_UNKNOWN"
+  ],
+  "normalization": {
+    "encoding": "UTF-8",
+    "line_endings": "LF",
+    "preserve_other_characters": true,
+    "final_newline": "EXACTLY_ONE_LF",
+    "digest": "SHA-256"
+  },
+  "receipt": {
+    "proposed_namespace": "state/project-interface/instruction-installation/",
+    "required_fields": [
+      "schema_version",
+      "repository",
+      "canonical_source_commit",
+      "source_path",
+      "source_git_blob",
+      "normalized_source_sha256",
+      "target_project_label",
+      "action_type",
+      "installer_identity",
+      "observed_at",
+      "verification_method",
+      "comparison_result",
+      "limitations",
+      "claim_ceiling"
+    ],
+    "optional_fields": [
+      "observed_installed_sha256"
+    ],
+    "forbidden_fields": [
+      "credential",
+      "token",
+      "secret",
+      "connector_secret",
+      "unrelated_private_project_content"
+    ],
+    "required_claim_ceiling": [
+      "INSTALLATION_RECEIPT_NE_PROOF_CURRENT_CHAT_CONSUMED_TEXT"
+    ]
+  },
+  "effect_boundary": {
+    "source_edit": "ISOLATED_REVERSIBLE_WORK_WHEN_OTHERWISE_AUTHORIZED",
+    "source_merge": "PROTECTED_CANONICAL_EFFECT",
+    "project_instruction_install_or_replace": "PROTECTED_EXTERNAL_CONFIGURATION_EFFECT",
+    "required_authority": "PATRICK_EXPLICIT_EXACT_EFFECT"
+  },
+  "bootstrap_rule": {
+    "source_file_alone_proves_installation": false,
+    "unknown_must_remain_unknown": true,
+    "required_classification_when_checked": [
+      "MATCH",
+      "DRIFT",
+      "UNKNOWN"
+    ]
+  },
+  "future_workflow": [
+    "EDIT_SOURCE",
+    "REVIEW_SOURCE",
+    "PROMOTE_SOURCE",
+    "AUTHORIZE_INSTALL",
+    "INSTALL",
+    "VERIFY",
+    "RECORD_RECEIPT",
+    "FRESH_CHAT_RECONSTRUCTION_TEST"
+  ]
+}
