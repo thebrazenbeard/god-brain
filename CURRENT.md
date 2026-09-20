@@ -113,11 +113,15 @@ Four has now independently rereviewed the repaired exact subject and returned `C
 - disposition: `CHANGES_REQUIRED`;
 - implementation gate: `BLOCKED`.
 
-`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_REREVIEW_F1_REPAIR`
+Hephaestus has now returned R2 at exact head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`, hostile-set blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`. Author validation reports YAML/structural PASS, 174/174 repository tests PASS, diff check PASS, and the diff remains confined to the two authorized files.
+
+R2 explicitly defines the three PREPARED-only target-inspection outcomes and extends HCDN-09 across all three. Those are author results, not independent qualification.
+
+`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_FOUR_R2_REREVIEW`
 
 Next gate:
 
-`HEPHAESTUS_R2_REPAIR -> FOUR_EXACT_SUBJECT_REREVIEW`
+`FOUR_R2_EXACT_SUBJECT_REREVIEW`
 
 ## Main-readiness boundary
 
