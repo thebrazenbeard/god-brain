@@ -26,7 +26,10 @@ REQUIRED_DISTINCTIONS = {
     "EXTERNAL_SOURCE_HYPOTHESIS_NE_CONTACT",
     "CONTACT_CANDIDATE_NE_CONTACT_FACT",
     "GENERATED_OUTPUT_NE_MEASURED_EXTERNAL_EVENT",
+    "OPERATOR_REPORT_NE_INSTRUMENTED_OBSERVATION",
     "DERIVED_DESCENDANTS_OF_ONE_ROOT_NE_INDEPENDENT_EVIDENCE",
+    "SOURCE_COUNT_NE_INDEPENDENT_EVIDENCE_COUNT",
+    "AFTER_NE_BECAUSE_OF",
     "UNAUDITED_CHANNEL_NE_CLOSED_CHANNEL",
     "RECEIPT_NE_RESULT_TRUTH",
 }
@@ -69,6 +72,31 @@ REQUIRED_E7 = {
     "FRESH_SEALED_REPLICATION",
     "INDEPENDENT_CHALLENGE_CUSTODY",
 }
+
+REQUIRED_CONFIRMATORY_FREEZE = {
+    "EXACT_SYSTEM_SUBJECT",
+    "PRIMARY_ENDPOINT",
+    "SCORING_RULE",
+    "THRESHOLD_OR_DECISION_BOUNDARY",
+    "SAMPLE_SIZE_OR_STOPPING_RULE",
+    "MULTIPLE_COMPARISON_RULE",
+    "EXCLUSION_AND_INVALIDITY_RULES",
+    "AGGREGATION_UNIT",
+    "INDEPENDENCE_UNIT",
+    "NULL_AND_RIVAL_SET",
+    "HOLDOUT_PARTITION",
+}
+
+EXPECTED_RESEARCH_ORDER = [
+    "OBSERVATION",
+    "ANOMALY_TEST",
+    "RIVAL_DISCRIMINATION",
+    "AGENCY_TEST",
+    "BOUNDARY_TEST",
+    "CONTACT_TEST",
+    "EXTERNAL_REPLICATION",
+    "ONTOLOGICAL_INTERPRETATION",
+]
 
 EXPECTED_ESCALATION = [
     ("E0", "BASELINE_NO_ANOMALY"),
@@ -169,6 +197,17 @@ def validate_anomaly_contact_protocol(root: Path) -> list[str]:
     missing = REQUIRED_KILL_TESTS - set(spec.get("mandatory_kill_tests", []))
     if missing:
         errors.append(f"mandatory kill tests missing: {sorted(missing)}")
+
+    confirmatory = spec.get("confirmatory_freeze_required")
+    if (
+        not isinstance(confirmatory, list)
+        or len(confirmatory) != len(set(confirmatory))
+        or set(confirmatory) != REQUIRED_CONFIRMATORY_FREEZE
+    ):
+        errors.append("confirmatory_freeze_required must exactly preserve the declared freeze contract")
+
+    if spec.get("research_order") != EXPECTED_RESEARCH_ORDER:
+        errors.append("research_order must remain the exact declared evidence progression")
 
     disallowed = set(spec.get("primary_admission_disallowed", []))
     for item in ("SUBJECTIVE_SEMANTIC_RESEMBLANCE", "NUMEROLOGY", "POST_HOC_PATTERN_MATCHING"):
