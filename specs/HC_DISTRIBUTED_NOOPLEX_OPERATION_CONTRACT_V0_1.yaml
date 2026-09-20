@@ -137,6 +137,11 @@ operation_identity:
   operation_id:
     semantics: One logical operation across retry, relay, storage, crash recovery, or replay.
     stable_across_retry: true
+  target_operation_id:
+    semantics: Distinct logical operation targeted by a cancellation request.
+    required_for:
+      - CANCEL
+    must_differ_from_operation_id: true
   idempotency_key:
     semantics: Caller supplied or derived identity for operations declared idempotent within an exact scope.
     must_bind:
@@ -152,6 +157,18 @@ operation_identity:
     substitution_for_newer_subject_forbidden: true
   content_digest:
     semantics: Canonical digest of material operation content, excluding transport-only mutable hop metadata.
+    immutable: true
+  stream_id:
+    semantics: Identity of one ordered transport/application stream when sequence-gap detection is required.
+    changes_on_sequence_domain_reset: true
+  message_sequence:
+    semantics: Positive monotonically increasing position within one stream_id.
+    scope: exact_stream_id
+    silent_gap_skip_forbidden: true
+  recovery_epoch:
+    semantics: Causal runtime/recovery epoch used to fence material work across restart or recovery boundaries.
+    changes_on_restart_or_recovery_boundary: true
+    stale_epoch_material_effect_requires_revalidation: true
 
 operation_kinds:
   - OBSERVE
@@ -241,6 +258,9 @@ message_event_envelope:
         - operation_kind_is_EXECUTE
         - operation_kind_is_CANCEL
         - effect_class_is_protected_or_irreversible
+    target_operation_id:
+      required_when:
+        - operation_kind_is_CANCEL
     parent_message_id:
       required_when:
         - causal_parent_exists_and_is_material
@@ -253,6 +273,20 @@ message_event_envelope:
     continuity_epoch:
       required_when:
         - operation_touches_continuity_bearing_state_family
+    recovery_epoch:
+      required_when:
+        - operation_kind_is_EXECUTE_or_CANCEL_and_effect_is_not_READ_ONLY
+        - material_operation_is_resumed_or_replayed_after_restart_or_recovery
+    stream_id:
+      required_when:
+        - stream_contract_declares_sequence_gap_detection
+        - message_sequence_is_present
+    message_sequence:
+      required_when:
+        - stream_id_is_present
+      constraints:
+        - positive_integer
+        - monotonically_increasing_within_stream_id
     sender_effect_class:
       required_when:
         - operation_kind_is_EXECUTE
@@ -269,22 +303,37 @@ message_event_envelope:
     - hop_trace
     - transport_observation
   immutable_semantic_fields:
+    - protocol_version
     - message_id
     - operation_id
     - origin
     - target
     - operation_kind
     - exact_subject
+    - content_digest
+    - created_at
+    - expiry
+    - priority
     - payload_type
     - payload
     - provenance
     - sender_effect_class
     - authority_ref
     - idempotency_key
+    - target_operation_id
     - parent_message_id
     - root_episode_id
     - coalition_id
     - continuity_epoch
+    - recovery_epoch
+    - stream_id
+    - message_sequence
+    - expected_state
+    - requested_receipts
+  mutability_rule:
+    required_or_conditional_field_not_explicitly_mutable_is_immutable: true
+    relay_extension_of_expiry_forbidden: true
+    reprioritization_requires_new_governed_message_or_operation: true
 
 priority:
   semantics: Scheduling urgency inside a declared scope.
@@ -308,7 +357,6 @@ routing_and_incorporation:
     - IN_TRANSIT
     - CUSTODY_ACCEPTED
     - TARGET_STORED
-    - TARGET_DELIVERED
     - TARGET_PROCESSED
     - DEAD_LETTER
     - EXPIRED
@@ -321,6 +369,10 @@ routing_and_incorporation:
     - INCORPORATED_AS_CONTROL_INPUT
     - NOT_INCORPORATED
   rule: Routing/delivery state and semantic incorporation state are independent dimensions.
+  delivery_semantics:
+    durable_delivery_state: TARGET_STORED
+    separate_TARGET_DELIVERED_state_defined: false
+    note: A transport may expose transient delivery observations, but V0.1 does not promote them to a separate normative routing state without an explicit proof contract.
   dead_letter_reasons:
     - NO_ROUTE
     - TARGET_UNHEALTHY
@@ -338,6 +390,22 @@ routing_and_incorporation:
 
 receipt_model:
   receipt_is_append_only_proposition: true
+  minimum_receipt_binding:
+    required:
+      - receipt_id
+      - receipt_type
+      - message_id
+      - operation_id
+      - exact_subject
+      - immutable_content_digest
+      - issuer_or_signer
+      - issued_at
+      - transition
+      - provenance
+    conditional:
+      - stream_id_when_message_is_sequenced
+      - message_sequence_when_message_is_sequenced
+    cross_message_or_cross_operation_substitution: CONFLICT
   receipt_types:
     CUSTODY:
       proves: A declared custodian accepted the exact immutable message object.
@@ -400,6 +468,14 @@ effect_lifecycle:
     unresolved_after_attempt: AMBIGUOUS
     recovery_action: INSPECT_TARGET_BEFORE_RETRY
     retry_reuses_operation_id: true
+  prepared_only_recovery:
+    absence_of_attempt_evidence_does_not_prove_effect_absence: true
+    recovery_action: INSPECT_TARGET_BEFORE_RETRY
+    if_target_absent_before_retry:
+      - refresh_exact_subject
+      - refresh_current_authority_and_prohibitions
+      - refresh_recovery_epoch
+    retry_reuses_operation_id: true
   prepared_record_must_bind:
     - operation_id
     - exact_subject
@@ -423,6 +499,15 @@ idempotency_and_duplicates:
     disposition: CONFLICT
   completed_operation_retry:
     disposition: RETURN_EXISTING_COMPLETION_EVIDENCE
+  protected_duplicate_admission_order:
+    current_checks_before_completion_evidence:
+      - authentication_or_current_trust_basis
+      - exact_subject
+      - current_authority
+      - hard_prohibition_clearance
+      - expiry
+      - recovery_epoch_when_required
+    failed_current_check_must_not_expose_unauthorized_completion_evidence: true
   ambiguous_operation_retry:
     disposition: INSPECT_BEFORE_RETRY
 
@@ -440,11 +525,16 @@ ordering_and_time:
   record_time:
     distinct_from_event_time: true
   sequence_gap:
+    identity: stream_id
+    position: message_sequence
     default_disposition: QUARANTINE_OR_EXPLICIT_GAP_STATE
     must_not_silently_skip: true
   expired_message:
     effect_execution_forbidden: true
     historical_receipt_retention_allowed: true
+  restart_or_recovery_epoch_change:
+    material_pre_restart_work_requires_currentness_and_authority_revalidation: true
+    stale_epoch_effect_execution_forbidden: true
 
 state_ownership:
   every_shared_state_family_requires:
@@ -607,10 +697,17 @@ conformance_requirements:
     - authority_is_checked_at_effect_boundary
     - custody_delivery_processing_and_effect_receipts_do_not_promote_each_other
     - duplicate_retry_does_not_repeat_verified_mutation
+    - protected_duplicate_retry_revalidates_current_authority_and_currentness
     - ambiguous_effect_is_inspected_before_retry
+    - prepared_only_recovery_inspects_target_before_retry
     - stale_fence_cannot_commit_or_claim_completion
     - expired_message_cannot_execute_effect
+    - immutable_expiry_and_content_digest_survive_relay
     - sequence_gap_is_observable
+    - sequenced_message_and_receipt_bind_same_stream_and_sequence
+    - cancel_uses_distinct_target_operation_id
+    - receipt_cannot_be_substituted_across_message_or_operation
+    - stale_recovery_epoch_cannot_execute_material_effect
     - partition_policy_blocks_forbidden_continuity_writes
     - rejoin_reconciliation_precedes_write_reenable
     - degraded_route_does_not_mutate_durable_plasticity_automatically
