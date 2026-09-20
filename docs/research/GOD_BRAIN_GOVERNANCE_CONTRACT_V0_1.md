@@ -121,12 +121,12 @@ The role does not itself grant canonical-effect authority.
 
 ## 6. BT2 Coordinator
 
-BT2 Coordinator owns the engineering-workforce and independent-review plane, including:
+BT2 Coordinator owns the engineering-workforce and independent-review plane. Bounded implementation is owned by BT2 only when the exact subject is explicitly delegated to BT2, including:
 
 - worker reconstruction and dispatch;
 - independent review;
 - adversarial and hostile testing;
-- bounded implementation work;
+- bounded implementation work explicitly delegated to BT2;
 - qualification evidence;
 - engineering coordination;
 - return of exact-subject evidence to God Brain.
@@ -207,7 +207,7 @@ Private Patrick/Vera material must not be imported into generic portability, tra
 
 Keep these stages separate:
 
-research proposal -> architecture -> specification -> fixture -> reference implementation -> production implementation -> deployment -> behavioral qualification
+research proposal -> architecture -> specification -> fixture -> reference implementation -> production implementation -> deployment -> behavioral qualification -> external scientific validation
 
 No stage silently proves the next.
 
@@ -220,6 +220,8 @@ No stage silently proves the next.
 `REFERENCE_CONFORMANCE_PASS != PRODUCTION_OPERATION`
 
 `UNIT_TEST_PASS != BEHAVIORAL_QUALIFICATION`
+
+`BEHAVIORAL_QUALIFICATION != EXTERNAL_SCIENTIFIC_VALIDATION`
 
 Evidence should label whether it establishes structure, semantics, source binding, implementation behavior, runtime operation, deployment state, or behavioral qualification.
 
