@@ -8,7 +8,7 @@ A first `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` draft and 40-case hosti
 
 Blocking findings: missing cancellation target-operation identity; missing stream/sequence semantics; incomplete immutable-field classification; insufficient restart/recovery fencing; orphan `TARGET_DELIVERED`; under-specified receipt identity/binding; PREPARED-only recovery absent from the normative contract; and completed-retry handling ordered too early relative to current trust/authority/prohibition/currentness gates.
 
-Therefore the originally reviewed distributed contract is **not main-ready**. Hephaestus returned a bounded repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`, contract blob `f6b3cd71620f9dad0c43c4a9b1e25a4327e12c8d`, hostile-set blob `9cdb0eb827e0a67b865bbe9230485753882c6188`. Reported author validation is YAML PASS, blocker consistency 8/8 PASS, repository tests 174/174 PASS, and diff check PASS. The repaired subject remains **not independently reviewed and not main-ready**. The current gate is `FOUR_EXACT_SUBJECT_REREVIEW`.
+Therefore the originally reviewed distributed contract is **not main-ready**. Hephaestus returned a bounded repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`, contract blob `f6b3cd71620f9dad0c43c4a9b1e25a4327e12c8d`, hostile-set blob `9cdb0eb827e0a67b865bbe9230485753882c6188`. Reported author validation is YAML PASS, blocker consistency 8/8 PASS, repository tests 174/174 PASS, and diff check PASS. Four has now independently rereviewed that exact repaired subject and returned **CHANGES_REQUIRED**. Seven original blockers are materially closed. Remaining blocker `REREVIEW-F1`: PREPARED-only recovery must normatively distinguish exact intended effect already present -> reconcile without repeat, target absent -> refresh gates before retry, and divergent target -> conflict/stop; hostile coverage must explicitly falsify divergence. The subject remains **not implementation-ready and not main-ready**. Current gate: `HEPHAESTUS_R2_REPAIR -> FOUR_EXACT_SUBJECT_REREVIEW`.
 
 Companion source universe: `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`.
 
@@ -311,4 +311,4 @@ This pass does not authorize or perform:
 - model training;
 - behavioral qualification claims.
 
-The next frontier after this document is fresh exact-subject Four rereview of the repaired `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` and hostile set before implementation or main integration of that contract.
+The next frontier after this document is a second bounded repair of `REREVIEW-F1`, followed by fresh exact-subject Four rereview before implementation or main integration of the Noöplex contract.
