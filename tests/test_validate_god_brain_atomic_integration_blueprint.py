@@ -8,6 +8,7 @@ from pathlib import Path
 from tools.validate_god_brain_atomic_integration_blueprint import (
     DOC_PATH,
     FIXTURE_PATH,
+    PROVENANCE_PATH,
     SPEC_PATH,
     validate_atomic_integration_blueprint,
 )
@@ -105,6 +106,24 @@ class GodBrainAtomicIntegrationBlueprintTests(unittest.TestCase):
             (target / FIXTURE_PATH).write_text(json.dumps(mutated), encoding="utf-8")
             errors = validate_atomic_integration_blueprint(target)
             self.assertTrue(any("GB-COMP-001..016" in error for error in errors))
+
+    def test_provenance_manifest_requires_exact_blob_ids(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        fixture = json.loads((root / FIXTURE_PATH).read_text(encoding="utf-8"))
+        provenance = json.loads((root / PROVENANCE_PATH).read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            for path in (SPEC_PATH, DOC_PATH, FIXTURE_PATH, PROVENANCE_PATH):
+                (target / path).parent.mkdir(parents=True, exist_ok=True)
+            (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
+            (target / DOC_PATH).write_text((root / DOC_PATH).read_text(encoding="utf-8"), encoding="utf-8")
+            (target / FIXTURE_PATH).write_text(json.dumps(fixture), encoding="utf-8")
+            mutated = json.loads(json.dumps(provenance))
+            mutated["sources"][0]["entries"][0][1] = "not-a-git-blob"
+            (target / PROVENANCE_PATH).write_text(json.dumps(mutated), encoding="utf-8")
+            errors = validate_atomic_integration_blueprint(target)
+            self.assertTrue(any("provenance blob invalid" in error for error in errors))
 
 
 if __name__ == "__main__":
