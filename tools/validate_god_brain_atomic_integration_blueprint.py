@@ -8,6 +8,7 @@ from typing import Any
 
 SPEC_PATH = "specs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.yaml"
 DOC_PATH = "docs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.md"
+FIXTURE_PATH = "specs/research/fixtures/GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1.json"
 
 REQUIRED_INPUTS = {
     "foundation",
@@ -192,6 +193,39 @@ def validate_atomic_integration_blueprint(root: Path) -> list[str]:
             errors.append("file-level provenance must be required")
         if assembly.get("composite_status_edits_require_fresh_review") is not True:
             errors.append("composite status edits must require fresh review")
+
+    fixture_path = root / FIXTURE_PATH
+    if not fixture_path.is_file():
+        errors.append(f"missing {FIXTURE_PATH}")
+    else:
+        try:
+            fixture = _load(fixture_path)
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            errors.append(f"{FIXTURE_PATH} invalid JSON: {exc}")
+            fixture = {}
+        if fixture.get("schema_version") != "GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1":
+            errors.append("composite fixture schema_version drifted")
+        if fixture.get("status") != "RESEARCH_FIXTURES":
+            errors.append("composite fixtures must remain research fixtures")
+        cases = fixture.get("cases")
+        if not isinstance(cases, list):
+            errors.append("composite fixture cases must be list")
+            cases = []
+        expected_ids = [f"GB-COMP-{i:03d}" for i in range(1, 17)]
+        actual_ids = [case.get("id") for case in cases if isinstance(case, dict)]
+        if actual_ids != expected_ids:
+            errors.append("composite fixture IDs must be contiguous GB-COMP-001..016")
+        dispositions = [case.get("expected") for case in cases if isinstance(case, dict)]
+        if dispositions.count("REJECT") != 12 or dispositions.count("ACCEPT") != 4:
+            errors.append("composite fixtures must contain 12 REJECT and 4 ACCEPT cases")
+        for case in cases:
+            if not isinstance(case, dict):
+                errors.append("composite fixture case must be object")
+                continue
+            if case.get("expected") not in {"REJECT", "ACCEPT"}:
+                errors.append(f"{case.get('id')} has invalid expected disposition")
+            if not case.get("reason"):
+                errors.append(f"{case.get('id')} missing reason")
 
     if doc_path.is_file():
         doc = doc_path.read_text(encoding="utf-8")
