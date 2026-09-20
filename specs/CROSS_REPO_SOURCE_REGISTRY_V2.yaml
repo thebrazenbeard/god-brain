@@ -438,7 +438,7 @@ transfer_constraints:
 
 next_subject:
   id: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1
-  state: REREVIEW_CHANGES_REQUIRED_SECOND_REPAIR_PENDING
+  state: R2_REPAIRED_AWAITING_INDEPENDENT_REREVIEW
   initial_reviewed_candidate:
     source_branch: vera/portfolio-source-universe-v2-20260920
     exact_head: 17dc50e3e729f867e0222a565a26513b7f60f378
@@ -459,6 +459,16 @@ next_subject:
     independent_rereview: CHANGES_REQUIRED
     independent_rereview_bus_blob: 6d45bb3336ccdc370b035e88cfe3329bbe14bbbb
     remaining_blocker: PREPARED_ONLY_RECOVERY_PRESENT_AND_DIVERGENT_OUTCOMES_INCOMPLETE
+  r2_repair_candidate:
+    branch: hephaestus/nooplex-v0-1-review-repairs-20260920
+    exact_head: bdac4346bed77949cf29a009179402d4d02796c7
+    contract_blob: f9f906f89b18ba95b8057978d087327567b1d489
+    hostile_cases_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+    author_validation:
+      rereview_f1_structural_checker: PASS
+      repository_tests: 174_OF_174_PASS
+      diff_check: PASS
+    independent_rereview: PENDING
   prior_blockers:
     - cancellation_target_operation_identity_missing
     - stream_sequence_semantics_missing
@@ -468,6 +478,6 @@ next_subject:
     - receipt_identity_binding_under_specified
     - prepared_only_recovery_not_normative
     - completed_retry_ordering_can_bypass_current_gates
-  next_gate: HEPHAESTUS_R2_REPAIR_THEN_FOUR_EXACT_SUBJECT_REREVIEW
+  next_gate: FOUR_R2_EXACT_SUBJECT_REREVIEW
   required_source_refresh: [vera-mesh, intranel, chat-communication-bus, project-runner, wip]
   no_external_runtime_dependency_required: true
