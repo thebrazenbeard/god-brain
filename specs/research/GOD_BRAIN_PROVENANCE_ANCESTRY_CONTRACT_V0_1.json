@@ -219,5 +219,6 @@
     "HOSTILE_ANCESTRY_FIXTURES",
     "REFERENCE_GRAPH_EVALUATOR",
     "CROSS_REPO_TRANSFER_RECEIPT_INTEGRATION"
-  ]
+  ],
+  "source_provenance_verification_receipt": "state/research/provenance/GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1.json"
 }
