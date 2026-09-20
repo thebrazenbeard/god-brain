@@ -1,0 +1,70 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_QUALIFICATION_SUBJECT_V0_1
+status: FROZEN_REVIEWED_SPECIFICATION_SUBJECT
+date: 2026-09-20
+repository: thebrazenbeard/god-brain
+
+subject:
+  id: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1_R2
+  source_branch: hephaestus/nooplex-v0-1-review-repairs-20260920
+  exact_head: bdac4346bed77949cf29a009179402d4d02796c7
+  contract:
+    path: specs/HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1.yaml
+    git_blob: f9f906f89b18ba95b8057978d087327567b1d489
+  hostile_set:
+    path: docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md
+    git_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+    contiguous_case_range: HCDN-01..HCDN-44
+    case_count: 44
+
+independent_review:
+  reviewer: Four
+  disposition: INDEPENDENT_REVIEW_PASS
+  bus_repository: thebrazenbeard/chat-communication-bus
+  bus_branch: bus/four-v2
+  review_commit: ed4b8bf92c33d3fa4b8cc9be38b0fcf4c9808fa8
+  review_message_path: messages/20260920-four-god-brain-nooplex-v0-1-r2-rereview-pass.md
+  reviewed_contract_blob: f9f906f89b18ba95b8057978d087327567b1d489
+  reviewed_hostile_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+  evidence:
+    yaml_semantic_structural_rereview: PASS
+    prior_blocker_closure_invariants: PASS
+    hostile_case_contiguity: PASS
+    repository_tests: 174_OF_174_PASS
+    diff_check: PASS
+    declared_source_bindings_readback: 11_OF_11_MATCH
+
+claim_ceiling:
+  - SPECIFICATION_AND_HOSTILE_SET_REVIEW_READINESS_ONLY
+  - NO_RUNTIME_IMPLEMENTATION_CLAIM
+  - NO_BEHAVIORAL_QUALIFICATION_CLAIM
+  - NO_MAIN_READY_OR_MERGE_AUTHORITY_CLAIM
+  - NO_CONSCIOUSNESS_OR_PERSONHOOD_CLAIM
+
+source_binding_blobs:
+  hc_typed_routing: 7a812ecf44e7a18ee3492c3506e2305889cdacd2
+  hc_runtime_model: 17593d4e3601590d8af9a9dd72692c55cb128fc9
+  hc_fault_partition: e861d3ab13a4dadfa51c46deb77b03387243a68e
+  veramesh_architecture: a0cde52adef19611cbef9f0841a24062790c6441
+  veramesh_authorization_matrix: c82c5c1c4c9de1fe249ea0b3c6a02346f3c869d5
+  veramesh_receipt_schema: d2601d17c3013f6a176e012b91b41600fca6380e
+  intranel_semantics: 768ee95d715aef5e34a2e246c912eb4f612183f4
+  project_runner_design: 2199332540c2243da2c5ad1aa49fb4aaffafa643
+  wip_effect_protocol: 1db3bda8f10d0d6b9eb473a3e7675d47dacfe96a
+  wip_recovery_protocol: 43fa5b9b381e71d7b12b6c4405e22371501c2b68
+  wip_checkpoint_protocol: f6d5619d2c9b3ddda07ba6907ab5fefc3432eaa5
+
+freeze_rules:
+  qualification_subject_movement_requires_new_review_subject: true
+  later_commit_does_not_inherit_exact_head_review: true
+  contract_blob_change_requires_fresh_review: true
+  hostile_set_blob_change_requires_fresh_review: true
+  review_receipt_must_not_be_rebound_to_later_content: true
+  fixtures_may_reference_this_subject_without_extending_review_scope: true
+
+implementation_status:
+  runtime: NOT_IMPLEMENTED
+  behavioral_qualification: NOT_QUALIFIED
+
+next_gate:
+  - MACHINE_READABLE_DETERMINISTIC_HCDN_FIXTURES
+  - SMALLEST_REFERENCE_RUNTIME_SLICE_AFTER_FIXTURE_REVIEW
