@@ -1,0 +1,29 @@
+name: Provenance Ancestry Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.md"
+      - "specs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_PROVENANCE_ANCESTRY_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_provenance_ancestry.py"
+      - "tests/test_validate_god_brain_provenance_ancestry.py"
+      - ".github/workflows/provenance-ancestry-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.md"
+      - "specs/research/GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_PROVENANCE_ANCESTRY_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_provenance_ancestry.py"
+      - "tests/test_validate_god_brain_provenance_ancestry.py"
+      - ".github/workflows/provenance-ancestry-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run provenance ancestry tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_provenance_ancestry
+      - name: Validate provenance ancestry contract
+        run: python3 tools/validate_god_brain_provenance_ancestry.py --root .
