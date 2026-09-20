@@ -350,7 +350,7 @@ A PASS on one implementation revision does not carry across material changes.
 
 ## HCDN-42 — pre-restart protected work replays under stale recovery epoch
 
-**Setup:** A protected `EXECUTE` was queued in recovery epoch E1. The HC restarts into E2 while the exact target revision remains otherwise unchanged. The serialized E1 operation becomes deliverable after restart.
+**Setup:** A protected `EXECUTE` was queued in recovery epoch E1. The HC restarts into E2 while the exact target revision remains otherwise unchanged. The serialized E1 operation becomes deliverable after restart. A hostile sender may also label the operation `READ_ONLY`; receiver-owned classification still identifies the protected mutation.
 
 **Expected:** Effect execution is blocked until currentness, authority/prohibitions, and recovery-epoch eligibility are revalidated for E2. Readability of the old queued object is not sufficient.
 
