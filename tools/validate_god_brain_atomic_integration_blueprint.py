@@ -9,6 +9,7 @@ from typing import Any
 SPEC_PATH = "specs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.yaml"
 DOC_PATH = "docs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.md"
 FIXTURE_PATH = "specs/research/fixtures/GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1.json"
+PROVENANCE_PATH = "specs/research/GOD_BRAIN_COMPOSITE_PROVENANCE_MANIFEST_V0_1.json"
 
 REQUIRED_INPUTS = {
     "foundation",
@@ -226,6 +227,64 @@ def validate_atomic_integration_blueprint(root: Path) -> list[str]:
                 errors.append(f"{case.get('id')} has invalid expected disposition")
             if not case.get("reason"):
                 errors.append(f"{case.get('id')} missing reason")
+
+    provenance_path = root / PROVENANCE_PATH
+    if not provenance_path.is_file():
+        errors.append(f"missing {PROVENANCE_PATH}")
+    else:
+        try:
+            provenance = _load(provenance_path)
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            errors.append(f"{PROVENANCE_PATH} invalid JSON: {exc}")
+            provenance = {}
+        if provenance.get("schema_version") != "GOD_BRAIN_COMPOSITE_PROVENANCE_MANIFEST_V0_1":
+            errors.append("composite provenance schema_version drifted")
+        if provenance.get("status") != "RESEARCH_PROVENANCE_PLAN":
+            errors.append("composite provenance must remain research-plan state")
+        sources = provenance.get("sources")
+        if not isinstance(sources, list):
+            errors.append("composite provenance sources must be list")
+            sources = []
+        observed_prs = [source.get("pr") for source in sources if isinstance(source, dict)]
+        if observed_prs != [6, 8, 10, 11, 12, 13]:
+            errors.append("composite provenance source PR order/set drifted")
+        expected_counts = {6: 7, 8: 1, 10: 1, 11: 9, 12: 5, 13: 6}
+        for source in sources:
+            if not isinstance(source, dict):
+                errors.append("composite provenance source must be object")
+                continue
+            pr = source.get("pr")
+            entries = source.get("entries")
+            if not isinstance(entries, list):
+                errors.append(f"PR {pr} provenance entries must be list")
+                continue
+            if pr in expected_counts and len(entries) != expected_counts[pr]:
+                errors.append(f"PR {pr} provenance entry count drifted")
+            for entry in entries:
+                if not isinstance(entry, list) or len(entry) != 3:
+                    errors.append(f"PR {pr} provenance entry must be [path, blob, disposition]")
+                    continue
+                path, blob, disposition = entry
+                if not isinstance(path, str) or not path:
+                    errors.append(f"PR {pr} provenance path invalid")
+                if not isinstance(blob, str) or len(blob) != 40:
+                    errors.append(f"PR {pr} provenance blob invalid for {path}")
+                if not isinstance(disposition, str) or not disposition:
+                    errors.append(f"PR {pr} provenance disposition missing for {path}")
+        transformed = provenance.get("transformed_targets")
+        if not isinstance(transformed, list) or len(transformed) != 3:
+            errors.append("composite provenance must define exactly three transformed targets")
+        invariants = set(provenance.get("assembly_invariants", []))
+        required_invariants = {
+            "FRESH_READ_EVERY_SOURCE_HEAD_BEFORE_COPY",
+            "NO_SOURCE_BRANCH_WHOLESALE_MERGE",
+            "EXACT_FILE_BLOB_PROVENANCE_REQUIRED",
+            "TRANSFORMED_FILE_NE_SOURCE_REVIEWED_BLOB",
+            "ALL_TRANSFORMATIONS_REQUIRE_COMPOSITE_REVIEW",
+            "PENDING_REVIEW_INPUT_NE_ADMISSIBLE_UNTIL_REVIEW_CLEAN",
+        }
+        if not required_invariants.issubset(invariants):
+            errors.append("composite provenance assembly invariants incomplete")
 
     if doc_path.is_file():
         doc = doc_path.read_text(encoding="utf-8")
