@@ -25,8 +25,14 @@ cases:
     input:
       operation_kind: EXECUTE
       requested_effect: protected_state_mutation
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: REJECT_OR_QUARANTINE
+      admission_disposition:
+        one_of:
+          - REJECT
+          - QUARANTINE
       effect_executed: false
     must_not_occur:
       - protected_state_mutation
@@ -44,6 +50,10 @@ cases:
     input:
       operation_kind: EXECUTE
       requested_effect: mutating_operation
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
+      conflict_reason: REVIEWED_HOSTILE_EXPECTATION
     expected:
       admission_disposition: CONFLICT
       effect_executed: false
@@ -65,8 +75,14 @@ cases:
     input:
       operation_kind: EXECUTE
       priority: MAX_DECLARED_PRIORITY
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: REJECT_OR_QUARANTINE
+      admission_disposition:
+        one_of:
+          - REJECT
+          - QUARANTINE
       effect_executed: false
     must_not_occur:
       - authority_granted_from_priority
@@ -87,9 +103,12 @@ cases:
       attempted_origin_rewrite: relay_B
     expectation_provenance:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
-      immutability_basis: NORMATIVE_CONTRACT
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: INTEGRITY_FAILURE_OR_CONFLICT
+      admission_disposition:
+        one_of:
+          - INTEGRITY_FAILURE
+          - CONFLICT
       effect_executed: false
     must_not_occur:
       - semantically_equivalent_admission_after_origin_rewrite
@@ -107,6 +126,10 @@ cases:
     input:
       operation_id: op_005
       content_digest: digest_B
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      duplicate_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
       admission_disposition: CONFLICT
       duplicate_disposition: CONFLICT
@@ -126,6 +149,10 @@ cases:
     input:
       idempotency_key: idem_006
       exact_subject: S2
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      duplicate_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
       admission_disposition: CONFLICT
       duplicate_disposition: CONFLICT
@@ -148,6 +175,10 @@ cases:
     input:
       retry_same_operation_id: op_007
       same_content_digest: true
+    expectation_provenance:
+      duplicate_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
+      effect_state: REVIEWED_HOSTILE_EXPECTATION
     expected:
       duplicate_disposition: RETURN_EXISTING_COMPLETION_EVIDENCE
       effect_executed: false
@@ -167,6 +198,9 @@ cases:
       crash_occurred: true
     input:
       recovery_event: restart
+    expectation_provenance:
+      effect_state: REVIEWED_HOSTILE_EXPECTATION
+      reconciliation_action: REVIEWED_HOSTILE_EXPECTATION
     expected:
       effect_state: AMBIGUOUS
       reconciliation_action: INSPECT_TARGET_BEFORE_RETRY
@@ -187,6 +221,8 @@ cases:
         - exact_intended_effect_observed
         - target_absent
         - target_diverged_from_intended_and_absent_state
+    expectation_provenance:
+      variants: REVIEWED_HOSTILE_EXPECTATION
     expected:
       variants:
         exact_intended_effect_observed:
@@ -217,6 +253,8 @@ cases:
       strongest_valid_receipt: CUSTODY
     input:
       projection_request: TARGET_PROCESSED
+    expectation_provenance:
+      receipt_projection: REVIEWED_HOSTILE_EXPECTATION
     expected:
       receipt_projection: CUSTODY
     must_not_occur:
@@ -260,9 +298,11 @@ cases:
       submitted_receipt: TARGET_PROCESSED
     expectation_provenance:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
-      predecessor_rule: NORMATIVE_CONTRACT
     expected:
-      admission_disposition: REJECT_OR_CONFLICT
+      admission_disposition:
+        one_of:
+          - REJECT
+          - CONFLICT
     must_not_occur:
       - projection_jump_to_TARGET_PROCESSED
 
@@ -282,6 +322,9 @@ cases:
       actor: worker_A
       fencing_token: 7
       action: shared_state_mutation_or_completion_claim
+    expectation_provenance:
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
     expected:
       admission_disposition: REJECT
       effect_executed: false
@@ -301,6 +344,8 @@ cases:
       verification_evidence_present: false
     input:
       reclaim_operation: true
+    expectation_provenance:
+      reconciliation_action: REVIEWED_HOSTILE_EXPECTATION
     expected:
       reconciliation_action: INSPECT_TARGET_BEFORE_RETRY
     must_not_occur:
@@ -319,6 +364,10 @@ cases:
       expiry_passed: true
     input:
       target_becomes_deliverable: true
+    expectation_provenance:
+      effect_executed: REVIEWED_HOSTILE_EXPECTATION
+      routing_state: REVIEWED_HOSTILE_EXPECTATION
+      historical_receipt_retention_allowed: REVIEWED_HOSTILE_EXPECTATION
     expected:
       effect_executed: false
       routing_state: EXPIRED
@@ -340,9 +389,18 @@ cases:
         - 43
     input:
       absent_sequence: 42
+    expectation_provenance:
+      sequence_state: REVIEWED_HOSTILE_EXPECTATION
+      admission_disposition: REVIEWED_HOSTILE_EXPECTATION
     expected:
-      sequence_state: EXPLICIT_GAP_OR_QUARANTINE
-      admission_disposition: QUARANTINE_OR_EXPLICIT_GAP_STATE
+      sequence_state:
+        one_of:
+          - EXPLICIT_GAP_STATE
+          - QUARANTINE
+      admission_disposition:
+        one_of:
+          - QUARANTINE
+          - EXPLICIT_GAP_STATE
     must_not_occur:
       - silently_skip_42
       - infer_42_never_existed
