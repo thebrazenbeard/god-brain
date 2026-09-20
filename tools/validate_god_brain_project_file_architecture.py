@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 
-SPEC_PATH = "specs/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml"
+SPEC_PATH = "specs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml"
 DOC_PATH = "docs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.md"
 
 REQUIRED_STRATA = {
