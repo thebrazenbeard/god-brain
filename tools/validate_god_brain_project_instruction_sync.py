@@ -24,6 +24,8 @@ REQUIRED_CLAIM_CEILING = {
     "NO_CURRENT_CHAT_CONSUMPTION_CLAIM",
 }
 
+RECEIPT_DIR = "state/project-interface/instruction-installation"
+
 REQUIRED_RECEIPT_FIELDS = {
     "schema_version",
     "repository",
@@ -128,6 +130,48 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
         required_classes = {"MATCH", "DRIFT", "UNKNOWN"}
         if not required_classes.issubset(set(bootstrap.get("required_classification_when_checked", []))):
             errors.append("bootstrap installation classification is incomplete")
+
+    receipt_dir = root / RECEIPT_DIR
+    if receipt_dir.is_dir():
+        for receipt_path in sorted(receipt_dir.glob("*.json")):
+            try:
+                observed = _load_object(receipt_path)
+            except (OSError, json.JSONDecodeError, ValueError) as exc:
+                errors.append(f"{receipt_path.relative_to(root)} invalid receipt JSON: {exc}")
+                continue
+
+            if observed.get("schema_version") != "GOD_BRAIN_PROJECT_INSTRUCTION_INSTALLATION_RECEIPT_V0_1":
+                errors.append(f"{receipt_path.relative_to(root)} unexpected receipt schema_version")
+            if observed.get("repository") != "thebrazenbeard/god-brain":
+                errors.append(f"{receipt_path.relative_to(root)} repository drifted")
+            if observed.get("source_path") != "architecture/chatgpt/PROJECT_INSTRUCTIONS.md":
+                errors.append(f"{receipt_path.relative_to(root)} source_path drifted")
+            if observed.get("sync_state") not in REQUIRED_SYNC_STATES:
+                errors.append(f"{receipt_path.relative_to(root)} invalid sync_state")
+
+            limitations = observed.get("limitations")
+            if not isinstance(limitations, list) or not limitations:
+                errors.append(f"{receipt_path.relative_to(root)} limitations must be a nonempty list")
+
+            ceilings = set(observed.get("claim_ceiling", []))
+            if "INSTALLATION_RECEIPT_NE_PROOF_CURRENT_CHAT_CONSUMED_TEXT" not in ceilings:
+                errors.append(f"{receipt_path.relative_to(root)} missing chat-consumption claim ceiling")
+            if "NO_CANONICAL_PROMOTION" not in ceilings:
+                errors.append(f"{receipt_path.relative_to(root)} missing canonical-promotion claim ceiling")
+
+            methods = observed.get("verification_method")
+            setting_method = methods.get("project_instruction_setting") if isinstance(methods, dict) else None
+            if setting_method == "USER_REPORT_ONLY_NO_INDEPENDENT_SETTING_BYTE_READBACK":
+                if observed.get("sync_state") == "INSTALLED_EXACT_SOURCE_VERIFIED":
+                    errors.append(
+                        f"{receipt_path.relative_to(root)} cannot claim exact installed source from user-report-only setting evidence"
+                    )
+
+            project_files = observed.get("project_file_verification")
+            if isinstance(project_files, dict) and project_files.get("result") == "EXACT_PACK_MATCH":
+                files = project_files.get("files")
+                if not isinstance(files, dict) or len(files) < 6:
+                    errors.append(f"{receipt_path.relative_to(root)} exact pack match lacks file digest evidence")
 
     if doc_path.is_file():
         doc = doc_path.read_text(encoding="utf-8")
