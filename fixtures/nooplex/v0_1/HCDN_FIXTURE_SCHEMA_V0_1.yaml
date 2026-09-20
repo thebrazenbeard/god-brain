@@ -9,6 +9,7 @@ required_fixture_fields:
   - contract_clause_refs
   - initial_state
   - input
+  - expectation_provenance
   - expected
   - must_not_occur
 
@@ -27,10 +28,42 @@ field_definitions:
   input: Abstract protocol/effect event supplied to a future conformance harness.
   expected: Required observable disposition/state transition.
   must_not_occur: Explicit forbidden outcomes.
-  expectation_provenance: Optional per-dimension statement of whether an expectation comes directly from the normative contract, the reviewed hostile case, or both.
+  expectation_provenance: Required per-dimension provenance map for the expected block.
+
+provenance_rules:
+  required_for_every_fixture: true
+  required_for_every_top_level_expected_dimension: true
+  unknown_provenance_key_forbidden: true
+  provenance_key_without_matching_expected_dimension_forbidden: true
+  expected_dimension_without_matching_provenance_key_forbidden: true
+  closed_vocabulary:
+    - NORMATIVE_CONTRACT
+    - REVIEWED_HOSTILE_EXPECTATION
+    - NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
+    - SETUP_STATE_AND_REVIEWED_HOSTILE_EXPECTATION
+  variants:
+    provenance_key: variants
+    provenance_applies_to_entire_variant_matrix: true
+    nested_variant_names_are_scenario_labels_not_expected_dimensions: true
+  unknown_label_disposition: REJECT_FIXTURE
+
+expected_value_forms:
+  scalar_symbol:
+    semantics: Opaque fixture/harness symbol. Do not infer alternatives by parsing token text.
+  boolean:
+    semantics: Literal boolean expectation.
+  one_of:
+    semantics: Explicit acceptable-outcome set; any listed member satisfies the expected dimension.
+    minimum_members: 2
+    duplicate_members_forbidden: true
+  variants:
+    semantics: Named input-scenario matrix whose nested expected leaves are governed by the variants provenance entry.
+  implicit_or_from_string_forbidden: true
+  unknown_structural_operator_disposition: REJECT_FIXTURE
 
 expected_dimension_rules:
   allowed_dimensions_apply_recursively_inside_variants: true
+  top_level_expected_keys_must_match_provenance_keys_exactly: true
 
 allowed_expected_dimensions:
   - admission_disposition
