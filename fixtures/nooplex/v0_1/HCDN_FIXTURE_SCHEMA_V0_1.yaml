@@ -56,6 +56,11 @@ expected_value_forms:
     semantics: Explicit acceptable-outcome set; any listed member satisfies the expected dimension.
     minimum_members: 2
     duplicate_members_forbidden: true
+  all_of:
+    semantics: Explicit required-member collection; every listed member is required.
+    minimum_members: 1
+    order_significant: false
+    duplicate_members_forbidden: true
   variants:
     semantics: Named input-scenario matrix whose nested expected leaves are governed by the variants provenance entry.
   implicit_or_from_string_forbidden: true
