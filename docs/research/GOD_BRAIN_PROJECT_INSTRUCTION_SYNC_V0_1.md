@@ -85,7 +85,9 @@ A receipt should include:
 
 - receipt schema/version;
 - repository;
-- canonical source commit;
+- source status: `CANONICAL` or `CANDIDATE_NONCANONICAL`;
+- canonical source commit when the source status is `CANONICAL`;
+- candidate source head and source PR when the source status is `CANDIDATE_NONCANONICAL`;
 - source path;
 - source Git blob;
 - normalized source SHA-256;
@@ -102,6 +104,8 @@ A receipt should include:
 Example claim ceiling:
 
 `INSTALLATION_RECEIPT != PROOF_CURRENT_CHAT_CONSUMED_TEXT`
+
+A candidate-source receipt must not masquerade as canonical: `canonical_source_commit` remains null while an exact candidate head and positive source PR identify the noncanonical source. A canonical receipt must carry an exact canonical commit and no candidate identity.
 
 The receipt must not contain credentials, tokens, private connector secrets, or unrelated Project content.
 
