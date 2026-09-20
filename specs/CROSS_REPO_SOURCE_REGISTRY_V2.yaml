@@ -2,7 +2,7 @@ schema_version: GOD_BRAIN_CROSS_REPO_SOURCE_REGISTRY_V2
 status: RESEARCH_INTAKE_NO_PROMOTION
 observed_date: 2026-09-20
 target_repository: thebrazenbeard/god-brain
-integration_candidate_branch: integration/main-foundation-v2-20260920
+integration_candidate_branch: integration/reviewed-foundation-bundle-20260920
 inventory_count: 58
 
 invariants:
