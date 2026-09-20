@@ -46,7 +46,10 @@
       "verification_method",
       "comparison_result",
       "limitations",
-      "claim_ceiling"
+      "claim_ceiling",
+      "source_status",
+      "candidate_source_head",
+      "source_pr"
     ],
     "optional_fields": [
       "observed_installed_sha256"
@@ -60,7 +63,23 @@
     ],
     "required_claim_ceiling": [
       "INSTALLATION_RECEIPT_NE_PROOF_CURRENT_CHAT_CONSUMED_TEXT"
-    ]
+    ],
+    "source_identity_rules": {
+      "source_status_values": [
+        "CANONICAL",
+        "CANDIDATE_NONCANONICAL"
+      ],
+      "CANONICAL": {
+        "canonical_source_commit": "REQUIRED_40_HEX",
+        "candidate_source_head": "MUST_BE_NULL",
+        "source_pr": "MUST_BE_NULL"
+      },
+      "CANDIDATE_NONCANONICAL": {
+        "canonical_source_commit": "MUST_BE_NULL",
+        "candidate_source_head": "REQUIRED_40_HEX",
+        "source_pr": "REQUIRED_POSITIVE_INTEGER"
+      }
+    }
   },
   "effect_boundary": {
     "source_edit": "ISOLATED_REVERSIBLE_WORK_WHEN_OTHERWISE_AUTHORIZED",
