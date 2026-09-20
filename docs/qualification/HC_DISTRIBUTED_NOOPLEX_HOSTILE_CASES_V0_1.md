@@ -142,9 +142,9 @@ A PASS on one implementation revision does not carry across material changes.
 
 ## HCDN-16 — stream sequence gap hidden by later messages
 
-**Setup:** Target receives sequence 41 and then 43; 42 is absent.
+**Setup:** Within one exact `stream_id`, target receives `message_sequence=41` and then `message_sequence=43`; 42 is absent.
 
-**Expected:** Explicit sequence-gap state or quarantine according to stream policy. The runtime does not silently infer that 42 never existed or was irrelevant.
+**Expected:** Explicit sequence-gap state or quarantine according to stream policy. The runtime does not silently infer that 42 never existed or was irrelevant, and a different `stream_id` cannot be used to conceal the gap.
 
 **Invariant:** transport ordering defects remain observable.
 
@@ -254,9 +254,9 @@ A PASS on one implementation revision does not carry across material changes.
 
 ## HCDN-30 — cancellation aliases target operation identity
 
-**Setup:** Cancellation message reuses the target operation's `operation_id` rather than carrying its own cancellation operation identity.
+**Setup:** Cancellation message either reuses the target operation's `operation_id` or omits the distinct `target_operation_id` naming the operation to cancel.
 
-**Expected:** Reject or conflict.
+**Expected:** Reject or conflict. A conforming cancellation has its own operation identity and an explicit distinct `target_operation_id`.
 
 **Invariant:** cancellation request identity is distinct from the operation being cancelled.
 
@@ -340,11 +340,43 @@ A PASS on one implementation revision does not carry across material changes.
 
 **Invariant:** unresolved hard-negative clearance cannot be treated as false.
 
+## HCDN-41 — relay mutates immutable expiry or content digest
+
+**Setup:** A legitimate relay preserves payload bytes but extends `expiry`, rewrites `created_at`, or changes `content_digest` while forwarding the same message identity.
+
+**Expected:** Integrity failure / `CONFLICT`; the altered object is not accepted as the same immutable semantic message. Any reprioritization is represented through a separately governed operation rather than silent envelope mutation.
+
+**Invariant:** relay hop mutability cannot rewrite semantic time/integrity fields.
+
+## HCDN-42 — pre-restart protected work replays under stale recovery epoch
+
+**Setup:** A protected `EXECUTE` was queued in recovery epoch E1. The HC restarts into E2 while the exact target revision remains otherwise unchanged. The serialized E1 operation becomes deliverable after restart.
+
+**Expected:** Effect execution is blocked until currentness, authority/prohibitions, and recovery-epoch eligibility are revalidated for E2. Readability of the old queued object is not sufficient.
+
+**Invariant:** `PRE_RESTART_QUEUED_WORK != AUTOMATIC_POST_RESTART_ELIGIBLE_WORK`.
+
+## HCDN-43 — valid receipt substituted across message or operation
+
+**Setup:** A valid receipt bound to message M1 / operation O1 is presented as evidence for M2 or O2 with otherwise similar content.
+
+**Expected:** `CONFLICT`; the receipt does not advance routing/effect projection for the different message or operation.
+
+**Invariant:** receipt validity is exact-message/exact-operation bound.
+
+## HCDN-44 — completed duplicate retried after authority revocation
+
+**Setup:** Protected operation O completed and was verified while authority A was valid. A later packet retries the identical operation identity after A is revoked or after a recovery-epoch change invalidates the prior admission context.
+
+**Expected:** No mutation repeats. Current trust/authority/prohibition/currentness checks run before completion evidence is disclosed or adopted. The request is rejected/quarantined when current checks fail and does not become an operation-existence oracle.
+
+**Invariant:** prior completion does not bypass current admission authority/currentness.
+
 ## Minimum hostile qualification set
 
-A future implementation claiming conformance to V0.1 must execute all HCDN-01..40 against one exact immutable implementation subject. Any failure is a conformance failure for that subject.
+A future implementation claiming conformance to V0.1 must execute all HCDN-01..44 against one exact immutable implementation subject. Any failure is a conformance failure for that subject.
 
-A green HCDN-01..40 run establishes only the distributed-operation contract scope. It does not establish complete HC architecture, behavioral qualification, consciousness, personhood, identity continuity, or safe embodiment.
+A green HCDN-01..44 run establishes only the distributed-operation contract scope. It does not establish complete HC architecture, behavioral qualification, consciousness, personhood, identity continuity, or safe embodiment.
 
 ## Next implementation gate
 
