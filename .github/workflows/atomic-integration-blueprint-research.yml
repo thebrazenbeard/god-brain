@@ -8,6 +8,7 @@ on:
       - "tools/validate_god_brain_atomic_integration_blueprint.py"
       - "tests/test_validate_god_brain_atomic_integration_blueprint.py"
       - ".github/workflows/atomic-integration-blueprint-research.yml"
+      - "specs/research/fixtures/GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1.json"
   pull_request:
     paths:
       - "docs/research/GOD_BRAIN_ATOMIC_INTEGRATION_BLUEPRINT_V0_1.md"
@@ -15,6 +16,7 @@ on:
       - "tools/validate_god_brain_atomic_integration_blueprint.py"
       - "tests/test_validate_god_brain_atomic_integration_blueprint.py"
       - ".github/workflows/atomic-integration-blueprint-research.yml"
+      - "specs/research/fixtures/GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1.json"
 
 jobs:
   validate:
