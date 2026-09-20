@@ -113,5 +113,35 @@
     "merge_source_branches_wholesale": false,
     "file_level_provenance_required": true,
     "composite_status_edits_require_fresh_review": true
+  },
+  "root_surface_audit": {
+    "observed_main": "c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5",
+    "surfaces": {
+      "README.md": {
+        "blob": "fbcaaec73b6d80f71849115533adbfb7c9098663",
+        "disposition": "GOD_BRAIN_CORRECT"
+      },
+      "CURRENT.md": {
+        "blob": "f5ff3f9ffe8e55e5cf1fe122afee7978ae1ed113",
+        "disposition": "MANDATORY_REBINDING_TARGET",
+        "forbidden_final_referent": "HC_BRAIN_AS_PROJECT_CURRENTNESS"
+      },
+      "docs/REPOSITORY_MAP.md": {
+        "blob": "642d191ec62ab1ee959069bc5e32f2c47c632caa",
+        "disposition": "MANDATORY_REBINDING_TARGET",
+        "forbidden_final_referent": "HC_AS_WHOLE_REPOSITORY_WITH_WARDEN_CURRENT_AUTHORITY"
+      },
+      "WARDEN.md": {
+        "blob": "4018be2085d1a97957f73c9ad0ab430f5794d0a5",
+        "disposition": "PRESERVE_AS_HC_PREDECESSOR_GOVERNANCE_SOURCE",
+        "must_remain_unchanged_first_pass": true
+      }
+    },
+    "required_final_convergence": [
+      "README_EQ_GOD_BRAIN",
+      "CURRENT_EQ_GOD_BRAIN",
+      "REPOSITORY_MAP_EQ_GOD_BRAIN_WITH_HC_SUBSTRATE",
+      "WARDEN_EQ_HC_PREDECESSOR_GOVERNANCE_SOURCE"
+    ]
   }
 }
