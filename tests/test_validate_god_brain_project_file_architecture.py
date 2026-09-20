@@ -22,7 +22,7 @@ class GodBrainProjectFileArchitectureTests(unittest.TestCase):
         spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
-            (target / "specs").mkdir(parents=True)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
             (target / "docs/research").mkdir(parents=True)
             mutated = json.loads(json.dumps(spec))
             future = mutated["future_current_pointer_contract"]
@@ -40,7 +40,7 @@ class GodBrainProjectFileArchitectureTests(unittest.TestCase):
         spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
-            (target / "specs").mkdir(parents=True)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
             (target / "docs/research").mkdir(parents=True)
             mutated = json.loads(json.dumps(spec))
             mutated["claim_ceiling"].remove("NO_CANONICAL_PROMOTION")
