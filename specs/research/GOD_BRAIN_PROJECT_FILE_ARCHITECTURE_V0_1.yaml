@@ -1,0 +1,180 @@
+{
+  "schema_version": "GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1",
+  "status": "RESEARCH_PROPOSAL_MACHINE_CONTRACT",
+  "claim_ceiling": [
+    "NO_CANONICAL_PROMOTION",
+    "NO_GOVERNANCE_ADOPTION",
+    "NO_RUNTIME_OR_PROVIDER_CURRENTNESS_CLAIM"
+  ],
+  "repository": "thebrazenbeard/god-brain",
+  "canonical_branch": "main",
+  "strata": [
+    {
+      "id": "ROOT_DISCOVERY_MANIFEST",
+      "canonical_path": "CHATGPT_REPO_INTERFACE.yaml",
+      "owns": [
+        "project_identity",
+        "bootstrap_routing",
+        "stable_authority_boundaries",
+        "freshness_requirement"
+      ],
+      "forbidden": [
+        "open_pr_list",
+        "delegated_subject_list",
+        "latest_review_verdicts",
+        "live_provider_status",
+        "latest_checkpoint"
+      ],
+      "truth_ceiling": "DISCOVERY_AND_BOOTSTRAP_CONTRACT"
+    },
+    {
+      "id": "CONSTITUTIONAL_CONTRACTS",
+      "canonical_path_pattern": "docs/governance/** and architecture/chatgpt/**",
+      "owns": [
+        "governance",
+        "epistemic_policy",
+        "routing_and_collision_policy",
+        "privacy_and_provenance_policy"
+      ],
+      "forbidden": [
+        "volatile_operational_currentness"
+      ],
+      "truth_ceiling": "STABLE_RULES_NOT_LIVE_OPERATIONAL_FACTS"
+    },
+    {
+      "id": "MACHINE_CURRENT_POINTER",
+      "proposed_path": "architecture/current/GOD_BRAIN_CURRENT.json",
+      "owns": [
+        "canonical_source_contract_paths"
+      ],
+      "forbidden": [
+        "open_pr_state",
+        "current_review_assignments",
+        "bus_assignment_state",
+        "provider_health",
+        "runtime_reachability",
+        "self_commit_sha"
+      ],
+      "truth_ceiling": "RESOLVES_CANONICAL_SOURCE_CONTRACTS_ONLY"
+    },
+    {
+      "id": "HUMAN_CANONICAL_CURRENTNESS",
+      "canonical_path": "CURRENT.md",
+      "owns": [
+        "human_interpretation_of_canonical_main",
+        "durable_claim_ceilings",
+        "canonical_layer_summary"
+      ],
+      "forbidden": [
+        "todays_work_queue",
+        "waiting_on_reviewer",
+        "volatile_pr_status",
+        "live_provider_health"
+      ],
+      "truth_ceiling": "CANONICAL_INTERPRETATION_OF_MAIN"
+    },
+    {
+      "id": "MUTABLE_OPERATIONAL_STATE",
+      "sources": [
+        "github_pr_branch_head_state",
+        "review_surfaces",
+        "chat_communication_bus",
+        "ci_status",
+        "provider_runtime_readback"
+      ],
+      "rule": "FRESH_READ",
+      "truth_ceiling": "OBSERVED_MUTABLE_STATE_ONLY"
+    },
+    {
+      "id": "REVIEW_EVIDENCE",
+      "required_binding": [
+        "repository",
+        "exact_head",
+        "base_when_applicable",
+        "paths_blobs_or_semantic_subject",
+        "reviewer_identity",
+        "reviewer_role",
+        "disposition",
+        "limitations"
+      ],
+      "forbidden": [
+        "self_certification",
+        "automatic_successor_head_inheritance"
+      ],
+      "truth_ceiling": "EXACT_SUBJECT_REVIEW_EVIDENCE"
+    },
+    {
+      "id": "CONTINUATION_CHECKPOINTS",
+      "path_pattern": "state/continuation/**",
+      "owns": [
+        "recovery_snapshot",
+        "last_observed_frontier_pointers"
+      ],
+      "forbidden": [
+        "canonical_currentness",
+        "worker_identity_authority",
+        "review_carry_forward",
+        "merge_authority",
+        "live_provider_proof"
+      ],
+      "truth_ceiling": "RECOVERY_ACCELERATOR_ONLY"
+    },
+    {
+      "id": "RESEARCH_AND_PROPOSALS",
+      "path_pattern": "docs/research/** or specs/research/**",
+      "owns": [
+        "candidate_mechanisms",
+        "unadopted_designs",
+        "research_results_with_provenance"
+      ],
+      "forbidden": [
+        "implicit_adoption"
+      ],
+      "truth_ceiling": "RESEARCH_ONLY_UNLESS_SEPARATELY_PROMOTED"
+    }
+  ],
+  "future_current_pointer_contract": {
+    "schema": "GOD_BRAIN_CURRENT_POINTER_V1",
+    "proposed_path": "architecture/current/GOD_BRAIN_CURRENT.json",
+    "required_fields": [
+      "schema",
+      "repository",
+      "canonical_branch",
+      "project_interface_path",
+      "governance_path",
+      "epistemic_contract_path",
+      "routing_contract_path",
+      "human_currentness_path",
+      "truth_ceiling"
+    ],
+    "forbidden_fields": [
+      "open_pull_requests",
+      "active_reviews",
+      "delegated_subjects",
+      "provider_health",
+      "runtime_health",
+      "current_chat",
+      "current_commit_sha"
+    ],
+    "required_truth_ceiling": "Resolves canonical source contracts only; mutable PR/review/delegation/provider/runtime state must be freshly read."
+  },
+  "anti_patterns": [
+    "SELF_UPDATING_CURRENT_FILE_LOOP",
+    "PR_DESCRIPTION_AS_CURRENTNESS_DATABASE",
+    "CHECKPOINT_PROMOTED_BY_CONVENIENCE",
+    "INSTRUCTION_DUPLICATION",
+    "PROVIDER_PROJECTION_AS_CANON",
+    "UNMERGED_RESEARCH_PATH_REQUIRED_BY_CANONICAL_BOOTSTRAP",
+    "REVIEW_STATUS_EMBEDDED_AS_DURABLE_ARCHITECTURE"
+  ],
+  "promotion_order": [
+    "REVIEW_PROJECT_INTERFACE",
+    "REVIEW_GOD_BRAIN_GOVERNANCE",
+    "RECONCILE_REPOSITORY_MAP_REBINDING",
+    "PREPARE_FRESH_MAIN_IMPLEMENTATION_CANDIDATE",
+    "ADD_MACHINE_CURRENT_POINTER_WHEN_TARGET_PATHS_COEXIST",
+    "RUN_CROSS_FILE_CONFORMANCE",
+    "INDEPENDENT_EXACT_HEAD_REVIEW",
+    "PATRICK_EXPLICIT_CANONICAL_PROMOTION_AUTHORITY"
+  ]
+}
