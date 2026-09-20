@@ -131,19 +131,19 @@ This establishes reviewed specification/hostile-set readiness only.
 
 Next gate:
 
-`MAIN_INTEGRATION_ASSESSMENT_OR_REFERENCE_RUNTIME_PLANNING`
+`REFERENCE_RUNTIME_SUBJECT_FREEZE_AND_FIXTURE_PLANNING`
 
 ## Main-readiness boundary
 
 Current bounded classification:
 
-- God Brain README: **CANONICAL ON MAIN** at `c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5`;
-- this God Brain currentness entrypoint: **MAIN_READY candidate** pending exact-head integration review;
-- Source Universe V2: **MAIN_READY research candidate** pending exact-head integration review;
-- Transfer Gap Analysis V2: **MAIN_READY research candidate** pending exact-head integration review;
-- Cross-Repo Source Registry V2: **MAIN_READY research candidate** pending exact-head integration review;
-- Noöplex V0.1 contract R2: **INDEPENDENT_SPEC_REVIEW_PASS** at head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`; main-integration review remains separate;
-- Noöplex hostile set R2: **INDEPENDENT_HOSTILE_SET_REVIEW_PASS** at hostile blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`; main-integration review remains separate;
+- God Brain README: **PROJECT_ENTRYPOINT**; whether this exact blob is present on `main` is mutable repository state and must be read from Git when needed;
+- this God Brain currentness entrypoint: **GOD_BRAIN_CURRENTNESS_ARTIFACT** bound to the repository snapshot containing it;
+- Source Universe V2: **CURRENT_RESEARCH_SOURCE_UNIVERSE** for the observed 2026-09-20 portfolio cut, not a runtime dependency;
+- Transfer Gap Analysis V2: **CURRENT_RESEARCH_ANALYSIS** for its declared evidence cut;
+- Cross-Repo Source Registry V2: **CURRENT_MACHINE_READABLE_RESEARCH_REGISTRY** for its declared evidence cut;
+- Noöplex V0.1 contract R2: **INDEPENDENT_SPEC_REVIEW_PASS** at head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`; repository placement does not imply runtime implementation or behavioral qualification;
+- Noöplex hostile set R2: **INDEPENDENT_HOSTILE_SET_REVIEW_PASS** at hostile blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`; repository placement does not strengthen the review claim;
 - Noah/Four Exodus checkpoints copied from HC work: **HISTORICAL/LINEAGE ONLY**, not God Brain canon by default;
 - Exodus worker-reconstruction regression test: **HISTORICAL/LINEAGE ONLY** unless God Brain independently adopts that governance mechanism;
 - inherited `WARDEN.md`: **SOURCE-LINEAGE GOVERNANCE**, not automatically God Brain project governance.
@@ -168,6 +168,8 @@ No whole-branch promotion is implied by these classifications.
 
 Advance the smallest bounded God Brain unit whose provenance, wording, and review state are coherent.
 
-For the distributed Noöplex frontier, the exact R2 specification/hostile-set subject has passed independent review. In this combined candidate, the active next gate is exact-head integration review of the seven-file bundle as one coherent main-bound subject. Runtime implementation and behavioral qualification remain separate future gates and are not implied by specification review or integration readiness.
+For the distributed Noöplex frontier, the exact R2 specification/hostile-set subject has passed independent review. The next technical gate before any runtime implementation claim is to freeze the exact reviewed subject, create machine-readable deterministic HCDN fixtures/vectors, and only then implement the smallest reference runtime slice. Runtime implementation and behavioral qualification remain separate future gates and are not implied by specification review or repository placement.
 
-For main integration, preserve file-level selection rather than merging unrelated HC/Exodus branch history wholesale.
+Repository review, PR, and merge status are mutable external Git state. Do not encode a pending PR/review/merge state here as if it were durable currentness; read the repository/Bus when that operational status matters.
+
+For future integration work, preserve file-level selection rather than merging unrelated HC/Exodus branch history wholesale.
