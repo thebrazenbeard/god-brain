@@ -103,7 +103,10 @@ cases:
       reconciliation_action: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
       continuity_write_disposition: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
-      reconciliation_action: RECONCILING_OR_CONFLICT
+      reconciliation_action:
+        one_of:
+          - RECONCILING
+          - CONFLICT
       continuity_write_disposition: RESTRICTED_UNTIL_CANONICAL_RECOVERY_OR_CURRENTNESS_RESOLUTION
     must_not_occur:
       - automatic_last_writer_wins
@@ -125,7 +128,10 @@ cases:
       partition_state: REVIEWED_HOSTILE_EXPECTATION
     expected:
       ownership_state: HC_OWNED
-      partition_state: PARTITIONED_OR_DEGRADED
+      partition_state:
+        one_of:
+          - PARTITIONED
+          - DEGRADED
     must_not_occur:
       - reclassify_as_external_peripheral
       - independent_successor_promotion
@@ -186,7 +192,10 @@ cases:
       health_state: SETUP_STATE_AND_REVIEWED_HOSTILE_EXPECTATION
       protected_work_admission: REVIEWED_HOSTILE_EXPECTATION
     expected:
-      health_state: DEGRADED_OR_UNAVAILABLE
+      health_state:
+        one_of:
+          - DEGRADED
+          - UNAVAILABLE
       protected_work_admission: REQUIRE_CURRENT_HEALTH_AND_DEGRADATION_STATE
     must_not_occur:
       - admit_protected_work_from_capability_string_alone
@@ -204,7 +213,10 @@ cases:
     expectation_provenance:
       health_state: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
-      health_state: DEGRADED_OR_UNHEALTHY
+      health_state:
+        one_of:
+          - DEGRADED
+          - UNHEALTHY
     must_not_occur:
       - classify_end_to_end_healthy_from_process_liveness_alone
 
@@ -263,7 +275,10 @@ cases:
       effect_verification_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
       receipt_projection: CUSTODY
-      effect_verification_constraint: REJECTED_OR_UNVERIFIED_WITHOUT_TARGET_READBACK
+      effect_verification_constraint:
+        one_of:
+          - REJECTED
+          - UNVERIFIED_WITHOUT_TARGET_READBACK
     must_not_occur:
       - promote_custody_to_effect_success
 
@@ -278,9 +293,11 @@ cases:
       operation_kind: CANCEL
     expectation_provenance:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
-      noncancellable_state_exists: NORMATIVE_CONTRACT
     expected:
-      admission_disposition: REJECT_OR_NONCANCELLABLE
+      admission_disposition:
+        one_of:
+          - REJECT
+          - NONCANCELLABLE
     must_not_occur:
       - rewrite_completed_history_as_cancelled
 
@@ -300,7 +317,10 @@ cases:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
       target_operation_identity_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: REJECT_OR_CONFLICT
+      admission_disposition:
+        one_of:
+          - REJECT
+          - CONFLICT
       target_operation_identity_constraint: DISTINCT_AND_REQUIRED
     must_not_occur:
       - cancellation_identity_alias
@@ -321,7 +341,11 @@ cases:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
       exact_subject_handling: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: STALE_OR_CONFLICT_OR_REVIEW_REQUIRED
+      admission_disposition:
+        one_of:
+          - STALE
+          - CONFLICT
+          - REVIEW_REQUIRED
       exact_subject_handling: NO_SILENT_SUBSTITUTION
     must_not_occur:
       - execute_R1_operation_against_R2
@@ -342,7 +366,10 @@ cases:
       admission_disposition: REVIEWED_HOSTILE_EXPECTATION
       authority_evidence_revalidation: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
-      admission_disposition: REJECT_OR_QUARANTINE_UNLESS_AUTHORITY_INDEPENDENTLY_VALID_AND_REBOUND
+      admission_disposition:
+        one_of:
+          - REJECT
+          - QUARANTINE
       authority_evidence_revalidation: REQUIRED_FOR_M2_EXACT_SUBJECT_SCOPE_EFFECT
     must_not_occur:
       - reuse_M1_admission_evidence_as_unscoped_boolean
