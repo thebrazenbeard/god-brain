@@ -16,6 +16,7 @@ on:
       - "tools/validate_god_brain_project_instruction_sync.py"
       - "tests/test_validate_god_brain_project_instruction_sync.py"
       - ".github/workflows/project-instruction-sync-research.yml"
+      - "state/project-interface/instruction-installation/**"
 
 jobs:
   validate:
