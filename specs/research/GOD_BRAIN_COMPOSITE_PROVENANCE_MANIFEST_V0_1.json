@@ -1,0 +1,231 @@
+{
+  "schema_version": "GOD_BRAIN_COMPOSITE_PROVENANCE_MANIFEST_V0_1",
+  "status": "RESEARCH_PROVENANCE_PLAN",
+  "repository": "thebrazenbeard/god-brain",
+  "observed_main": "c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5",
+  "claim_ceiling": [
+    "NO_CANONICAL_PROMOTION",
+    "NO_WHOLE_BRANCH_ADMISSION",
+    "SOURCE_BLOB_BINDING_NE_COMPOSITE_REVIEW_PASS"
+  ],
+  "sources": [
+    {
+      "pr": 6,
+      "head": "c8aff4109e53930a15eed54ab2f00b746ec8b09c",
+      "role": "REVIEWED_FOUNDATION_INPUT",
+      "entries": [
+        [
+          "CURRENT.md",
+          "3aaad14b52a4e32c91dda656b1067bb4b620e9dc",
+          "ADMIT_IF_STILL_CURRENT"
+        ],
+        [
+          "README.md",
+          "9deda9b89ec34a4d33149b518904207eada3ab58",
+          "ADMIT_IF_STILL_CURRENT"
+        ],
+        [
+          "docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md",
+          "74dfcf09d89a6c4a78ce9835d982041a07cba9ff",
+          "ADMIT_REVIEWED_COMPONENT_COMPOSITE_REREVIEW_REQUIRED"
+        ],
+        [
+          "docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md",
+          "3e39454c78663f2f95dc48637905306fca8c72b4",
+          "ADMIT_IF_STILL_CURRENT"
+        ],
+        [
+          "docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md",
+          "d0018cc41c869e81281ac3a21fc21354f230a72a",
+          "ADMIT_IF_STILL_CURRENT"
+        ],
+        [
+          "specs/CROSS_REPO_SOURCE_REGISTRY_V2.yaml",
+          "e790566f4a72256b3dc09abd44898e74f3c576d6",
+          "ADMIT_IF_STILL_CURRENT"
+        ],
+        [
+          "specs/HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1.yaml",
+          "f9f906f89b18ba95b8057978d087327567b1d489",
+          "ADMIT_REVIEWED_COMPONENT_COMPOSITE_REREVIEW_REQUIRED"
+        ]
+      ]
+    },
+    {
+      "pr": 8,
+      "head": "930392a8edebebf089f98a5e65311bbfe2b12c6a",
+      "role": "REVIEWED_REBINDING_DESIGN_INPUT",
+      "entries": [
+        [
+          "docs/research/GOD_BRAIN_REPOSITORY_GOVERNANCE_REBINDING_V0_1.md",
+          "f8cc859f6d37a745453d9a6c092a09f31b287562",
+          "DESIGN_EVIDENCE_NOT_CANONICAL_GOVERNANCE"
+        ]
+      ]
+    },
+    {
+      "pr": 10,
+      "head": "8c2bbce1e00d0cf79dc716d958a82b61e2824ed4",
+      "role": "PENDING_REVIEW_GOVERNANCE_INPUT",
+      "entries": [
+        [
+          "docs/research/GOD_BRAIN_GOVERNANCE_CONTRACT_V0_1.md",
+          "99c5bf552f2792686383751b758ca1c7929e711f",
+          "TRANSFORM_TO_CANONICAL_GOVERNANCE_AFTER_REVIEW"
+        ]
+      ]
+    },
+    {
+      "pr": 11,
+      "head": "d80dcec08137d5fd1a8b5cafa62fb60d956e7ce2",
+      "role": "PENDING_REVIEW_PROJECT_INTERFACE_INPUT",
+      "entries": [
+        [
+          ".github/workflows/chatgpt-project-interface.yml",
+          "5d08bd8dc353c5b1729ba32a800ba42cc0a21b44",
+          "ADMIT_AFTER_REVIEW"
+        ],
+        [
+          "CHATGPT_REPO_INTERFACE.yaml",
+          "55b24cc9d887c4b31a1985236bbba704a992b78c",
+          "ADMIT_AFTER_REVIEW_WITH_STATUS_REBIND"
+        ],
+        [
+          "architecture/chatgpt/BOOTSTRAP.md",
+          "504a448d1eb28c966d1fd800a17a293df5284aba",
+          "ADMIT_AFTER_REVIEW_WITH_STATUS_REBIND"
+        ],
+        [
+          "architecture/chatgpt/EPISTEMIC_CONTRACT.md",
+          "7207e5c01ee57829c0778ded7fe20a66372591d6",
+          "ADMIT_AFTER_REVIEW_WITH_STATUS_REBIND"
+        ],
+        [
+          "architecture/chatgpt/PROJECT_INSTRUCTIONS.md",
+          "a0c272143f67637c03baca9eb910908ab4fba84c",
+          "ADMIT_AFTER_REVIEW"
+        ],
+        [
+          "architecture/chatgpt/RECOVERY_AND_CONTINUATION.md",
+          "5a752226b8bfef00a20044416db53755555ddb28",
+          "ADMIT_AFTER_REVIEW_WITH_STATUS_REBIND"
+        ],
+        [
+          "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml",
+          "a7f5cdd0c258b4a708114c8353ac721f4829de8f",
+          "ADMIT_AFTER_REVIEW_WITH_STATUS_REBIND"
+        ],
+        [
+          "tests/test_validate_chatgpt_project_interface.py",
+          "02ce31d7cd9bf27d44cab26c63ae17b1dd382337",
+          "ADMIT_AFTER_REVIEW_AND_ADAPT_TO_COMPOSITE"
+        ],
+        [
+          "tools/validate_chatgpt_project_interface.py",
+          "65d3fd1501511b30d20d5e110275e81bfebcef2b",
+          "ADMIT_AFTER_REVIEW_AND_ADAPT_TO_COMPOSITE"
+        ]
+      ]
+    },
+    {
+      "pr": 12,
+      "head": "215eb2ccd1ee8834377dcf98d862a54eaf4e5edb",
+      "role": "PENDING_REVIEW_FILE_ARCHITECTURE_INPUT",
+      "entries": [
+        [
+          ".github/workflows/project-file-architecture-research.yml",
+          "e58683af07a405ca2f0b9b1588e347670eb2f383",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ],
+        [
+          "docs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.md",
+          "b1a816bca0ba1795749b318e1723d6f3a38dd4d4",
+          "RESEARCH_EVIDENCE_OPTIONAL"
+        ],
+        [
+          "specs/research/GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1.yaml",
+          "dc6ef855bdb6fef4942f979fb6773c2fdc436383",
+          "RESEARCH_EVIDENCE_OPTIONAL"
+        ],
+        [
+          "tests/test_validate_god_brain_project_file_architecture.py",
+          "803a9795d5a5d64c344db42cf314bbdad2bb4ef0",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ],
+        [
+          "tools/validate_god_brain_project_file_architecture.py",
+          "5ef35e83a846253a2ba3b410405a4baceff0a478",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ]
+      ]
+    },
+    {
+      "pr": 13,
+      "head": "25bbb837d22b5986582345a8d03094b231f93b62",
+      "role": "PENDING_REVIEW_INSTRUCTION_SYNC_INPUT",
+      "entries": [
+        [
+          ".github/workflows/project-instruction-sync-research.yml",
+          "5ab30a0086da46875055f45ff7a1a827f34dca84",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ],
+        [
+          "docs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.md",
+          "108ee9164692ae2b463ba042c6e800447bece1ac",
+          "RESEARCH_EVIDENCE_OPTIONAL"
+        ],
+        [
+          "specs/research/GOD_BRAIN_PROJECT_INSTRUCTION_SYNC_V0_1.yaml",
+          "7af292aa7eb1075331abb2dc34dc1e813acaf156",
+          "RESEARCH_EVIDENCE_OPTIONAL"
+        ],
+        [
+          "state/project-interface/instruction-installation/20260920T115309-0400.json",
+          "7d6994ad1f04da10223e7f1063c46af42bb722da",
+          "HISTORICAL_OBSERVATION_OPTIONAL"
+        ],
+        [
+          "tests/test_validate_god_brain_project_instruction_sync.py",
+          "7e3a37aeb300364e32fd12f0201bfb710cfdb5a9",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ],
+        [
+          "tools/validate_god_brain_project_instruction_sync.py",
+          "41bfde07b72ad0edf69bd6905b4899471e976b76",
+          "RESEARCH_TOOLING_OPTIONAL"
+        ]
+      ]
+    }
+  ],
+  "transformed_targets": [
+    {
+      "source_pr": 10,
+      "source_path": "docs/research/GOD_BRAIN_GOVERNANCE_CONTRACT_V0_1.md",
+      "target_path": "docs/governance/GOD_BRAIN_GOVERNANCE_V1.md",
+      "rule": "REVIEW_FINDINGS_RECONCILED_AND_RESEARCH_STATUS_REMOVED_ON_COMPOSITE",
+      "creates_new_exact_subject": true
+    },
+    {
+      "source_pr": null,
+      "source_path": "docs/REPOSITORY_MAP.md@main",
+      "target_path": "docs/REPOSITORY_MAP.md",
+      "rule": "REBIND_WHOLE_REPOSITORY_REFERENT_TO_GOD_BRAIN_WHILE_PRESERVING_HC_SUBSTRATE_INVENTORY",
+      "creates_new_exact_subject": true
+    },
+    {
+      "source_pr": null,
+      "source_path": null,
+      "target_path": "architecture/current/GOD_BRAIN_CURRENT.json",
+      "rule": "CREATE_ONLY_AFTER_ALL_REFERENCED_CANONICAL_PATHS_COEXIST",
+      "creates_new_exact_subject": true
+    }
+  ],
+  "assembly_invariants": [
+    "FRESH_READ_EVERY_SOURCE_HEAD_BEFORE_COPY",
+    "NO_SOURCE_BRANCH_WHOLESALE_MERGE",
+    "EXACT_FILE_BLOB_PROVENANCE_REQUIRED",
+    "TRANSFORMED_FILE_NE_SOURCE_REVIEWED_BLOB",
+    "ALL_TRANSFORMATIONS_REQUIRE_COMPOSITE_REVIEW",
+    "PENDING_REVIEW_INPUT_NE_ADMISSIBLE_UNTIL_REVIEW_CLEAN"
+  ]
+}
