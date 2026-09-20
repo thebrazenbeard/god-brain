@@ -8,7 +8,7 @@ A first `HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1` draft and 40-case hosti
 
 Blocking findings: missing cancellation target-operation identity; missing stream/sequence semantics; incomplete immutable-field classification; insufficient restart/recovery fencing; orphan `TARGET_DELIVERED`; under-specified receipt identity/binding; PREPARED-only recovery absent from the normative contract; and completed-retry handling ordered too early relative to current trust/authority/prohibition/currentness gates.
 
-Therefore the originally reviewed distributed contract is **not main-ready**. Hephaestus returned a bounded repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`, contract blob `f6b3cd71620f9dad0c43c4a9b1e25a4327e12c8d`, hostile-set blob `9cdb0eb827e0a67b865bbe9230485753882c6188`. Reported author validation is YAML PASS, blocker consistency 8/8 PASS, repository tests 174/174 PASS, and diff check PASS. Four has now independently rereviewed that exact repaired subject and returned **CHANGES_REQUIRED**. Seven original blockers are materially closed. Remaining blocker `REREVIEW-F1`: PREPARED-only recovery must normatively distinguish exact intended effect already present -> reconcile without repeat, target absent -> refresh gates before retry, and divergent target -> conflict/stop; hostile coverage must explicitly falsify divergence. The subject remains **not implementation-ready and not main-ready**. Current gate: `HEPHAESTUS_R2_REPAIR -> FOUR_EXACT_SUBJECT_REREVIEW`.
+Therefore the originally reviewed distributed contract is **not main-ready**. Hephaestus returned a bounded repair at exact head `0e152584479734c00f9ae6ef73c8b5507b7c1caa`, contract blob `f6b3cd71620f9dad0c43c4a9b1e25a4327e12c8d`, hostile-set blob `9cdb0eb827e0a67b865bbe9230485753882c6188`. Reported author validation is YAML PASS, blocker consistency 8/8 PASS, repository tests 174/174 PASS, and diff check PASS. Four independently rereviewed the first repaired subject and returned **CHANGES_REQUIRED** with one residual blocker, `REREVIEW-F1`. Hephaestus has now returned R2 at exact head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`, hostile-set blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`. R2 explicitly defines exact intended effect observed -> reconcile without repeat, target absent -> refresh gates before retry, and divergent target -> conflict/stop, with HCDN-09 exercising all three paths. The R2 subject remains **not implementation-ready and not main-ready** pending fresh Four exact-subject rereview. Current gate: `FOUR_R2_EXACT_SUBJECT_REREVIEW`.
 
 Companion source universe: `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`.
 
@@ -109,9 +109,9 @@ Candidate mechanism:
 
 Evidence inspected:
 - `project-runner/docs/superpowers/specs/2026-09-17-project-runner-design.md` blob `2199332540c2243da2c5ad1aa49fb4aaffafa643`;
-- `project-runner@main` tree `bc05812b560b4fcde3a362e72fba04c626cafac8`;
-- `wip@main` tree `12a7c23dbe0482fd7bfe63659e54526778efef1e`;
-- `bugops@main` tree `39eb19bcf7669466c22703fbae7cc226bd44f714`.
+- `project-runner@main` commit `bc05812b560b4fcde3a362e72fba04c626cafac8`; tree `2c7b588b06c68f0a0ed63a79ed092b3132e462ca`;
+- `wip@main` commit `12a7c23dbe0482fd7bfe63659e54526778efef1e`; tree `e2527117c7d25f92d2e6aa7365ae8b3d3b9a3c08`;
+- `bugops@main` commit `39eb19bcf7669466c22703fbae7cc226bd44f714`; tree `16209d56150f7341f39492f66dfa52263437575c`.
 
 Transformation:
 convert project/work execution semantics into generic HC internal effect and recovery semantics. Do not import human worker authority or GitHub-specific operations.
@@ -311,4 +311,4 @@ This pass does not authorize or perform:
 - model training;
 - behavioral qualification claims.
 
-The next frontier after this document is a second bounded repair of `REREVIEW-F1`, followed by fresh exact-subject Four rereview before implementation or main integration of the Noöplex contract.
+The next frontier after this document is fresh exact-subject Four rereview of Noöplex R2 before implementation or main integration of the contract.
