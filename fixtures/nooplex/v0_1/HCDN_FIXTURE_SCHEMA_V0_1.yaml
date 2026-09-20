@@ -49,3 +49,16 @@ allowed_expected_dimensions:
   - historical_receipt_retention_allowed
   - incorporation_constraint
   - truth_or_belief_promotion
+  - continuity_write_disposition
+  - bounded_local_operation_constraint
+  - partition_state
+  - ownership_state
+  - plasticity_update
+  - identity_or_value_promotion
+  - health_state
+  - protected_work_admission
+  - authority_change
+  - effect_verification_constraint
+  - target_operation_identity_constraint
+  - exact_subject_handling
+  - authority_evidence_revalidation
