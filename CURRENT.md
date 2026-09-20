@@ -168,6 +168,6 @@ No whole-branch promotion is implied by these classifications.
 
 Advance the smallest bounded God Brain unit whose provenance, wording, and review state are coherent.
 
-For the distributed Noöplex frontier, the exact R2 specification/hostile-set subject has passed independent review. The active next gate is the separate current-main integration assessment on Draft PR #3. Runtime implementation and behavioral qualification remain separate future gates and are not implied by specification review or integration readiness.
+For the distributed Noöplex frontier, the exact R2 specification/hostile-set subject has passed independent review. In this combined candidate, the active next gate is exact-head integration review of the seven-file bundle as one coherent main-bound subject. Runtime implementation and behavioral qualification remain separate future gates and are not implied by specification review or integration readiness.
 
 For main integration, preserve file-level selection rather than merging unrelated HC/Exodus branch history wholesale.
