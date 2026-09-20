@@ -60,7 +60,7 @@ cases:
       bounded_local_operation_constraint: NORMATIVE_CONTRACT_AND_REVIEWED_HOSTILE_EXPECTATION
     expected:
       continuity_write_disposition: BLOCKED
-      bounded_local_operation_constraint: MAY_RETAIN_PREDECLARED_LOCAL_SENSING_OR_REGULATION
+      bounded_local_operation_constraint: MAY_RETAIN_PREDECLARED_LOCAL_SENSING_REGULATION_ONLY
     must_not_occur:
       - new_authority
       - successor_identity
@@ -107,7 +107,7 @@ cases:
         one_of:
           - RECONCILING
           - CONFLICT
-      continuity_write_disposition: RESTRICTED_UNTIL_CANONICAL_RECOVERY_OR_CURRENTNESS_RESOLUTION
+      continuity_write_disposition: RESTRICTED_UNTIL_DIVERGENCE_RESOLVED_BY_CANONICAL_RECOVERY_CURRENTNESS_LOGIC
     must_not_occur:
       - automatic_last_writer_wins
       - protected_write_before_reconciliation
@@ -255,7 +255,7 @@ cases:
       epistemic_type_promotion: REVIEWED_HOSTILE_EXPECTATION
     expected:
       incorporation_constraint: PRESERVE_HYPOTHESIS_EVIDENCE_CLASS
-      epistemic_type_promotion: NO_PROMOTION_FROM_HYPOTHESIS_TO_OBSERVATION_OR_FACT
+      epistemic_type_promotion: NO_HYPOTHESIS_PROMOTION_TO_OBSERVATION_FACT
     must_not_occur:
       - promote_to_observation_or_fact_from_incorporation_alone
 
