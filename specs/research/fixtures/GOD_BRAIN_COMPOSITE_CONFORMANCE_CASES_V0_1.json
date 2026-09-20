@@ -1,0 +1,123 @@
+{
+  "schema_version": "GOD_BRAIN_COMPOSITE_CONFORMANCE_CASES_V0_1",
+  "status": "RESEARCH_FIXTURES",
+  "claim_ceiling": [
+    "FIXTURE_PASS_NE_COMPOSITE_IMPLEMENTATION_PASS",
+    "FIXTURE_PASS_NE_COMPOSITE_REVIEW_PASS",
+    "NO_CANONICAL_PROMOTION"
+  ],
+  "cases": [
+    {
+      "id": "GB-COMP-001",
+      "title": "God Brain README with HC CURRENT",
+      "mutation": "README identifies God Brain while CURRENT.md remains '# HC Brain — Current State'",
+      "expected": "REJECT",
+      "reason": "ROOT_CURRENTNESS_REFERENT_CONFLICT"
+    },
+    {
+      "id": "GB-COMP-002",
+      "title": "God Brain governance with Warden as current repository authority",
+      "mutation": "canonical God Brain governance exists but repository map still declares WARDEN.md current authority",
+      "expected": "REJECT",
+      "reason": "DUAL_AUTHORITY_SURFACE"
+    },
+    {
+      "id": "GB-COMP-003",
+      "title": "WARDEN preserved as predecessor source",
+      "mutation": "WARDEN.md remains textually unchanged and repository map classifies it as HC predecessor governance",
+      "expected": "ACCEPT",
+      "reason": "PROVENANCE_PRESERVED_AUTHORITY_REBOUND"
+    },
+    {
+      "id": "GB-COMP-004",
+      "title": "Missing Project-interface target path",
+      "mutation": "CHATGPT_REPO_INTERFACE.yaml points to architecture/chatgpt/EPISTEMIC_CONTRACT.md but target is absent",
+      "expected": "REJECT",
+      "reason": "BROKEN_BOOTSTRAP_POINTER"
+    },
+    {
+      "id": "GB-COMP-005",
+      "title": "Machine current pointer carries open PR list",
+      "mutation": "architecture/current/GOD_BRAIN_CURRENT.json includes open_pull_requests",
+      "expected": "REJECT",
+      "reason": "MUTABLE_OPERATIONAL_STATE_IN_CANONICAL_POINTER"
+    },
+    {
+      "id": "GB-COMP-006",
+      "title": "Machine current pointer carries current commit SHA",
+      "mutation": "architecture/current/GOD_BRAIN_CURRENT.json embeds its own current_commit_sha",
+      "expected": "REJECT",
+      "reason": "SELF_REFERENTIAL_CURRENTNESS_LOOP"
+    },
+    {
+      "id": "GB-COMP-007",
+      "title": "Component reviews substituted for composite review",
+      "mutation": "candidate is classified MAIN_READY only from component PASS receipts without exact composite review",
+      "expected": "REJECT",
+      "reason": "COMPONENT_REVIEW_NE_COMPOSITE_REVIEW"
+    },
+    {
+      "id": "GB-COMP-008",
+      "title": "Candidate Project pack treated as canonical",
+      "mutation": "installed PR #11 Project pack is treated as canonical because it is installed",
+      "expected": "REJECT",
+      "reason": "PROJECT_INSTALLATION_NE_MAIN_PROMOTION"
+    },
+    {
+      "id": "GB-COMP-009",
+      "title": "Canonical source movement preserves old installation verification",
+      "mutation": "canonical Project instruction source bytes change but prior installation verification is kept current",
+      "expected": "REJECT",
+      "reason": "SOURCE_MOVEMENT_INVALIDATES_INSTALL_VERIFICATION"
+    },
+    {
+      "id": "GB-COMP-010",
+      "title": "Epistemic contract loses anomaly/contact distinction",
+      "mutation": "composite omits ANOMALY != CONTACT",
+      "expected": "REJECT",
+      "reason": "EPISTEMIC_GUARD_REMOVED"
+    },
+    {
+      "id": "GB-COMP-011",
+      "title": "File-level provenance preserved",
+      "mutation": "each admitted composite file records source PR/head/blob and status edits are separately identified",
+      "expected": "ACCEPT",
+      "reason": "PROVENANCE_BOUND_COMPOSITE"
+    },
+    {
+      "id": "GB-COMP-012",
+      "title": "Fresh-main atomic candidate with clean pointers",
+      "mutation": "candidate branches from fresh main, includes God Brain README/CURRENT/map/governance/interface, clean pointer, unchanged WARDEN predecessor source, and receives fresh exact-head review",
+      "expected": "ACCEPT",
+      "reason": "COHERENT_COMPOSITE_SHAPE"
+    },
+    {
+      "id": "GB-COMP-013",
+      "title": "Research governance path referenced by canonical bootstrap",
+      "mutation": "canonical root interface points directly to docs/research/GOD_BRAIN_GOVERNANCE_CONTRACT_V0_1.md",
+      "expected": "REJECT",
+      "reason": "CANONICAL_BOOTSTRAP_DEPENDS_ON_UNADOPTED_RESEARCH_PATH"
+    },
+    {
+      "id": "GB-COMP-014",
+      "title": "Checkpoint used as canonical current pointer",
+      "mutation": "state/continuation checkpoint is used to resolve current canonical governance or active head",
+      "expected": "REJECT",
+      "reason": "CHECKPOINT_NE_CANON"
+    },
+    {
+      "id": "GB-COMP-015",
+      "title": "HC qualification inherited as God Brain qualification",
+      "mutation": "historical HC test PASS is reported as fresh God Brain implementation qualification without exact God Brain subject rerun",
+      "expected": "REJECT",
+      "reason": "HC_QUALIFICATION_NE_GOD_BRAIN_QUALIFICATION"
+    },
+    {
+      "id": "GB-COMP-016",
+      "title": "Mutable review state fresh-read externally",
+      "mutation": "canonical source contains no reviewer/PR queue state and bootstrap fresh-reads GitHub/Bus before currentness claims",
+      "expected": "ACCEPT",
+      "reason": "LIVE_STATE_OUTSIDE_CANONICAL_POINTER"
+    }
+  ]
+}
