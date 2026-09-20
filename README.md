@@ -83,7 +83,9 @@ Identity-specific memories, relationships, preferences, morphology, intimate mat
 
 A major current engineering gap is distributed Noöplex execution: allowing HC-owned cognitive constituents to operate across multiple processes or physical nodes while preserving coherent governance, provenance, currentness, recovery, and partition safety.
 
-A V0.1 distributed-operation contract and hostile test set were drafted on a research branch and independently reviewed. The first independent review found blocking semantic defects, so that draft is **not main-ready and implementation remains blocked** until repaired and re-reviewed.
+A V0.1 distributed-operation contract and hostile test set were drafted on a research branch. The first independent review found blocking semantic defects. Hephaestus repaired those defects in two bounded passes, and Four independently rereviewed the final R2 exact subject at head `bdac4346bed77949cf29a009179402d4d02796c7` and returned `INDEPENDENT_REVIEW_PASS` for contract blob `f9f906f89b18ba95b8057978d087327567b1d489` and hostile-set blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`.
+
+That PASS establishes reviewed specification/hostile-set readiness only. It does **not** establish runtime implementation, behavioral qualification, main readiness, or merge authority. Current-main integration is being assessed separately.
 
 The intended contract must preserve distinctions including:
 
