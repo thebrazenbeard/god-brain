@@ -108,6 +108,73 @@ Role:
 - deterministic text normalization;
 - evidence ceiling for Project-setting verification.
 
+## Root-surface rebinding audit
+
+Observed on canonical `main@c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5`:
+
+### `README.md`
+
+- blob: `fbcaaec73b6d80f71849115533adbfb7c9098663`
+- disposition: `GOD_BRAIN_CORRECT`
+
+The root README already identifies the repository as God Brain, distinguishes the HC template as inherited substrate, and preserves the simulation thesis as a hypothesis.
+
+### `CURRENT.md`
+
+- blob: `f5ff3f9ffe8e55e5cf1fe122afee7978ae1ed113`
+- disposition: `MANDATORY_REBINDING_TARGET`
+
+The canonical file still opens:
+
+`# HC Brain — Current State`
+
+and presents inherited HC implementation baseline `fdff1094c4f6388c6ef2c94c193ec887b141d7fb` as canonical implementation state.
+
+This is source-lineage evidence, not correct God Brain currentness.
+
+PR #6 contains the reviewed God Brain replacement candidate. Therefore the future composite must not leave canonical `CURRENT.md` at the inherited blob.
+
+`MAIN_CURRENT_HC_REFERENT != GOD_BRAIN_CURRENTNESS`
+
+### `docs/REPOSITORY_MAP.md`
+
+- blob: `642d191ec62ab1ee959069bc5e32f2c47c632caa`
+- disposition: `MANDATORY_REBINDING_TARGET`
+
+The canonical map still:
+- titles itself `Hyperconnectome Brain Repository Map`;
+- says the repository defines the HC-series template;
+- treats `WARDEN.md` as current authority;
+- names Noah/Noëtarch as current architect/Warden/integration authority;
+- states that main remains under active Warden integration.
+
+Those statements remain valid HC predecessor provenance but conflict with God Brain repository-level identity and authority.
+
+### `WARDEN.md`
+
+- blob: `4018be2085d1a97957f73c9ad0ab430f5794d0a5`
+- disposition: `PRESERVE_AS_HC_PREDECESSOR_GOVERNANCE_SOURCE`
+
+Its text explicitly scopes itself to the Hyperconnectome Brain project and grants Noëtarch direct-main/canonical-integration authority there.
+
+The first God Brain integration pass should preserve the file unchanged and fix its repository-level interpretation around it.
+
+`WARDEN_TEXT_PRESERVED != WARDEN_AUTHORITY_IMPORTED`
+
+### Required root convergence
+
+The future composite must satisfy:
+
+`README = GOD_BRAIN`
+
+`CURRENT = GOD_BRAIN`
+
+`REPOSITORY_MAP = GOD_BRAIN_WITH_HC_SUBSTRATE`
+
+`WARDEN = HC_PREDECESSOR_GOVERNANCE_SOURCE`
+
+A composite that updates only one or two of these surfaces is not repository-coherent.
+
 ## Core dependency DAG
 
 ```text
