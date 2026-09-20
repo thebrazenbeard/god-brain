@@ -7,6 +7,7 @@ from pathlib import Path
 
 from tools.validate_god_brain_project_instruction_sync import (
     DOC_PATH,
+    RECEIPT_DIR,
     SPEC_PATH,
     validate_project_instruction_sync,
 )
@@ -67,6 +68,30 @@ class GodBrainProjectInstructionSyncTests(unittest.TestCase):
             )
             errors = validate_project_instruction_sync(target)
             self.assertTrue(any("chat consumption" in error for error in errors))
+
+    def test_user_report_only_receipt_cannot_claim_exact_installation(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        receipt_source = next((root / RECEIPT_DIR).glob("*.json"))
+        receipt = json.loads(receipt_source.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
+            (target / DOC_PATH).parent.mkdir(parents=True)
+            (target / RECEIPT_DIR).mkdir(parents=True)
+            (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
+            (target / DOC_PATH).write_text(
+                (root / DOC_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            mutated = json.loads(json.dumps(receipt))
+            mutated["sync_state"] = "INSTALLED_EXACT_SOURCE_VERIFIED"
+            (target / RECEIPT_DIR / "receipt.json").write_text(
+                json.dumps(mutated),
+                encoding="utf-8",
+            )
+            errors = validate_project_instruction_sync(target)
+            self.assertTrue(any("user-report-only" in error for error in errors))
 
 
 if __name__ == "__main__":
