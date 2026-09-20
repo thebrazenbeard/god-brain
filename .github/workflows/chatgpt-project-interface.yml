@@ -1,0 +1,27 @@
+name: ChatGPT Project Interface Conformance
+
+on:
+  push:
+    paths:
+      - "CHATGPT_REPO_INTERFACE.yaml"
+      - "architecture/chatgpt/**"
+      - "tools/validate_chatgpt_project_interface.py"
+      - "tests/test_validate_chatgpt_project_interface.py"
+      - ".github/workflows/chatgpt-project-interface.yml"
+  pull_request:
+    paths:
+      - "CHATGPT_REPO_INTERFACE.yaml"
+      - "architecture/chatgpt/**"
+      - "tools/validate_chatgpt_project_interface.py"
+      - "tests/test_validate_chatgpt_project_interface.py"
+      - ".github/workflows/chatgpt-project-interface.yml"
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run project-interface unit tests
+        run: python3 -m unittest -v tests.test_validate_chatgpt_project_interface
+      - name: Validate project interface
+        run: python3 tools/validate_chatgpt_project_interface.py --root .
