@@ -156,8 +156,36 @@ operation_identity:
     semantics: Immutable state/revision/object subject against which the operation was formed.
     substitution_for_newer_subject_forbidden: true
   content_digest:
-    semantics: Canonical digest of material operation content, excluding transport-only mutable hop metadata.
+    semantics: Canonical digest of immutable material operation content, excluding the content_digest field itself and excluding transport-only mutable hop metadata.
     immutable: true
+    self_inclusion_forbidden: true
+    canonicalization_profile_must_be_versioned: true
+    digest_input_must_include_when_present:
+      - protocol_version
+      - operation_id
+      - origin
+      - target
+      - operation_kind
+      - exact_subject
+      - payload_type
+      - payload
+      - provenance
+      - sender_effect_class
+      - authority_ref
+      - idempotency_key
+      - target_operation_id
+      - parent_message_id
+      - root_episode_id
+      - coalition_id
+      - continuity_epoch
+      - recovery_epoch
+      - stream_id
+      - message_sequence
+      - expected_state
+      - requested_receipts
+      - created_at
+      - expiry
+      - priority
   stream_id:
     semantics: Identity of one ordered transport/application stream when sequence-gap detection is required.
     changes_on_sequence_domain_reset: true
@@ -275,8 +303,9 @@ message_event_envelope:
         - operation_touches_continuity_bearing_state_family
     recovery_epoch:
       required_when:
-        - operation_kind_is_EXECUTE_or_CANCEL_and_effect_is_not_READ_ONLY
-        - material_operation_is_resumed_or_replayed_after_restart_or_recovery
+        - operation_kind_is_EXECUTE
+        - operation_kind_is_CANCEL
+      note: Presence is packet-shape fail-closed and never depends on sender-declared effect class. Receiver-owned effect classification still controls admission/effect authorization.
     stream_id:
       required_when:
         - stream_contract_declares_sequence_gap_detection
