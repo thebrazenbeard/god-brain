@@ -131,6 +131,46 @@ def validate_atomic_integration_blueprint(root: Path) -> list[str]:
         if conformance.get("protected_effect_authority") != "PATRICK_EXPLICIT_EXACT_EFFECT":
             errors.append("protected effect authority drifted")
 
+    root_audit = spec.get("root_surface_audit")
+    if not isinstance(root_audit, dict):
+        errors.append("root_surface_audit must be object")
+    else:
+        surfaces = root_audit.get("surfaces")
+        if not isinstance(surfaces, dict):
+            errors.append("root_surface_audit.surfaces must be object")
+            surfaces = {}
+        required_surface_dispositions = {
+            "README.md": "GOD_BRAIN_CORRECT",
+            "CURRENT.md": "MANDATORY_REBINDING_TARGET",
+            "docs/REPOSITORY_MAP.md": "MANDATORY_REBINDING_TARGET",
+            "WARDEN.md": "PRESERVE_AS_HC_PREDECESSOR_GOVERNANCE_SOURCE",
+        }
+        for path, disposition in required_surface_dispositions.items():
+            item = surfaces.get(path)
+            if not isinstance(item, dict):
+                errors.append(f"root surface missing: {path}")
+                continue
+            if item.get("disposition") != disposition:
+                errors.append(f"root surface disposition drifted: {path}")
+        current = surfaces.get("CURRENT.md")
+        if isinstance(current, dict) and current.get("forbidden_final_referent") != "HC_BRAIN_AS_PROJECT_CURRENTNESS":
+            errors.append("CURRENT.md must forbid inherited HC project-currentness referent")
+        repo_map = surfaces.get("docs/REPOSITORY_MAP.md")
+        if isinstance(repo_map, dict) and repo_map.get("forbidden_final_referent") != "HC_AS_WHOLE_REPOSITORY_WITH_WARDEN_CURRENT_AUTHORITY":
+            errors.append("repository map must forbid HC whole-repository/Warden-current referent")
+        warden = surfaces.get("WARDEN.md")
+        if isinstance(warden, dict) and warden.get("must_remain_unchanged_first_pass") is not True:
+            errors.append("WARDEN.md must remain unchanged in first pass")
+        convergence = set(root_audit.get("required_final_convergence", []))
+        required_convergence = {
+            "README_EQ_GOD_BRAIN",
+            "CURRENT_EQ_GOD_BRAIN",
+            "REPOSITORY_MAP_EQ_GOD_BRAIN_WITH_HC_SUBSTRATE",
+            "WARDEN_EQ_HC_PREDECESSOR_GOVERNANCE_SOURCE",
+        }
+        if not required_convergence.issubset(convergence):
+            errors.append("root surface final convergence requirements incomplete")
+
     installation = spec.get("project_installation_rule")
     if not isinstance(installation, dict):
         errors.append("project_installation_rule must be object")
@@ -161,6 +201,8 @@ def validate_atomic_integration_blueprint(root: Path) -> list[str]:
             "MAIN_READY != MERGE_AUTHORITY",
             "CANONICAL_SOURCE_MOVEMENT -> PRIOR_INSTALLATION_NOT_CURRENTLY_VERIFIED",
             "OLD_CANDIDATE_INSTALLATION != CANONICAL_SOURCE_INSTALLATION",
+            "MAIN_CURRENT_HC_REFERENT != GOD_BRAIN_CURRENTNESS",
+            "WARDEN_TEXT_PRESERVED != WARDEN_AUTHORITY_IMPORTED",
         ):
             if marker not in doc:
                 errors.append(f"{DOC_PATH} missing marker: {marker}")
