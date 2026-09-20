@@ -117,11 +117,21 @@ Hephaestus has now returned R2 at exact head `bdac4346bed77949cf29a009179402d4d0
 
 R2 explicitly defines the three PREPARED-only target-inspection outcomes and extends HCDN-09 across all three. Those are author results, not independent qualification.
 
-`NOOPLEX_V0_1_IMPLEMENTATION = BLOCKED_PENDING_FOUR_R2_REREVIEW`
+Four has now independently rereviewed the R2 exact subject and returned `INDEPENDENT_REVIEW_PASS` bound to head `bdac4346bed77949cf29a009179402d4d02796c7`, contract blob `f9f906f89b18ba95b8057978d087327567b1d489`, and hostile-set blob `74dfcf09d89a6c4a78ce9835d982041a07cba9ff`. Four independently reproduced 174/174 repository tests PASS, YAML/structural PASS, source-binding readback PASS, contiguous HCDN-01..44, and diff check PASS.
+
+This establishes reviewed specification/hostile-set readiness only.
+
+`INDEPENDENT_REVIEW_PASS != RUNTIME_IMPLEMENTATION_PASS`
+
+`INDEPENDENT_REVIEW_PASS != BEHAVIORAL_QUALIFICATION`
+
+`INDEPENDENT_REVIEW_PASS != MAIN_READY_OR_MERGE_AUTHORITY`
+
+`NOOPLEX_V0_1_SPEC_REVIEW = PASS`
 
 Next gate:
 
-`FOUR_R2_EXACT_SUBJECT_REREVIEW`
+`MAIN_INTEGRATION_ASSESSMENT_OR_REFERENCE_RUNTIME_PLANNING`
 
 ## Main-readiness boundary
 
