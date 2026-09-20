@@ -72,7 +72,7 @@ coordinator_division:
     - worker_dispatch
     - independent_review
     - adversarial_testing
-    - bounded_implementation
+    - bounded_implementation_explicitly_delegated_to_bt2
     - qualification_evidence
     - engineering_coordination
 
