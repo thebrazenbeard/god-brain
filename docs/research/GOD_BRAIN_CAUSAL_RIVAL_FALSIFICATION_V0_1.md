@@ -62,8 +62,13 @@ For anomaly/contact/simulation-adjacent work, a causal comparison should conside
 - TIMING_SYNCHRONIZATION_CACHE_OR_ROUTING
 - ORDINARY_EXTERNAL_INFORMATION_CHANNEL
 - KNOWN_SYSTEM_AGENCY
-- UNKNOWN_ORDINARY_MECHANISM
 - EXTERNAL_SOURCE_OR_INTERVENTION_HYPOTHESIS
+
+`UNKNOWN_ORDINARY_MECHANISM` is deliberately not a testable rival family. It is a coverage sentinel: a durable statement that named ordinary mechanisms do not exhaust ordinary causal space.
+
+`UNKNOWN_ORDINARY_MECHANISM != TESTABLE_HYPOTHESIS`
+
+The sentinel cannot be marked falsified and cannot donate eliminated probability mass to another hypothesis.
 
 This list is a floor, not proof that the rival set is exhaustive.
 
@@ -74,6 +79,8 @@ This list is a floor, not proof that the rival set is exhaustive.
 Every hypothesis should bind:
 
 - HYPOTHESIS_ID
+- PARENT_HYPOTHESIS_ID
+- REVISION_REASON
 - PROPOSITION
 - HYPOTHESIS_CLASS
 - PREDICTED_OBSERVATIONS
@@ -85,6 +92,7 @@ Every hypothesis should bind:
 - FALSIFIERS
 - COUNTERFACTUAL_PREDICTIONS
 - PRECOMMITMENT_STATE
+- EARLIEST_TARGET_EVIDENCE_EXPOSURE
 - EVIDENCE_REFERENCES
 - CLAIM_CEILING
 
@@ -120,8 +128,10 @@ A comparison should bind:
 
 - EXACT_OBSERVATION_SUBJECT
 - HYPOTHESIS_SET
+- APPLICABLE_RIVAL_FAMILY_COVERAGE
 - SHARED_ASSUMPTIONS
 - DISCRIMINATING_EVIDENCE
+- EVIDENCE_INDEPENDENCE_LEDGER
 - UNRESOLVED_CONFOUNDERS
 - NEGATIVE_CONTROLS
 - ABLATIONS_OR_PERTURBATIONS
@@ -129,6 +139,8 @@ A comparison should bind:
 - RIVAL_ELIMINATION_LEDGER
 - NEW_HYPOTHESIS_POLICY
 - STOPPING_RULE
+- PRECOMMITTED_DECISION_RULE
+- LIMITING_FLAGS
 - OUTPUT_DISPOSITION
 - CLAIM_CEILING
 
@@ -211,7 +223,7 @@ A component whose removal does not change the result may not be causally necessa
 
 ## Unknown ordinary mechanism
 
-The rival set must permit an unresolved ordinary-mechanism state.
+The protocol must preserve an unresolved ordinary-mechanism **coverage sentinel**, not pretend the unknown mechanism is itself a falsifiable model.
 
 This prevents a false dichotomy:
 
@@ -221,7 +233,9 @@ extraordinary explanation.
 
 `KNOWN_RIVALS_EXHAUSTED != ORDINARY_CAUSAL_SPACE_EXHAUSTED`
 
-Unknown ordinary mechanism is not a claim that an ordinary cause definitely exists. It records incomplete causal coverage.
+`UNKNOWN_ORDINARY_MECHANISM != TESTABLE_HYPOTHESIS`
+
+Unknown ordinary mechanism is not a claim that an ordinary cause definitely exists. It records incomplete causal coverage and remains non-falsifiable by construction.
 
 ## Output dispositions
 
