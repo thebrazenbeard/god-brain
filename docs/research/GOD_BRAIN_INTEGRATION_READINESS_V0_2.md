@@ -209,6 +209,8 @@ A fresh Track A composite becomes rational only after:
 
 No current research PASS grants step 10.
 
+`PATRICK_EXACT_MERGE_AUTHORIZATION` remains a separate protected-effect gate.
+
 ## Composite assembly rule
 
 Use:
