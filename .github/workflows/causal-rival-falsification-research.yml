@@ -16,17 +16,34 @@ on:
       - "tests/test_validate_god_brain_causal_rival_falsification.py"
       - ".github/workflows/causal-rival-falsification-research.yml"
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: python tools/validate_god_brain_causal_rival_falsification.py
-      - run: python -m unittest tests.test_validate_god_brain_causal_rival_falsification
-      - run: python -m compileall -q tools tests
-      - run: git diff --check HEAD^ HEAD
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+
+      - name: Validate causal-rival protocol
+        working-directory: repo
+        run: python3 tools/validate_god_brain_causal_rival_falsification.py
+
+      - name: Run hostile regression tests
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_causal_rival_falsification
+
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
