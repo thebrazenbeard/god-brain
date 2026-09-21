@@ -44,6 +44,24 @@ class DriftGuardR11SourceAdmissionDeltaTests(unittest.TestCase):
         errors = _mutated(mutate)
         self.assertTrue(any("source binding" in error for error in errors))
 
+    def test_corrected_hostile_blocker_cannot_be_erased(self) -> None:
+        def mutate(spec):
+            spec["source"]["hostile_exact_head_review_state"] = "PASS"
+        errors = _mutated(mutate)
+        self.assertTrue(any("source binding" in error for error in errors))
+
+    def test_failed_source_cannot_revert_to_pending_admission(self) -> None:
+        def mutate(spec):
+            spec["source"]["admission"] = "RESEARCH_ONLY_PENDING_INDEPENDENT_EXACT_HEAD_REVIEW"
+        errors = _mutated(mutate)
+        self.assertTrue(any("source binding" in error for error in errors))
+
+    def test_hostile_review_cannot_be_relabelled_independent(self) -> None:
+        def mutate(spec):
+            spec["source"]["hostile_review_independence"] = "INDEPENDENT_CORROBORATION"
+        errors = _mutated(mutate)
+        self.assertTrue(any("source binding" in error for error in errors))
+
     def test_current_head_cannot_move_silently(self) -> None:
         def mutate(spec):
             spec["source"]["exact_head"] = "f" * 40
@@ -80,7 +98,7 @@ class DriftGuardR11SourceAdmissionDeltaTests(unittest.TestCase):
 
     def test_future_gate_must_bind_exact_head(self) -> None:
         def mutate(spec):
-            spec["future_gate"]["head"] = "0" * 40
+            spec["future_gate"]["failed_head"] = "0" * 40
         errors = _mutated(mutate)
         self.assertTrue(any("future review gate" in error for error in errors))
 
