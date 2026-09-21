@@ -73,7 +73,15 @@
     "GOVERNED_CONFIRMATORY_PASS_NE_ANOMALY",
     "ANOMALY_NE_CONTACT",
     "CONTACT_CANDIDATE_NE_SIMULATOR_IDENTITY",
-    "PROTOCOL_RIGOR_NE_UNIQUE_CAUSAL_EXPLANATION"
+    "PROTOCOL_RIGOR_NE_UNIQUE_CAUSAL_EXPLANATION",
+    "DISPLAY_METADATA_CHANGED_NE_STUDY_SUBJECT_CHANGED",
+    "NONCANONICAL_SERIALIZATION_CHANGED_NE_SCIENTIFIC_SUBJECT_CHANGED",
+    "STUDY_SUBJECT_DIGEST_NE_SEMANTIC_EQUIVALENCE_PROOF",
+    "NEW_STUDY_SUBJECT_DIGEST_NE_CLEAN_NEW_LINEAGE",
+    "UNLINKED_ROOT_NE_INDEPENDENT_STUDY",
+    "NEW_LABEL_NE_NEW_LINEAGE",
+    "PRE_EXPOSURE_REVISION_NE_SAME_SUBJECT_ATTEMPT",
+    "POST_EXPOSURE_REDESIGN_NE_UNTOUCHED_CONFIRMATION"
   ],
   "required_hostile_cases": [
     "HOLDOUT_CONTENT_RELABELED_CORPUS",
@@ -93,7 +101,13 @@
     "CROSS_STUDY_RECEIPT",
     "CROSS_ATTEMPT_RECEIPT",
     "CONTENT_NONREUSE_PROMOTED_TO_INDEPENDENCE",
-    "PROTOCOL_PASS_PROMOTED_TO_EXTERNAL_SCIENTIFIC_VALIDATION"
+    "PROTOCOL_PASS_PROMOTED_TO_EXTERNAL_SCIENTIFIC_VALIDATION",
+    "CANONICAL_PAYLOAD_REORDERED_NEW_DIGEST",
+    "DISPLAY_METADATA_CHANGES_STUDY_IDENTITY",
+    "PARAPHRASED_EQUIVALENT_QUESTION_CLAIMS_CLEAN_ROOT",
+    "UNLINKED_NEW_ROOT_CLAIMS_INDEPENDENCE",
+    "POST_EXPOSURE_REDESIGN_OMITS_CHANGED_FIELDS",
+    "PRE_EXPOSURE_REVISION_MISLABELED_SAME_SUBJECT"
   ],
   "research_stage": "ARCHITECTURE",
   "claim_ceiling": [
@@ -114,6 +128,49 @@
     "NO_PROVIDER_OR_CONTROL_AUTHORITY",
     "NO_MERGE_AUTHORITY",
     "NO_DEPLOYMENT_AUTHORITY",
-    "NO_CANONICAL_PROMOTION"
-  ]
+    "NO_CANONICAL_PROMOTION",
+    "NO_SEMANTIC_EQUIVALENCE_PROOF",
+    "NO_COMPLETE_LINEAGE_ROOT_DISCOVERY"
+  ],
+  "canonical_subject_digest": {
+    "algorithm": "SHA-256",
+    "serialization_profile": "RFC8785_JCS_OR_EQUIVALENT_VERSIONED_CANONICAL_JSON",
+    "canonicalize_semantically_unordered_collections": true,
+    "validate_types_before_hashing": true,
+    "excluded_nonsubject_metadata": [
+      "DISPLAY_LABEL",
+      "OBSERVED_AT",
+      "BRANCH_NAME",
+      "ATTEMPT_ID",
+      "REPOSITORY_PATH_ALIAS"
+    ],
+    "digest_is_semantic_equivalence_proof": false
+  },
+  "lineage_registry": {
+    "required": true,
+    "states": [
+      "KNOWN_LINEAGE",
+      "NEW_ROOT_PENDING_EQUIVALENCE_CHECK",
+      "ANCESTRY_UNKNOWN"
+    ],
+    "new_digest_establishes_clean_root": false,
+    "unlinked_root_establishes_independence": false,
+    "new_root_requires_governed_admission": true,
+    "complete_hidden_history_discovery_claim": false
+  },
+  "change_timing_classes": {
+    "PRE_EXPOSURE_SUBJECT_REVISION": {
+      "requires_new_study_subject_digest": true,
+      "requires_predecessor_study_relation": true,
+      "preserves_precommit_history": true,
+      "inherits_holdout_exposure": false
+    },
+    "POST_EXPOSURE_REDESIGN": {
+      "requires_new_study_subject_digest": true,
+      "requires_predecessor_study_relation": true,
+      "requires_changed_field_disclosure": true,
+      "preserves_prior_evidence_exposure": true,
+      "may_claim_untouched_confirmation_of_predecessor": false
+    }
+  }
 }
