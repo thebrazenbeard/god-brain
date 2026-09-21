@@ -111,7 +111,11 @@ def validate(root: Path) -> list[str]:
         "blob": "11e7a18ff01669656fd0b471b9b5d9fa2c37304a",
         "current_exact_head_review_state": "SELF_REVIEW_PASS_WITH_CLAIM_CEILING",
         "independent_exact_head_review_state": "NOT_OBSERVED",
-        "admission": "RESEARCH_ONLY_PENDING_INDEPENDENT_EXACT_HEAD_REVIEW",
+        "hostile_exact_head_review_state": "CHANGES_REQUIRED",
+        "hostile_exact_head_review_id": "PRR_kwDOUh0Fi88AAAABOiir_A",
+        "hostile_review_independence": "NOT_INDEPENDENT_CORROBORATION_PRIOR_EXPOSURE",
+        "known_blocker": "UNEXPECTED_RUNTIME_OR_INFRASTRUCTURE_EXCEPTION_CAN_TERMINALIZE_EXECUTING_AS_INVALIDATED_AND_REOPEN_SUCCESSOR_ELIGIBILITY",
+        "admission": "RESEARCH_ONLY_BLOCKED_BY_HOSTILE_EXACT_HEAD_REVIEW",
     }
     if source != expected_source:
         errors.append("source binding/review/admission state drifted")
@@ -127,9 +131,10 @@ def validate(root: Path) -> list[str]:
 
     gate = spec.get("future_gate")
     expected_gate = {
-        "required": "FRESH_INDEPENDENT_EXACT_HEAD_REVIEW",
-        "head": "351b7a57b7213bd72cf881aa2bbaa449fb0fbc8f",
-        "on_head_movement": "REVIEW_STALE",
+        "required": "REPAIRED_SOURCE_HEAD_PLUS_FRESH_INDEPENDENT_EXACT_HEAD_REVIEW",
+        "failed_head": "351b7a57b7213bd72cf881aa2bbaa449fb0fbc8f",
+        "source_repair_requires_new_head": True,
+        "on_head_movement": "REBIND_SOURCE_AND_REVIEW",
         "pass_may_support": "ADAPT_WITH_PROVENANCE_CANDIDATE_ONLY",
     }
     if gate != expected_gate:
@@ -144,7 +149,7 @@ def validate(root: Path) -> list[str]:
         "AMBIGUOUS_CONFIRMATORY_EXECUTION != SAFE_TO_RETRY",
         "VALID_RECEIPT != VALID_FOR_THIS_SUBJECT",
         "GOVERNED_HOLDOUT_PASS != ANOMALY",
-        "RESEARCH_ONLY_PENDING_INDEPENDENT_EXACT_HEAD_REVIEW",
+        "RESEARCH_ONLY_BLOCKED_BY_HOSTILE_EXACT_HEAD_REVIEW",
     ):
         if marker not in doc:
             errors.append(f"research doc missing marker: {marker}")
