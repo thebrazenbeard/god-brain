@@ -1,0 +1,182 @@
+{
+  "schema_version": "GOD_BRAIN_CONFIRMATORY_STUDY_LINEAGE_V0_1",
+  "status": "RESEARCH_ARCHITECTURE",
+  "god_brain_base_head": "c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5",
+  "event_id": "GB_DG_TRIAD_20260921_V1",
+  "triggering_source": {
+    "repository": "thebrazenbeard/driftguard",
+    "source_pr": 34,
+    "exact_head": "351b7a57b7213bd72cf881aa2bbaa449fb0fbc8f",
+    "observations": [
+      "5762590813",
+      "5762641946",
+      "5762703839"
+    ],
+    "source_use": "HOSTILE_BLOCKER_EVIDENCE_ONLY"
+  },
+  "identity": {
+    "rule": "STUDY_SUBJECT_DIGEST_IS_DURABLE_STUDY_IDENTITY",
+    "display_label_is_identity": false,
+    "required_subject_fields": [
+      "SCHEMA_VERSION",
+      "EVIDENTIARY_QUESTION",
+      "MEASURED_SUBJECT_DEFINITION",
+      "PORTFOLIO_DIGEST",
+      "CANDIDATE_IDENTITIES_AND_DIGESTS",
+      "SPECIFICATION_DIGESTS",
+      "POLICIES_AND_ACCEPTANCE_CRITERIA",
+      "METRIC_EVALUATION_CONTRACT",
+      "SELECTION_OR_NONPROMOTION_RULE",
+      "EXECUTION_SUBJECT_POLICY",
+      "DATA_PARTITION_POLICY",
+      "CLAIM_CEILING",
+      "PROVENANCE_ROOTS"
+    ]
+  },
+  "successor_classes": {
+    "SAME_SUBJECT_ATTEMPT": {
+      "requires_exact_study_subject_digest_match": true,
+      "inherits_attempt_ancestry": true,
+      "inherits_holdout_content_ancestry": true,
+      "inherits_evidence_exposure": true
+    },
+    "SUCCESSOR_REDESIGN": {
+      "requires_new_study_subject_digest": true,
+      "requires_predecessor_study_relation": true,
+      "requires_redesign_reason": true,
+      "preserves_prior_evidence_exposure": true,
+      "may_claim_untouched_confirmation_of_predecessor": false
+    }
+  },
+  "holdout_ancestry_required_fields": [
+    "CORPUS_IDENTITY_DIGEST",
+    "CANONICAL_ARTIFACT_DIGEST",
+    "OBSERVATION_CONTENT_DIGEST",
+    "SOURCE_PROVENANCE_BINDING",
+    "REVEAL_RECEIPT_DIGEST",
+    "EXECUTION_RECEIPT_DIGEST"
+  ],
+  "invariants": [
+    "STUDY_LABEL_NE_STUDY_IDENTITY",
+    "DISCLOSED_PREDECESSOR_ATTEMPTS_NE_SAME_CONFIRMATORY_STUDY_SUBJECT",
+    "CORPUS_IDENTITY_NONREUSE_NE_HOLDOUT_CONTENT_NONREUSE",
+    "REDESIGN_AFTER_HOLDOUT_EXPOSURE_NE_UNTOUCHED_CONFIRMATION",
+    "FAILED_OR_ABORTED_ATTEMPT_NE_DISAPPEARED_ATTEMPT",
+    "HOLDOUT_METADATA_CHANGED_NE_HOLDOUT_CONTENT_NEW",
+    "CONTENT_NONREUSE_NE_PROVENANCE_CONTINUITY",
+    "REVEAL_AUTHORITY_IS_SINGLE_USE",
+    "EXECUTION_AUTHORITY_IS_SINGLE_USE",
+    "AMBIGUOUS_EXECUTION_NE_SAFE_TO_RETRY",
+    "VALID_RECEIPT_NE_VALID_FOR_THIS_SUBJECT",
+    "DIGEST_NONREUSE_NE_STATISTICAL_INDEPENDENCE",
+    "DURABLE_LINEAGE_NE_EXTERNAL_CUSTODY",
+    "GOVERNED_CONFIRMATORY_PASS_NE_ANOMALY",
+    "ANOMALY_NE_CONTACT",
+    "CONTACT_CANDIDATE_NE_SIMULATOR_IDENTITY",
+    "PROTOCOL_RIGOR_NE_UNIQUE_CAUSAL_EXPLANATION",
+    "DISPLAY_METADATA_CHANGED_NE_STUDY_SUBJECT_CHANGED",
+    "NONCANONICAL_SERIALIZATION_CHANGED_NE_SCIENTIFIC_SUBJECT_CHANGED",
+    "STUDY_SUBJECT_DIGEST_NE_SEMANTIC_EQUIVALENCE_PROOF",
+    "NEW_STUDY_SUBJECT_DIGEST_NE_CLEAN_NEW_LINEAGE",
+    "UNLINKED_ROOT_NE_INDEPENDENT_STUDY",
+    "NEW_LABEL_NE_NEW_LINEAGE",
+    "PRE_EXPOSURE_REVISION_NE_SAME_SUBJECT_ATTEMPT",
+    "POST_EXPOSURE_REDESIGN_NE_UNTOUCHED_CONFIRMATION"
+  ],
+  "required_hostile_cases": [
+    "HOLDOUT_CONTENT_RELABELED_CORPUS",
+    "HOLDOUT_CONTENT_REPACKAGED_ARTIFACT",
+    "STUDY_RELABEL_RESETS_ANCESTRY",
+    "SAME_SUBJECT_TWO_LABELS_SPLIT_ANCESTRY",
+    "SAME_STUDY_CHANGED_CANDIDATES",
+    "SAME_STUDY_CHANGED_ACCEPTANCE_CRITERIA",
+    "SAME_STUDY_CHANGED_PORTFOLIO",
+    "SAME_STUDY_CHANGED_SPECIFICATION",
+    "REDESIGN_AFTER_EXPOSURE_MISLABELED_CONFIRMATION",
+    "MISSING_PREDECESSOR_ATTEMPT",
+    "MISSING_PREDECESSOR_HOLDOUT_CONTENT",
+    "REVEAL_REPLAY",
+    "EXECUTION_REPLAY",
+    "AMBIGUOUS_EXECUTION_OPERATOR_RETRY",
+    "CROSS_STUDY_RECEIPT",
+    "CROSS_ATTEMPT_RECEIPT",
+    "CONTENT_NONREUSE_PROMOTED_TO_INDEPENDENCE",
+    "PROTOCOL_PASS_PROMOTED_TO_EXTERNAL_SCIENTIFIC_VALIDATION",
+    "CANONICAL_PAYLOAD_REORDERED_NEW_DIGEST",
+    "DISPLAY_METADATA_CHANGES_STUDY_IDENTITY",
+    "PARAPHRASED_EQUIVALENT_QUESTION_CLAIMS_CLEAN_ROOT",
+    "UNLINKED_NEW_ROOT_CLAIMS_INDEPENDENCE",
+    "POST_EXPOSURE_REDESIGN_OMITS_CHANGED_FIELDS",
+    "PRE_EXPOSURE_REVISION_MISLABELED_SAME_SUBJECT"
+  ],
+  "research_stage": "ARCHITECTURE",
+  "claim_ceiling": [
+    "NO_RUNTIME_LEDGER_IMPLEMENTATION",
+    "NO_EXPERIMENT_EXECUTION",
+    "NO_DETECTOR_OR_MODEL_QUALIFICATION",
+    "NO_HOLDOUT_NONACCESS_PROOF",
+    "NO_TRUSTED_TIME_PROOF",
+    "NO_STATISTICAL_INDEPENDENCE_PROOF",
+    "NO_EXTERNAL_CUSTODY_PROOF",
+    "NO_HIDDEN_HISTORY_COMPLETENESS_PROOF",
+    "NO_STATISTICAL_SIGNIFICANCE_CLAIM",
+    "NO_CAUSAL_TRUTH_CLAIM",
+    "NO_PRODUCTION_SUPERIORITY",
+    "NO_ANOMALY_CLAIM",
+    "NO_EXTERNAL_CONTACT_CLAIM",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_PROVIDER_OR_CONTROL_AUTHORITY",
+    "NO_MERGE_AUTHORITY",
+    "NO_DEPLOYMENT_AUTHORITY",
+    "NO_CANONICAL_PROMOTION",
+    "NO_SEMANTIC_EQUIVALENCE_PROOF",
+    "NO_COMPLETE_LINEAGE_ROOT_DISCOVERY"
+  ],
+  "canonical_subject_digest": {
+    "algorithm": "SHA-256",
+    "serialization_profile": "RFC8785_JCS",
+    "canonicalize_semantically_unordered_collections": true,
+    "unordered_collection_fields": [
+      "CANDIDATE_IDENTITIES_AND_DIGESTS",
+      "SPECIFICATION_DIGESTS",
+      "PROVENANCE_ROOTS"
+    ],
+    "unordered_collection_order": "LEXICOGRAPHIC_UTF8_BY_RFC8785_CANONICAL_ELEMENT_BYTES",
+    "validate_types_before_hashing": true,
+    "excluded_nonsubject_metadata": [
+      "DISPLAY_LABEL",
+      "OBSERVED_AT",
+      "BRANCH_NAME",
+      "ATTEMPT_ID",
+      "REPOSITORY_PATH_ALIAS"
+    ],
+    "digest_is_semantic_equivalence_proof": false
+  },
+  "lineage_registry": {
+    "required": true,
+    "states": [
+      "KNOWN_LINEAGE",
+      "NEW_ROOT_PENDING_EQUIVALENCE_CHECK",
+      "ANCESTRY_UNKNOWN"
+    ],
+    "new_digest_establishes_clean_root": false,
+    "unlinked_root_establishes_independence": false,
+    "new_root_requires_governed_admission": true,
+    "complete_hidden_history_discovery_claim": false
+  },
+  "change_timing_classes": {
+    "PRE_EXPOSURE_SUBJECT_REVISION": {
+      "requires_new_study_subject_digest": true,
+      "requires_predecessor_study_relation": true,
+      "preserves_precommit_history": true,
+      "inherits_holdout_exposure": false
+    },
+    "POST_EXPOSURE_REDESIGN": {
+      "requires_new_study_subject_digest": true,
+      "requires_predecessor_study_relation": true,
+      "requires_changed_field_disclosure": true,
+      "preserves_prior_evidence_exposure": true,
+      "may_claim_untouched_confirmation_of_predecessor": false
+    }
+  }
+}
