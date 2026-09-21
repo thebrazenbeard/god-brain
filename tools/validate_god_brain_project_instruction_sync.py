@@ -25,6 +25,10 @@ REQUIRED_CLAIM_CEILING = {
 }
 
 RECEIPT_DIR = "state/project-interface/instruction-installation"
+SOURCE_POINTER_RECEIPT_PATH = (
+    "state/project-interface/source-provenance/"
+    "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1.json"
+)
 
 REQUIRED_RECEIPT_FIELDS = {
     "schema_version",
@@ -33,6 +37,7 @@ REQUIRED_RECEIPT_FIELDS = {
     "canonical_source_commit",
     "candidate_source_head",
     "source_pr",
+    "source_verification_receipt",
     "source_path",
     "source_git_blob",
     "normalized_source_sha256",
@@ -135,6 +140,34 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
                 if source_rules.get(status) != expected_rule:
                     errors.append(f"receipt source identity rule drifted for {status}")
 
+        pointer_contract = receipt.get("source_verification_receipt_contract")
+        if not isinstance(pointer_contract, dict):
+            errors.append("receipt source_verification_receipt_contract must be an object")
+        else:
+            if pointer_contract.get("candidate_source_receipt") != "REQUIRED":
+                errors.append("candidate source verification receipt must remain required")
+            if pointer_contract.get("required_schema") != "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1":
+                errors.append("source verification receipt schema drifted")
+            if pointer_contract.get("required_status") != "EXACT_GIT_POINTER_VERIFIED":
+                errors.append("source verification receipt status drifted")
+            if pointer_contract.get("exact_tuple_fields") != [
+                "repository",
+                "source_pr",
+                "candidate_source_head",
+                "source_path",
+                "source_git_blob",
+            ]:
+                errors.append("source verification tuple contract drifted")
+            required_pointer_ceiling = {
+                "POINTER_VERIFIED_AT_T1",
+                "NO_CURRENTNESS_CLAIM",
+                "NO_CANONICAL_PROMOTION",
+                "NO_INSTALLATION_PROOF",
+                "NO_PROJECT_SETTING_EFFECT",
+            }
+            if set(pointer_contract.get("receipt_claim_ceiling", [])) != required_pointer_ceiling:
+                errors.append("source verification receipt claim ceiling drifted")
+
         forbidden = set(receipt.get("forbidden_fields", []))
         for sensitive in ("credential", "token", "secret"):
             if sensitive not in forbidden:
@@ -164,6 +197,44 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
         required_classes = {"MATCH", "DRIFT", "UNKNOWN"}
         if not required_classes.issubset(set(bootstrap.get("required_classification_when_checked", []))):
             errors.append("bootstrap installation classification is incomplete")
+
+    pointer_path = root / SOURCE_POINTER_RECEIPT_PATH
+    pointer_receipt: dict[str, Any] = {}
+    if pointer_path.is_file():
+        try:
+            pointer_receipt = _load_object(pointer_path)
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            errors.append(f"{SOURCE_POINTER_RECEIPT_PATH} invalid pointer receipt: {exc}")
+    else:
+        errors.append(f"missing {SOURCE_POINTER_RECEIPT_PATH}")
+
+    if pointer_receipt:
+        if pointer_receipt.get("schema_version") != "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1":
+            errors.append("source pointer receipt schema_version drifted")
+        if pointer_receipt.get("status") != "EXACT_GIT_POINTER_VERIFIED":
+            errors.append("source pointer receipt status drifted")
+        if pointer_receipt.get("verification_surface") != "GITHUB_EXACT_PR_HEAD_FILE_READBACK":
+            errors.append("source pointer verification surface drifted")
+        if pointer_receipt.get("repository") != "thebrazenbeard/god-brain":
+            errors.append("source pointer repository drifted")
+        if not _is_sha40(pointer_receipt.get("source_head")):
+            errors.append("source pointer head must be lowercase 40-hex")
+        if not _is_sha40(pointer_receipt.get("source_git_blob")):
+            errors.append("source pointer git blob must be lowercase 40-hex")
+        if pointer_receipt.get("source_path") != "architecture/chatgpt/PROJECT_INSTRUCTIONS.md":
+            errors.append("source pointer path drifted")
+        source_pr = pointer_receipt.get("source_pr")
+        if isinstance(source_pr, bool) or not isinstance(source_pr, int) or source_pr <= 0:
+            errors.append("source pointer PR must be a positive integer")
+        required_pointer_ceiling = {
+            "POINTER_VERIFIED_AT_T1",
+            "NO_CURRENTNESS_CLAIM",
+            "NO_CANONICAL_PROMOTION",
+            "NO_INSTALLATION_PROOF",
+            "NO_PROJECT_SETTING_EFFECT",
+        }
+        if set(pointer_receipt.get("claim_ceiling", [])) != required_pointer_ceiling:
+            errors.append("source pointer claim ceiling drifted")
 
     receipt_dir = root / RECEIPT_DIR
     if receipt_dir.is_dir():
@@ -200,6 +271,25 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
                     errors.append(f"{relative} candidate source requires 40-hex candidate_source_head")
                 if isinstance(source_pr, bool) or not isinstance(source_pr, int) or source_pr <= 0:
                     errors.append(f"{relative} candidate source requires positive integer source_pr")
+                if observed.get("source_verification_receipt") != SOURCE_POINTER_RECEIPT_PATH:
+                    errors.append(f"{relative} candidate source verification receipt path drifted")
+                if pointer_receipt:
+                    observed_tuple = (
+                        observed.get("repository"),
+                        source_pr,
+                        candidate_source_head,
+                        observed.get("source_path"),
+                        observed.get("source_git_blob"),
+                    )
+                    verified_tuple = (
+                        pointer_receipt.get("repository"),
+                        pointer_receipt.get("source_pr"),
+                        pointer_receipt.get("source_head"),
+                        pointer_receipt.get("source_path"),
+                        pointer_receipt.get("source_git_blob"),
+                    )
+                    if observed_tuple != verified_tuple:
+                        errors.append(f"{relative} candidate source tuple does not match verification receipt")
             else:
                 errors.append(f"{relative} invalid source_status")
             if observed.get("source_path") != "architecture/chatgpt/PROJECT_INSTRUCTIONS.md":
