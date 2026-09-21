@@ -81,6 +81,36 @@ class ExperimentAdmissionArchitectureTests(unittest.TestCase):
         errors = _mutated(lambda s: s["required_packet_fields"].remove("MULTIPLE_COMPARISON_RULE"))
         self.assertTrue(any("required packet fields" in e for e in errors))
 
+    def test_required_rival_floor_cannot_drop_training_prior_knowledge(self) -> None:
+        errors = _mutated(
+            lambda s: s["required_rival_hypotheses"].remove("H4_TRAINING_OR_PRIOR_KNOWLEDGE")
+        )
+        self.assertTrue(any("required rival hypotheses" in e for e in errors))
+
+    def test_e7_minimum_cannot_drop_independent_challenge_custody(self) -> None:
+        errors = _mutated(
+            lambda s: s["escalation_gate"]["e7_minimum"].remove("INDEPENDENT_CHALLENGE_CUSTODY")
+        )
+        self.assertTrue(any("E7 minimum controls" in e for e in errors))
+
+    def test_invalidity_floor_cannot_drop_unaudited_channel(self) -> None:
+        errors = _mutated(
+            lambda s: s["invalidity_conditions"].remove("UNAUDITED_CHANNEL_COULD_CONTAIN_CHALLENGE")
+        )
+        self.assertTrue(any("invalidity conditions" in e for e in errors))
+
+    def test_testability_floor_cannot_drop_independence_custody_plan(self) -> None:
+        errors = _mutated(
+            lambda s: s["testability_gate"]["required_fields"].remove("INDEPENDENCE_AND_CUSTODY_PLAN")
+        )
+        self.assertTrue(any("testability required fields" in e for e in errors))
+
+    def test_internal_confirmation_requires_fresh_holdout(self) -> None:
+        errors = _mutated(
+            lambda s: s["modes"]["INTERNAL_CONFIRMATORY"].__setitem__("requires_fresh_holdout", False)
+        )
+        self.assertTrue(any("internal confirmatory requirements" in e for e in errors))
+
     def test_admission_cannot_be_run_authority(self) -> None:
         errors = _mutated(lambda s: s["invariants"].remove("ADMISSION_READY_NE_AUTHORIZED_TO_RUN"))
         self.assertTrue(any("invariants" in e for e in errors))
