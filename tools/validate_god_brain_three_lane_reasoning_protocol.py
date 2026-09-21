@@ -19,6 +19,46 @@ EXPECTED_EXPOSURE = {
     "FULLY_EXPOSED_TO_OTHER_LANE_CONCLUSIONS",
     "EXPOSURE_UNKNOWN",
 }
+EXPECTED_SUBJECT_PACKET_FIELDS = {
+    "EVENT_ID",
+    "REPOSITORY_AND_EXACT_HEAD_WHEN_APPLICABLE",
+    "RELEVANT_PATHS_OR_BLOBS_WHEN_APPLICABLE",
+    "LITERAL_PROPOSITION_OR_ARCHITECTURE_SUBJECT",
+    "ADMITTED_EVIDENCE_SET",
+    "CLAIM_CEILING",
+    "PROTECTED_EFFECT_BOUNDARY",
+    "REQUIRED_LANES",
+    "LANE_EXPOSURE_DISCLOSURE",
+}
+
+EXPECTED_FIRST_PASS_FIELDS = {
+    "EXACT_SUBJECT_BINDING",
+    "CONCLUSION_OR_DISPOSITION",
+    "COMPETING_HYPOTHESES_OR_INTERPRETATIONS",
+    "STRONGEST_SUPPORTING_EVIDENCE",
+    "STRONGEST_OPPOSING_EVIDENCE",
+    "ASSUMPTIONS",
+    "FALSIFIERS",
+    "UNRESOLVED_DEPENDENCIES",
+    "RECOMMENDED_DISCRIMINATING_TEST",
+    "EXPOSURE_DISCLOSURE",
+    "CLAIM_CEILING",
+}
+
+EXPECTED_RECONCILIATION_FACTORS = {
+    "EXACT_SUBJECT_MATCH",
+    "SOURCE_QUALITY",
+    "SOURCE_INDEPENDENCE",
+    "LOGICAL_VALIDITY",
+    "CAUSAL_ADEQUACY",
+    "ASSUMPTION_LOAD",
+    "FALSIFIABILITY",
+    "CONTRADICTION_SEVERITY",
+    "PROVENANCE_CURRENTNESS",
+    "EXPOSURE_CORRELATION",
+    "PREDICTIVE_DISCRIMINATION",
+}
+
 EXPECTED_WORKFLOW = {
     "SUBJECT_BOUND",
     "FIRST_PASS_OPEN",
@@ -138,6 +178,9 @@ def validate(root: Path) -> list[str]:
         errors.append("event id drifted")
 
     _exact_set(errors, spec.get("lanes"), EXPECTED_LANES, "lanes")
+    _exact_set(errors, spec.get("subject_packet_required_fields"), EXPECTED_SUBJECT_PACKET_FIELDS, "subject packet required fields")
+    _exact_set(errors, spec.get("first_pass_required_fields"), EXPECTED_FIRST_PASS_FIELDS, "first pass required fields")
+    _exact_set(errors, spec.get("reconciliation_factors"), EXPECTED_RECONCILIATION_FACTORS, "reconciliation factors")
     _exact_set(errors, spec.get("first_pass_exposure_classes"), EXPECTED_EXPOSURE, "first pass exposure classes")
     _exact_set(errors, spec.get("workflow_states"), EXPECTED_WORKFLOW, "workflow states")
     _exact_set(errors, spec.get("reconciliation_dispositions"), EXPECTED_DISPOSITIONS, "reconciliation dispositions")
