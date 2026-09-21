@@ -41,5 +41,7 @@
     "INSTALLATION_RECEIPT_NE_PROOF_CURRENT_CHAT_CONSUMED_TEXT",
     "NO_CANONICAL_PROMOTION",
     "NO_MERGE_AUTHORITY"
-  ]
+  ],
+  "source_status": "CANDIDATE_NONCANONICAL",
+  "source_verification_receipt": "state/project-interface/source-provenance/GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1.json"
 }

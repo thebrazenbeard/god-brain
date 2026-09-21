@@ -85,7 +85,9 @@ A receipt should include:
 
 - receipt schema/version;
 - repository;
-- canonical source commit;
+- source status: `CANONICAL` or `CANDIDATE_NONCANONICAL`;
+- canonical source commit when the source status is `CANONICAL`;
+- candidate source head and source PR when the source status is `CANDIDATE_NONCANONICAL`;
 - source path;
 - source Git blob;
 - normalized source SHA-256;
@@ -102,6 +104,18 @@ A receipt should include:
 Example claim ceiling:
 
 `INSTALLATION_RECEIPT != PROOF_CURRENT_CHAT_CONSUMED_TEXT`
+
+A candidate-source receipt must not masquerade as canonical: `canonical_source_commit` remains null while an exact candidate head and positive source PR identify the noncanonical source. A canonical receipt must carry an exact canonical commit and no candidate identity.
+
+For a candidate source, the receipt must also reference a separate exact Git pointer verification receipt binding repository + PR + candidate head + source path + Git blob. The installation receipt and pointer receipt must agree exactly on that tuple.
+
+The pointer receipt proves only that the declared Git tuple resolved at the observed verification time:
+
+`POINTER_VERIFIED_AT_T1 != SOURCE_CURRENT_AT_T2`
+
+`POINTER_VERIFICATION != INSTALLATION_PROOF`
+
+`POINTER_VERIFICATION != CANONICAL_PROMOTION`
 
 The receipt must not contain credentials, tokens, private connector secrets, or unrelated Project content.
 

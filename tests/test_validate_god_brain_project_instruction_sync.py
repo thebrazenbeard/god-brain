@@ -8,6 +8,7 @@ from pathlib import Path
 from tools.validate_god_brain_project_instruction_sync import (
     DOC_PATH,
     RECEIPT_DIR,
+    SOURCE_POINTER_RECEIPT_PATH,
     SPEC_PATH,
     validate_project_instruction_sync,
 )
@@ -69,6 +70,88 @@ class GodBrainProjectInstructionSyncTests(unittest.TestCase):
             errors = validate_project_instruction_sync(target)
             self.assertTrue(any("chat consumption" in error for error in errors))
 
+    def test_receipt_required_source_identity_fields_are_enforced(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        receipt_source = next((root / RECEIPT_DIR).glob("*.json"))
+        receipt = json.loads(receipt_source.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
+            (target / DOC_PATH).parent.mkdir(parents=True)
+            (target / RECEIPT_DIR).mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).parent.mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).write_text(
+                (root / SOURCE_POINTER_RECEIPT_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
+            (target / DOC_PATH).write_text((root / DOC_PATH).read_text(encoding="utf-8"), encoding="utf-8")
+            mutated = json.loads(json.dumps(receipt))
+            mutated.pop("candidate_source_head")
+            (target / RECEIPT_DIR / "receipt.json").write_text(json.dumps(mutated), encoding="utf-8")
+            errors = validate_project_instruction_sync(target)
+            self.assertTrue(any("missing required receipt fields" in error for error in errors))
+
+    def test_candidate_receipt_requires_consistent_noncanonical_source_identity(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        receipt_source = next((root / RECEIPT_DIR).glob("*.json"))
+        receipt = json.loads(receipt_source.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
+            (target / DOC_PATH).parent.mkdir(parents=True)
+            (target / RECEIPT_DIR).mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).parent.mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).write_text(
+                (root / SOURCE_POINTER_RECEIPT_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
+            (target / DOC_PATH).write_text((root / DOC_PATH).read_text(encoding="utf-8"), encoding="utf-8")
+            mutated = json.loads(json.dumps(receipt))
+            mutated["candidate_source_head"] = None
+            (target / RECEIPT_DIR / "receipt.json").write_text(json.dumps(mutated), encoding="utf-8")
+            errors = validate_project_instruction_sync(target)
+            self.assertTrue(any("candidate source requires 40-hex candidate_source_head" in error for error in errors))
+
+    def test_candidate_source_tuple_must_match_exact_pointer_receipt(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
+        receipt_source = next((root / RECEIPT_DIR).glob("*.json"))
+        receipt = json.loads(receipt_source.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+            (target / SPEC_PATH).parent.mkdir(parents=True)
+            (target / DOC_PATH).parent.mkdir(parents=True)
+            (target / RECEIPT_DIR).mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).parent.mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).write_text(
+                (root / SOURCE_POINTER_RECEIPT_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
+            (target / DOC_PATH).write_text(
+                (root / DOC_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            mutated = json.loads(json.dumps(receipt))
+            mutated["source_pr"] = 12
+            mutated["candidate_source_head"] = "0" * 40
+            mutated["source_git_blob"] = "1" * 40
+            (target / RECEIPT_DIR / "receipt.json").write_text(
+                json.dumps(mutated),
+                encoding="utf-8",
+            )
+            errors = validate_project_instruction_sync(target)
+            self.assertTrue(
+                any(
+                    "candidate source tuple does not match verification receipt" in error
+                    for error in errors
+                )
+            )
+
     def test_user_report_only_receipt_cannot_claim_exact_installation(self) -> None:
         root = Path(__file__).resolve().parents[1]
         spec = json.loads((root / SPEC_PATH).read_text(encoding="utf-8"))
@@ -79,6 +162,11 @@ class GodBrainProjectInstructionSyncTests(unittest.TestCase):
             (target / SPEC_PATH).parent.mkdir(parents=True)
             (target / DOC_PATH).parent.mkdir(parents=True)
             (target / RECEIPT_DIR).mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).parent.mkdir(parents=True)
+            (target / SOURCE_POINTER_RECEIPT_PATH).write_text(
+                (root / SOURCE_POINTER_RECEIPT_PATH).read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
             (target / SPEC_PATH).write_text(json.dumps(spec), encoding="utf-8")
             (target / DOC_PATH).write_text(
                 (root / DOC_PATH).read_text(encoding="utf-8"),

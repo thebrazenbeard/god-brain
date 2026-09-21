@@ -25,11 +25,19 @@ REQUIRED_CLAIM_CEILING = {
 }
 
 RECEIPT_DIR = "state/project-interface/instruction-installation"
+SOURCE_POINTER_RECEIPT_PATH = (
+    "state/project-interface/source-provenance/"
+    "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1.json"
+)
 
 REQUIRED_RECEIPT_FIELDS = {
     "schema_version",
     "repository",
+    "source_status",
     "canonical_source_commit",
+    "candidate_source_head",
+    "source_pr",
+    "source_verification_receipt",
     "source_path",
     "source_git_blob",
     "normalized_source_sha256",
@@ -49,6 +57,14 @@ def _load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"{path} root must be an object")
     return value
+
+
+def _is_sha40(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 40
+        and all(ch in "0123456789abcdef" for ch in value)
+    )
 
 
 def validate_project_instruction_sync(root: Path) -> list[str]:
@@ -101,6 +117,57 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
         missing_fields = REQUIRED_RECEIPT_FIELDS - set(receipt.get("required_fields", []))
         if missing_fields:
             errors.append(f"receipt required_fields missing: {sorted(missing_fields)}")
+
+        source_rules = receipt.get("source_identity_rules")
+        if not isinstance(source_rules, dict):
+            errors.append("receipt source_identity_rules must be an object")
+        else:
+            if source_rules.get("source_status_values") != ["CANONICAL", "CANDIDATE_NONCANONICAL"]:
+                errors.append("receipt source_status_values drifted")
+            expected_rules = {
+                "CANONICAL": {
+                    "canonical_source_commit": "REQUIRED_40_HEX",
+                    "candidate_source_head": "MUST_BE_NULL",
+                    "source_pr": "MUST_BE_NULL",
+                },
+                "CANDIDATE_NONCANONICAL": {
+                    "canonical_source_commit": "MUST_BE_NULL",
+                    "candidate_source_head": "REQUIRED_40_HEX",
+                    "source_pr": "REQUIRED_POSITIVE_INTEGER",
+                },
+            }
+            for status, expected_rule in expected_rules.items():
+                if source_rules.get(status) != expected_rule:
+                    errors.append(f"receipt source identity rule drifted for {status}")
+
+        pointer_contract = receipt.get("source_verification_receipt_contract")
+        if not isinstance(pointer_contract, dict):
+            errors.append("receipt source_verification_receipt_contract must be an object")
+        else:
+            if pointer_contract.get("candidate_source_receipt") != "REQUIRED":
+                errors.append("candidate source verification receipt must remain required")
+            if pointer_contract.get("required_schema") != "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1":
+                errors.append("source verification receipt schema drifted")
+            if pointer_contract.get("required_status") != "EXACT_GIT_POINTER_VERIFIED":
+                errors.append("source verification receipt status drifted")
+            if pointer_contract.get("exact_tuple_fields") != [
+                "repository",
+                "source_pr",
+                "candidate_source_head",
+                "source_path",
+                "source_git_blob",
+            ]:
+                errors.append("source verification tuple contract drifted")
+            required_pointer_ceiling = {
+                "POINTER_VERIFIED_AT_T1",
+                "NO_CURRENTNESS_CLAIM",
+                "NO_CANONICAL_PROMOTION",
+                "NO_INSTALLATION_PROOF",
+                "NO_PROJECT_SETTING_EFFECT",
+            }
+            if set(pointer_contract.get("receipt_claim_ceiling", [])) != required_pointer_ceiling:
+                errors.append("source verification receipt claim ceiling drifted")
+
         forbidden = set(receipt.get("forbidden_fields", []))
         for sensitive in ("credential", "token", "secret"):
             if sensitive not in forbidden:
@@ -131,6 +198,44 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
         if not required_classes.issubset(set(bootstrap.get("required_classification_when_checked", []))):
             errors.append("bootstrap installation classification is incomplete")
 
+    pointer_path = root / SOURCE_POINTER_RECEIPT_PATH
+    pointer_receipt: dict[str, Any] = {}
+    if pointer_path.is_file():
+        try:
+            pointer_receipt = _load_object(pointer_path)
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            errors.append(f"{SOURCE_POINTER_RECEIPT_PATH} invalid pointer receipt: {exc}")
+    else:
+        errors.append(f"missing {SOURCE_POINTER_RECEIPT_PATH}")
+
+    if pointer_receipt:
+        if pointer_receipt.get("schema_version") != "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1":
+            errors.append("source pointer receipt schema_version drifted")
+        if pointer_receipt.get("status") != "EXACT_GIT_POINTER_VERIFIED":
+            errors.append("source pointer receipt status drifted")
+        if pointer_receipt.get("verification_surface") != "GITHUB_EXACT_PR_HEAD_FILE_READBACK":
+            errors.append("source pointer verification surface drifted")
+        if pointer_receipt.get("repository") != "thebrazenbeard/god-brain":
+            errors.append("source pointer repository drifted")
+        if not _is_sha40(pointer_receipt.get("source_head")):
+            errors.append("source pointer head must be lowercase 40-hex")
+        if not _is_sha40(pointer_receipt.get("source_git_blob")):
+            errors.append("source pointer git blob must be lowercase 40-hex")
+        if pointer_receipt.get("source_path") != "architecture/chatgpt/PROJECT_INSTRUCTIONS.md":
+            errors.append("source pointer path drifted")
+        source_pr = pointer_receipt.get("source_pr")
+        if isinstance(source_pr, bool) or not isinstance(source_pr, int) or source_pr <= 0:
+            errors.append("source pointer PR must be a positive integer")
+        required_pointer_ceiling = {
+            "POINTER_VERIFIED_AT_T1",
+            "NO_CURRENTNESS_CLAIM",
+            "NO_CANONICAL_PROMOTION",
+            "NO_INSTALLATION_PROOF",
+            "NO_PROJECT_SETTING_EFFECT",
+        }
+        if set(pointer_receipt.get("claim_ceiling", [])) != required_pointer_ceiling:
+            errors.append("source pointer claim ceiling drifted")
+
     receipt_dir = root / RECEIPT_DIR
     if receipt_dir.is_dir():
         for receipt_path in sorted(receipt_dir.glob("*.json")):
@@ -140,10 +245,53 @@ def validate_project_instruction_sync(root: Path) -> list[str]:
                 errors.append(f"{receipt_path.relative_to(root)} invalid receipt JSON: {exc}")
                 continue
 
+            relative = receipt_path.relative_to(root)
+            missing_observed = REQUIRED_RECEIPT_FIELDS - set(observed)
+            if missing_observed:
+                errors.append(f"{relative} missing required receipt fields: {sorted(missing_observed)}")
+
             if observed.get("schema_version") != "GOD_BRAIN_PROJECT_INSTRUCTION_INSTALLATION_RECEIPT_V0_1":
-                errors.append(f"{receipt_path.relative_to(root)} unexpected receipt schema_version")
+                errors.append(f"{relative} unexpected receipt schema_version")
             if observed.get("repository") != "thebrazenbeard/god-brain":
-                errors.append(f"{receipt_path.relative_to(root)} repository drifted")
+                errors.append(f"{relative} repository drifted")
+
+            source_status = observed.get("source_status")
+            canonical_source_commit = observed.get("canonical_source_commit")
+            candidate_source_head = observed.get("candidate_source_head")
+            source_pr = observed.get("source_pr")
+            if source_status == "CANONICAL":
+                if not _is_sha40(canonical_source_commit):
+                    errors.append(f"{relative} canonical source requires 40-hex canonical_source_commit")
+                if candidate_source_head is not None or source_pr is not None:
+                    errors.append(f"{relative} canonical source cannot also claim candidate source identity")
+            elif source_status == "CANDIDATE_NONCANONICAL":
+                if canonical_source_commit is not None:
+                    errors.append(f"{relative} candidate source cannot claim canonical_source_commit")
+                if not _is_sha40(candidate_source_head):
+                    errors.append(f"{relative} candidate source requires 40-hex candidate_source_head")
+                if isinstance(source_pr, bool) or not isinstance(source_pr, int) or source_pr <= 0:
+                    errors.append(f"{relative} candidate source requires positive integer source_pr")
+                if observed.get("source_verification_receipt") != SOURCE_POINTER_RECEIPT_PATH:
+                    errors.append(f"{relative} candidate source verification receipt path drifted")
+                if pointer_receipt:
+                    observed_tuple = (
+                        observed.get("repository"),
+                        source_pr,
+                        candidate_source_head,
+                        observed.get("source_path"),
+                        observed.get("source_git_blob"),
+                    )
+                    verified_tuple = (
+                        pointer_receipt.get("repository"),
+                        pointer_receipt.get("source_pr"),
+                        pointer_receipt.get("source_head"),
+                        pointer_receipt.get("source_path"),
+                        pointer_receipt.get("source_git_blob"),
+                    )
+                    if observed_tuple != verified_tuple:
+                        errors.append(f"{relative} candidate source tuple does not match verification receipt")
+            else:
+                errors.append(f"{relative} invalid source_status")
             if observed.get("source_path") != "architecture/chatgpt/PROJECT_INSTRUCTIONS.md":
                 errors.append(f"{receipt_path.relative_to(root)} source_path drifted")
             if observed.get("sync_state") not in REQUIRED_SYNC_STATES:
