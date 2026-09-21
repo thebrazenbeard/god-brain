@@ -28,6 +28,14 @@ class ThreeLaneProtocolTests(unittest.TestCase):
     def test_repository_subject_validates(self) -> None:
         self.assertEqual(validate(ROOT), [])
 
+    def test_unknown_top_level_authority_claim_is_rejected(self) -> None:
+        errors = _mutated(lambda s: s.__setitem__("merge_authority", True))
+        self.assertTrue(any("top-level machine contract keys" in e for e in errors))
+
+    def test_unknown_top_level_independence_claim_is_rejected(self) -> None:
+        errors = _mutated(lambda s: s.__setitem__("lane_independence_proven", True))
+        self.assertTrue(any("top-level machine contract keys" in e for e in errors))
+
     def test_lane_set_is_closed(self) -> None:
         errors = _mutated(lambda s: s["lanes"].append("FOURTH_VOTER"))
         self.assertTrue(any("lanes" in e for e in errors))
