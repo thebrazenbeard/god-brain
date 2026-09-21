@@ -196,6 +196,47 @@ class GodBrainProjectFileArchitectureTests(unittest.TestCase):
             )
         )
 
+    def test_claim_ceiling_rejects_extra_authority_claim(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec["claim_ceiling"].append("MERGE_AUTHORITY_GRANTED")
+        )
+        self.assertTrue(
+            any(
+                "claim_ceiling unexpected" in error
+                and "MERGE_AUTHORITY_GRANTED" in error
+                for error in errors
+            )
+        )
+
+    def test_top_level_extra_authority_field_is_rejected(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec.__setitem__("merge_authority", True)
+        )
+        self.assertTrue(
+            any("top-level machine contract keys unexpected" in error for error in errors)
+        )
+
+    def test_stratum_extra_authority_field_is_rejected(self) -> None:
+        def mutate(spec: dict) -> None:
+            stratum(spec, "CONTINUATION_CHECKPOINTS")["grants_merge_authority"] = True
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "stratum CONTINUATION_CHECKPOINTS keys unexpected" in error
+                and "grants_merge_authority" in error
+                for error in errors
+            )
+        )
+
+    def test_promotion_order_keeps_patrick_exact_authority_gate(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec["promotion_order"].remove(
+                "PATRICK_EXPLICIT_CANONICAL_PROMOTION_AUTHORITY"
+            )
+        )
+        self.assertTrue(any("promotion_order drifted" in error for error in errors))
+
     def test_duplicate_stratum_id_is_rejected(self) -> None:
         def mutate(spec: dict) -> None:
             spec["strata"][-1]["id"] = "ROOT_DISCOVERY_MANIFEST"
