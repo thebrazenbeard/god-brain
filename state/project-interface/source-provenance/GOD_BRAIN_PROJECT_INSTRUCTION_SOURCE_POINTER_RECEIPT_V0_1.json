@@ -1,0 +1,18 @@
+{
+  "schema_version": "GOD_BRAIN_PROJECT_INSTRUCTION_SOURCE_POINTER_RECEIPT_V0_1",
+  "status": "EXACT_GIT_POINTER_VERIFIED",
+  "verification_surface": "GITHUB_EXACT_PR_HEAD_FILE_READBACK",
+  "verified_on": "2026-09-21",
+  "repository": "thebrazenbeard/god-brain",
+  "source_pr": 11,
+  "source_head": "d80dcec08137d5fd1a8b5cafa62fb60d956e7ce2",
+  "source_path": "architecture/chatgpt/PROJECT_INSTRUCTIONS.md",
+  "source_git_blob": "a0c272143f67637c03baca9eb910908ab4fba84c",
+  "claim_ceiling": [
+    "POINTER_VERIFIED_AT_T1",
+    "NO_CURRENTNESS_CLAIM",
+    "NO_CANONICAL_PROMOTION",
+    "NO_INSTALLATION_PROOF",
+    "NO_PROJECT_SETTING_EFFECT"
+  ]
+}
