@@ -18,12 +18,31 @@ on:
       - "tests/test_validate_god_brain_simulation_testability.py"
       - ".github/workflows/simulation-testability-research.yml"
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Run simulation testability tests
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+      - name: Validate simulation-testability boundary
+        working-directory: repo
+        run: python3 tools/validate_god_brain_simulation_testability.py
+      - name: Run hostile regression tests
+        working-directory: repo
         run: python3 -m unittest -v tests.test_validate_god_brain_simulation_testability
-      - name: Validate simulation testability boundary
-        run: python3 tools/validate_god_brain_simulation_testability.py --root .
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
