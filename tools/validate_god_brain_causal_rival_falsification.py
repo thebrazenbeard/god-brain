@@ -16,6 +16,7 @@ EXPECTED_TOP_LEVEL_KEYS = {
     "event_id",
     "minimum_rival_families",
     "hypothesis_required_fields",
+    "hypothesis_identity_contract",
     "precommitment_states",
     "comparison_required_fields",
     "rival_states",
@@ -39,6 +40,32 @@ EXPECTED_RIVALS = {
     "KNOWN_SYSTEM_AGENCY",
     "UNKNOWN_ORDINARY_MECHANISM",
     "EXTERNAL_SOURCE_OR_INTERVENTION_HYPOTHESIS",
+}
+
+EXPECTED_HYPOTHESIS_IDENTITY = {
+    "identity_bearing_fields": [
+        "PROPOSITION",
+        "HYPOTHESIS_CLASS",
+        "PREDICTED_OBSERVATIONS",
+        "TENSION_OR_NONPREDICTED_OBSERVATIONS",
+        "CAUSAL_ASSUMPTIONS",
+        "AUXILIARY_ASSUMPTIONS",
+        "CONFOUNDERS_AND_COMMON_CAUSES",
+        "SELECTION_MECHANISMS",
+        "FALSIFIERS",
+        "COUNTERFACTUAL_PREDICTIONS",
+        "CLAIM_CEILING",
+    ],
+    "nonidentity_display_fields": ["DISPLAY_LABEL"],
+    "material_identity_change_requires": "NEW_HYPOTHESIS_ID_OR_EXPLICIT_REVISION_RECORD",
+    "revision_record_required_fields": [
+        "PREDECESSOR_HYPOTHESIS_ID",
+        "SUCCESSOR_HYPOTHESIS_ID",
+        "CHANGED_IDENTITY_FIELDS",
+        "CHANGE_TIMING_RELATIVE_TO_TARGET_EVIDENCE",
+    ],
+    "unchanged_label_does_not_preserve_identity": True,
+    "new_id_does_not_erase_revision_timing": True,
 }
 
 EXPECTED_PRECOMMITMENT = {
@@ -214,6 +241,8 @@ def validate(root: Path) -> list[str]:
 
     _exact_set(errors, spec.get("minimum_rival_families"), EXPECTED_RIVALS, "minimum rival families")
     _exact_set(errors, spec.get("hypothesis_required_fields"), EXPECTED_HYP_FIELDS, "hypothesis fields")
+    if spec.get("hypothesis_identity_contract") != EXPECTED_HYPOTHESIS_IDENTITY:
+        errors.append("hypothesis identity contract drifted")
     _exact_set(errors, spec.get("precommitment_states"), EXPECTED_PRECOMMITMENT, "precommitment states")
     _exact_set(errors, spec.get("comparison_required_fields"), EXPECTED_COMPARISON_FIELDS, "comparison fields")
     _exact_set(errors, spec.get("rival_states"), EXPECTED_RIVAL_STATES, "rival states")
