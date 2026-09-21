@@ -1,0 +1,27 @@
+name: God Brain Integration Readiness Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_INTEGRATION_READINESS_V0_2.md"
+      - "specs/research/GOD_BRAIN_INTEGRATION_READINESS_V0_2.json"
+      - "tools/validate_god_brain_integration_readiness_v0_2.py"
+      - "tests/test_validate_god_brain_integration_readiness_v0_2.py"
+      - ".github/workflows/god-brain-integration-readiness-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_INTEGRATION_READINESS_V0_2.md"
+      - "specs/research/GOD_BRAIN_INTEGRATION_READINESS_V0_2.json"
+      - "tools/validate_god_brain_integration_readiness_v0_2.py"
+      - "tests/test_validate_god_brain_integration_readiness_v0_2.py"
+      - ".github/workflows/god-brain-integration-readiness-research.yml"
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run readiness tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_integration_readiness_v0_2
+      - name: Validate readiness contract
+        run: python3 tools/validate_god_brain_integration_readiness_v0_2.py --root .
