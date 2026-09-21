@@ -129,6 +129,86 @@ class ChatGPTProjectInterfaceTests(unittest.TestCase):
                 any("unqualified bounded_implementation" in error for error in errors)
             )
 
+    def test_manifest_bt2_extra_merge_authority_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            copy_interface_subject(root)
+            manifest = root / "CHATGPT_REPO_INTERFACE.yaml"
+            manifest.write_text(
+                manifest.read_text(encoding="utf-8").replace(
+                    "    - engineering_coordination\n",
+                    "    - engineering_coordination\n    - merge_authority\n",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            errors = validate_project_interface(root)
+            self.assertTrue(
+                any(
+                    "coordinator_division.bt2 unexpected" in error
+                    and "merge_authority" in error
+                    for error in errors
+                )
+            )
+
+    def test_routing_bt2_extra_merge_authority_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            copy_interface_subject(root)
+            routing = root / "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml"
+            routing.write_text(
+                routing.read_text(encoding="utf-8").replace(
+                    "      - engineering_coordination\n",
+                    "      - engineering_coordination\n      - merge_authority\n",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            errors = validate_project_interface(root)
+            self.assertTrue(
+                any(
+                    "roles.bt2_coordinator.owns unexpected" in error
+                    and "merge_authority" in error
+                    for error in errors
+                )
+            )
+
+    def test_review_non_grant_cannot_drop_merge_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            copy_interface_subject(root)
+            routing = root / "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml"
+            routing.write_text(
+                routing.read_text(encoding="utf-8").replace(
+                    "    - merge_authority\n",
+                    "",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            errors = validate_project_interface(root)
+            self.assertTrue(
+                any("review.pass_does_not_grant missing" in error for error in errors)
+            )
+
+    def test_protected_effect_class_cannot_drop_merge_main_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            copy_interface_subject(root)
+            routing = root / "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml"
+            routing.write_text(
+                routing.read_text(encoding="utf-8").replace(
+                    "    - merge_or_direct_main_mutation\n",
+                    "",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            errors = validate_project_interface(root)
+            self.assertTrue(
+                any("protected_effects.classes missing" in error for error in errors)
+            )
+
     def test_instruction_source_stays_compact(self) -> None:
         path = REPO_ROOT / "architecture/chatgpt/PROJECT_INSTRUCTIONS.md"
         self.assertLessEqual(
