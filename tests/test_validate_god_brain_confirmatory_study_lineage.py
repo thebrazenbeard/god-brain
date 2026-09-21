@@ -59,6 +59,22 @@ class ConfirmatoryStudyLineageTests(unittest.TestCase):
         errors = _mutated(lambda s: s["claim_ceiling"].remove("NO_STATISTICAL_INDEPENDENCE_PROOF"))
         self.assertTrue(any("claim ceiling" in e for e in errors))
 
+    def test_new_digest_cannot_establish_clean_root(self) -> None:
+        errors = _mutated(lambda s: s["lineage_registry"].__setitem__("new_digest_establishes_clean_root", True))
+        self.assertTrue(any("lineage registry" in e for e in errors))
+
+    def test_digest_cannot_claim_semantic_equivalence(self) -> None:
+        errors = _mutated(lambda s: s["canonical_subject_digest"].__setitem__("digest_is_semantic_equivalence_proof", True))
+        self.assertTrue(any("canonical subject digest" in e for e in errors))
+
+    def test_post_exposure_redesign_requires_changed_fields(self) -> None:
+        errors = _mutated(lambda s: s["change_timing_classes"]["POST_EXPOSURE_REDESIGN"].__setitem__("requires_changed_field_disclosure", False))
+        self.assertTrue(any("change-timing" in e for e in errors))
+
+    def test_unlinked_root_cannot_claim_independence(self) -> None:
+        errors = _mutated(lambda s: s["lineage_registry"].__setitem__("unlinked_root_establishes_independence", True))
+        self.assertTrue(any("lineage registry" in e for e in errors))
+
     def test_stage_cannot_jump_to_validation(self) -> None:
         errors = _mutated(lambda s: s.__setitem__("research_stage", "EXTERNAL_SCIENTIFIC_VALIDATION"))
         self.assertTrue(any("research stage" in e for e in errors))
