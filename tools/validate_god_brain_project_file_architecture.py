@@ -15,6 +15,58 @@ REQUIRED_CLAIM_CEILING = {
     "NO_RUNTIME_OR_PROVIDER_CURRENTNESS_CLAIM",
 }
 
+EXPECTED_TOP_LEVEL_KEYS = {
+    "schema_version",
+    "status",
+    "claim_ceiling",
+    "repository",
+    "canonical_branch",
+    "strata",
+    "future_current_pointer_contract",
+    "anti_patterns",
+    "promotion_order",
+}
+
+EXPECTED_STRATUM_KEYS = {
+    "ROOT_DISCOVERY_MANIFEST": {"id", "canonical_path", "owns", "forbidden", "truth_ceiling"},
+    "CONSTITUTIONAL_CONTRACTS": {"id", "canonical_path_pattern", "owns", "forbidden", "truth_ceiling"},
+    "MACHINE_CURRENT_POINTER": {"id", "proposed_path", "owns", "forbidden", "truth_ceiling"},
+    "HUMAN_CANONICAL_CURRENTNESS": {"id", "canonical_path", "owns", "forbidden", "truth_ceiling"},
+    "MUTABLE_OPERATIONAL_STATE": {"id", "sources", "rule", "truth_ceiling"},
+    "REVIEW_EVIDENCE": {"id", "required_binding", "forbidden", "truth_ceiling"},
+    "CONTINUATION_CHECKPOINTS": {"id", "path_pattern", "owns", "forbidden", "truth_ceiling"},
+    "RESEARCH_AND_PROPOSALS": {"id", "path_pattern", "owns", "forbidden", "truth_ceiling"},
+}
+
+EXPECTED_FUTURE_POINTER_KEYS = {
+    "schema",
+    "proposed_path",
+    "required_fields",
+    "forbidden_fields",
+    "required_truth_ceiling",
+}
+
+EXPECTED_ANTI_PATTERNS = {
+    "SELF_UPDATING_CURRENT_FILE_LOOP",
+    "PR_DESCRIPTION_AS_CURRENTNESS_DATABASE",
+    "CHECKPOINT_PROMOTED_BY_CONVENIENCE",
+    "INSTRUCTION_DUPLICATION",
+    "PROVIDER_PROJECTION_AS_CANON",
+    "UNMERGED_RESEARCH_PATH_REQUIRED_BY_CANONICAL_BOOTSTRAP",
+    "REVIEW_STATUS_EMBEDDED_AS_DURABLE_ARCHITECTURE",
+}
+
+EXPECTED_PROMOTION_ORDER = [
+    "REVIEW_PROJECT_INTERFACE",
+    "REVIEW_GOD_BRAIN_GOVERNANCE",
+    "RECONCILE_REPOSITORY_MAP_REBINDING",
+    "PREPARE_FRESH_MAIN_IMPLEMENTATION_CANDIDATE",
+    "ADD_MACHINE_CURRENT_POINTER_WHEN_TARGET_PATHS_COEXIST",
+    "RUN_CROSS_FILE_CONFORMANCE",
+    "INDEPENDENT_EXACT_HEAD_REVIEW",
+    "PATRICK_EXPLICIT_CANONICAL_PROMOTION_AUTHORITY",
+]
+
 REQUIRED_STRATUM_GUARDS: dict[str, dict[str, Any]] = {
     "ROOT_DISCOVERY_MANIFEST": {
         "owns": {
@@ -174,6 +226,22 @@ def _require_exact_members(
         errors.append(f"{label}.{field} unexpected: {sorted(unexpected)}")
 
 
+def _require_exact_keys(
+    value: dict[str, Any],
+    expected: set[str],
+    *,
+    label: str,
+    errors: list[str],
+) -> None:
+    observed = set(value)
+    missing = expected - observed
+    unexpected = observed - expected
+    if missing:
+        errors.append(f"{label} keys missing: {sorted(missing)}")
+    if unexpected:
+        errors.append(f"{label} keys unexpected: {sorted(unexpected)}")
+
+
 def _validate_stratum(
     entry: dict[str, Any],
     stratum_id: str,
@@ -181,6 +249,12 @@ def _validate_stratum(
     errors: list[str],
 ) -> None:
     label = f"stratum {stratum_id}"
+    _require_exact_keys(
+        entry,
+        EXPECTED_STRATUM_KEYS[stratum_id],
+        label=label,
+        errors=errors,
+    )
     for field, expected in required.items():
         if isinstance(expected, set):
             _require_exact_members(entry, field, expected, label=label, errors=errors)
@@ -215,15 +289,45 @@ def validate_project_file_architecture(root: Path) -> list[str]:
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         return [f"{SPEC_PATH} must be JSON-compatible YAML: {exc}"]
 
+    _require_exact_keys(
+        spec,
+        EXPECTED_TOP_LEVEL_KEYS,
+        label="top-level machine contract",
+        errors=errors,
+    )
     if spec.get("schema_version") != "GOD_BRAIN_PROJECT_FILE_ARCHITECTURE_V0_1":
         errors.append("unexpected schema_version")
     if spec.get("status") != "RESEARCH_PROPOSAL_MACHINE_CONTRACT":
         errors.append("status must remain research-only")
 
-    claim_ceiling = set(spec.get("claim_ceiling", []))
-    missing_claims = REQUIRED_CLAIM_CEILING - claim_ceiling
-    if missing_claims:
-        errors.append(f"claim_ceiling missing: {sorted(missing_claims)}")
+    claim_value = spec.get("claim_ceiling")
+    if not isinstance(claim_value, list):
+        errors.append("claim_ceiling must be a list")
+    else:
+        if len(claim_value) != len(set(claim_value)):
+            errors.append("claim_ceiling must not contain duplicates")
+        observed_claims = set(claim_value)
+        missing_claims = REQUIRED_CLAIM_CEILING - observed_claims
+        unexpected_claims = observed_claims - REQUIRED_CLAIM_CEILING
+        if missing_claims:
+            errors.append(f"claim_ceiling missing: {sorted(missing_claims)}")
+        if unexpected_claims:
+            errors.append(f"claim_ceiling unexpected: {sorted(unexpected_claims)}")
+
+    if spec.get("repository") != "thebrazenbeard/god-brain":
+        errors.append("repository drifted")
+    if spec.get("canonical_branch") != "main":
+        errors.append("canonical_branch drifted")
+
+    _require_exact_members(
+        spec,
+        "anti_patterns",
+        EXPECTED_ANTI_PATTERNS,
+        label="top-level machine contract",
+        errors=errors,
+    )
+    if spec.get("promotion_order") != EXPECTED_PROMOTION_ORDER:
+        errors.append("promotion_order drifted")
 
     strata = spec.get("strata")
     if not isinstance(strata, list):
@@ -262,6 +366,12 @@ def validate_project_file_architecture(root: Path) -> list[str]:
     if not isinstance(future, dict):
         errors.append("future_current_pointer_contract must be an object")
     else:
+        _require_exact_keys(
+            future,
+            EXPECTED_FUTURE_POINTER_KEYS,
+            label="future_current_pointer_contract",
+            errors=errors,
+        )
         if future.get("schema") != "GOD_BRAIN_CURRENT_POINTER_V1":
             errors.append("future current pointer schema drifted")
         if future.get("proposed_path") != "architecture/current/GOD_BRAIN_CURRENT.json":
