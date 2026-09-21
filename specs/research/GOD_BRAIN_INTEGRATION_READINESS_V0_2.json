@@ -1,0 +1,120 @@
+{
+  "schema_version": "GOD_BRAIN_INTEGRATION_READINESS_V0_2",
+  "status": "RESEARCH_CURRENTNESS_SNAPSHOT",
+  "observed_main_head": "c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5",
+  "snapshot_is_currentness_authority": false,
+  "invariants": [
+    "READINESS_SNAPSHOT_NE_CURRENT_TRUTH",
+    "REVIEWED_COMPONENT_NE_REVIEWED_COMPOSITE",
+    "MAIN_READY_NE_MERGE_AUTHORITY",
+    "SOURCE_ACCEPTANCE_NE_CANONICAL_ADOPTION",
+    "NOOPLEX_FIXTURE_REVIEW_NE_GOD_BRAIN_ROOT_REBINDING_GATE",
+    "SCIENCE_RESEARCH_SOURCE_ACCEPTANCE_NE_CORE_REPOSITORY_REBINDING_DEPENDENCY"
+  ],
+  "root_surfaces": {
+    "README": {
+      "classification": "GOD_BRAIN",
+      "blob": "fbcaaec73b6d80f71849115533adbfb7c9098663"
+    },
+    "CURRENT": {
+      "classification": "HC_PREDECESSOR_CURRENTNESS_STALE_FOR_GOD_BRAIN",
+      "blob": "f5ff3f9ffe8e55e5cf1fe122afee7978ae1ed113"
+    },
+    "REPOSITORY_MAP": {
+      "classification": "HC_PREDECESSOR_MAP_STALE_FOR_GOD_BRAIN",
+      "blob": "642d191ec62ab1ee959069bc5e32f2c47c632caa"
+    },
+    "WARDEN": {
+      "classification": "HC_PREDECESSOR_GOVERNANCE_SOURCE",
+      "blob": "4018be2085d1a97957f73c9ad0ab430f5794d0a5"
+    }
+  },
+  "tracks": {
+    "A_CORE_REPOSITORY_CONVERGENCE": [
+      {
+        "id": "A0_FOUNDATION_PR6",
+        "pr": 6,
+        "head": "c8aff4109e53930a15eed54ab2f00b746ec8b09c",
+        "state": "ATOMIC_INTEGRATION_REVIEW_PASS_MAIN_READY_NO_MERGE_AUTHORITY"
+      },
+      {
+        "id": "A1_PROJECT_INTERFACE_PR18",
+        "pr": 18,
+        "head": "d0a16b876895397c214c96e5f6630f83c58967e5",
+        "state": "REVIEW_PENDING_BLOCKER_CANDIDATE"
+      },
+      {
+        "id": "A2_PROJECT_FILE_PR22",
+        "pr": 22,
+        "head": "09d00ae20879ca76560d2eba525105e0856b7076",
+        "state": "SUCCESSOR_REPAIR_PENDING_FRESH_REVIEW"
+      },
+      {
+        "id": "A3_GOVERNANCE_PR23",
+        "pr": 23,
+        "head": "1f0a7516d58638d427bdd2dce24ed54d71aa5e5a",
+        "state": "REVIEWED_RESEARCH_SOURCE_CANDIDATE"
+      },
+      {
+        "id": "A4_INSTRUCTION_SYNC_PR24",
+        "pr": 24,
+        "head": "fd2ca21740509ee501a3b09eb430559cc12e9031",
+        "state": "CHANGES_REQUIRED_NEEDS_POINTER_BINDING_SUCCESSOR"
+      },
+      {
+        "id": "A5_ROOT_REBINDING",
+        "state": "NOT_YET_AUTHORED_ON_CURRENT_REVIEWED_COMPOSITE"
+      }
+    ],
+    "B_SCIENCE_RESEARCH": [
+      {
+        "id": "B1_ANOMALY_CONTACT_PR25",
+        "pr": 25,
+        "head": "d71f590eb7117f746ae7d3d761e3428a82ff5102",
+        "state": "REVIEWED_RESEARCH_SOURCE_CANDIDATE"
+      },
+      {
+        "id": "B2_SIMULATION_TESTABILITY_PR26",
+        "pr": 26,
+        "head": "dd579e79190a53bba998d70be1c4d2179c213aaf",
+        "state": "REVIEWED_RESEARCH_SOURCE_CANDIDATE"
+      },
+      {
+        "id": "B3_PROVENANCE_PR27",
+        "pr": 27,
+        "head": "14bc622b91e35683ffea8550ee06472926ce9812",
+        "state": "REVIEWED_RESEARCH_SOURCE_CANDIDATE_POINTERS_VERIFIED_AT_T1"
+      }
+    ],
+    "C_NOOPLEX_EXECUTION": [
+      {
+        "id": "C1_HCDN_ALLOF_PR16",
+        "pr": 16,
+        "head": "864a8adab84a89af03972b97a1d9554eabf941c3",
+        "state": "REVIEW_PENDING_BLOCKER_CANDIDATE_NOT_CORE_CONVERGENCE_BLOCKING"
+      }
+    ]
+  },
+  "core_composite_prerequisites": [
+    "PR18_REVIEW_CLEAN_SUCCESSOR",
+    "PR22_FRESH_EXACT_HEAD_REVIEW",
+    "PR24_POINTER_BINDING_SUCCESSOR_REVIEW_CLEAN",
+    "PR23_HEAD_UNCHANGED_AND_SOURCE_ACCEPTED",
+    "PR6_HEAD_UNCHANGED_AND_ATOMIC_REVIEW_PASS",
+    "FRESH_READ_MAIN",
+    "AUTHOR_ROOT_REPOSITORY_MAP_REBINDING",
+    "CLASSIFY_UNCHANGED_WARDEN_AS_HC_PREDECESSOR_GOVERNANCE",
+    "MACHINE_CURRENT_POINTER_ONLY_AFTER_REFERENCED_CANONICAL_FILES_COEXIST",
+    "FRESH_EXACT_COMPOSITE_REVIEW",
+    "PATRICK_EXACT_MERGE_AUTHORIZATION"
+  ],
+  "composite_assembly_rule": "FRESH_MAIN_PLUS_REVIEWED_FILE_LEVEL_INPUTS_PLUS_NEW_REBINDING_DELTA",
+  "prohibited_assembly_rule": "MERGE_ALL_SOURCE_BRANCHES",
+  "classification": {
+    "track_a": "REPAIR_AND_REVIEW_REQUIRED_BEFORE_FRESH_COMPOSITE",
+    "track_b": "MULTIPLE_REVIEWED_RESEARCH_SOURCE_CANDIDATES_AVAILABLE",
+    "track_c": "REVIEW_PENDING_NOT_CORE_CONVERGENCE_BLOCKING",
+    "canonical_main": "NOT_YET_GOD_BRAIN_COHERENT_ACROSS_ROOT_CURRENTNESS_SURFACES",
+    "protected_effects": "NO_MERGE_OR_CANONICAL_PROMOTION_AUTHORIZED"
+  }
+}
