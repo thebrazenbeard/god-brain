@@ -140,5 +140,32 @@
     "NO_MERGE_AUTHORITY",
     "NO_DEPLOYMENT_AUTHORITY",
     "NO_CANONICAL_PROMOTION"
-  ]
+  ],
+  "hypothesis_identity_contract": {
+    "identity_bearing_fields": [
+      "PROPOSITION",
+      "HYPOTHESIS_CLASS",
+      "PREDICTED_OBSERVATIONS",
+      "TENSION_OR_NONPREDICTED_OBSERVATIONS",
+      "CAUSAL_ASSUMPTIONS",
+      "AUXILIARY_ASSUMPTIONS",
+      "CONFOUNDERS_AND_COMMON_CAUSES",
+      "SELECTION_MECHANISMS",
+      "FALSIFIERS",
+      "COUNTERFACTUAL_PREDICTIONS",
+      "CLAIM_CEILING"
+    ],
+    "nonidentity_display_fields": [
+      "DISPLAY_LABEL"
+    ],
+    "material_identity_change_requires": "NEW_HYPOTHESIS_ID_OR_EXPLICIT_REVISION_RECORD",
+    "revision_record_required_fields": [
+      "PREDECESSOR_HYPOTHESIS_ID",
+      "SUCCESSOR_HYPOTHESIS_ID",
+      "CHANGED_IDENTITY_FIELDS",
+      "CHANGE_TIMING_RELATIVE_TO_TARGET_EVIDENCE"
+    ],
+    "unchanged_label_does_not_preserve_identity": true,
+    "new_id_does_not_erase_revision_timing": true
+  }
 }
