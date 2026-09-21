@@ -8,6 +8,24 @@ from typing import Any
 DOC_PATH = "docs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.md"
 SPEC_PATH = "specs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.json"
 
+EXPECTED_TOP_LEVEL_KEYS = {
+    "schema_version",
+    "status",
+    "god_brain_base_head",
+    "event_id",
+    "exposure_statuses",
+    "forbidden_statuses",
+    "recipient_identity_classes",
+    "evidence_exposure_classes",
+    "exposure_event_required_fields",
+    "untouched_decision",
+    "invariants",
+    "propagation",
+    "required_hostile_cases",
+    "research_stage",
+    "claim_ceiling",
+}
+
 EXPECTED_STATUSES = {
     "NO_RECORDED_EXPOSURE",
     "KNOWN_DIRECT_EXPOSURE",
@@ -151,6 +169,9 @@ def validate(root: Path) -> list[str]:
         spec = _load(root / SPEC_PATH)
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
         return [f"invalid exposure-lineage spec: {exc}"]
+
+    if set(spec) != EXPECTED_TOP_LEVEL_KEYS:
+        errors.append("top-level machine contract keys must be exact closed set")
 
     if spec.get("schema_version") != "GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1":
         errors.append("schema_version drifted")
