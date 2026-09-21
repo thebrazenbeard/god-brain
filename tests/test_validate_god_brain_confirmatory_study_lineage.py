@@ -63,6 +63,32 @@ class ConfirmatoryStudyLineageTests(unittest.TestCase):
         errors = _mutated(lambda s: s["lineage_registry"].__setitem__("new_digest_establishes_clean_root", True))
         self.assertTrue(any("lineage registry" in e for e in errors))
 
+    def test_serialization_profile_is_exactly_rfc8785_jcs(self) -> None:
+        errors = _mutated(
+            lambda s: s["canonical_subject_digest"].__setitem__(
+                "serialization_profile",
+                "RFC8785_JCS_OR_EQUIVALENT_VERSIONED_CANONICAL_JSON",
+            )
+        )
+        self.assertTrue(any("canonical subject digest" in e for e in errors))
+
+    def test_unordered_subject_field_inventory_is_exact(self) -> None:
+        errors = _mutated(
+            lambda s: s["canonical_subject_digest"]["unordered_collection_fields"].remove(
+                "PROVENANCE_ROOTS"
+            )
+        )
+        self.assertTrue(any("canonical subject digest" in e for e in errors))
+
+    def test_unordered_subject_order_rule_is_exact(self) -> None:
+        errors = _mutated(
+            lambda s: s["canonical_subject_digest"].__setitem__(
+                "unordered_collection_order",
+                "CALLER_DEFINED",
+            )
+        )
+        self.assertTrue(any("canonical subject digest" in e for e in errors))
+
     def test_digest_cannot_claim_semantic_equivalence(self) -> None:
         errors = _mutated(lambda s: s["canonical_subject_digest"].__setitem__("digest_is_semantic_equivalence_proof", True))
         self.assertTrue(any("canonical subject digest" in e for e in errors))
