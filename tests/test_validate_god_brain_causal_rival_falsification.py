@@ -32,58 +32,44 @@ class CausalRivalFalsificationTests(unittest.TestCase):
         errors = _mutated(lambda s: s.__setitem__("unique_cause_proven", True))
         self.assertTrue(any("top-level machine contract keys" in e for e in errors))
 
-    def test_identity_contract_cannot_drop_causal_assumptions(self) -> None:
-        errors = _mutated(
-            lambda s: s["hypothesis_identity_contract"]["identity_bearing_fields"].remove(
-                "CAUSAL_ASSUMPTIONS"
-            )
-        )
-        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+    def test_unknown_ordinary_is_nonfalsifiable_coverage_sentinel(self) -> None:
+        errors = _mutated(lambda s: s["coverage_sentinel"].__setitem__("cannot_be_falsified", False))
+        self.assertTrue(any("coverage sentinel" in e for e in errors))
 
-    def test_material_identity_change_rule_is_exact(self) -> None:
-        errors = _mutated(
-            lambda s: s["hypothesis_identity_contract"].__setitem__(
-                "material_identity_change_requires",
-                "UNCHANGED_HYPOTHESIS_ID_ALLOWED",
-            )
-        )
-        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+    def test_unknown_ordinary_is_not_a_testable_rival_family(self) -> None:
+        errors = _mutated(lambda s: s["minimum_testable_rival_families"].append("UNKNOWN_ORDINARY_MECHANISM"))
+        self.assertTrue(any("minimum testable rival" in e for e in errors))
 
-    def test_new_id_cannot_erase_post_evidence_revision_timing(self) -> None:
-        errors = _mutated(
-            lambda s: s["hypothesis_identity_contract"].__setitem__(
-                "new_id_does_not_erase_revision_timing",
-                False,
-            )
-        )
-        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+    def test_revision_lineage_cannot_disappear(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_rules"].remove("NEW_ID_DOES_NOT_ERASE_PARENT_ID"))
+        self.assertTrue(any("identity rules" in e for e in errors))
 
-    def test_unknown_ordinary_mechanism_is_required(self) -> None:
-        errors = _mutated(lambda s: s["minimum_rival_families"].remove("UNKNOWN_ORDINARY_MECHANISM"))
-        self.assertTrue(any("minimum rival" in e for e in errors))
+    def test_earliest_exposure_is_required_on_hypothesis(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_required_fields"].remove("EARLIEST_TARGET_EVIDENCE_EXPOSURE"))
+        self.assertTrue(any("hypothesis fields" in e for e in errors))
 
-    def test_one_failed_rival_guard_is_required(self) -> None:
-        errors = _mutated(lambda s: s["invariants"].remove("ONE_FAILED_RIVAL_NE_FAVORED_HYPOTHESIS_CONFIRMED"))
-        self.assertTrue(any("invariants" in e for e in errors))
+    def test_evidence_independence_ledger_is_required(self) -> None:
+        errors = _mutated(lambda s: s["comparison_required_fields"].remove("EVIDENCE_INDEPENDENCE_LEDGER"))
+        self.assertTrue(any("comparison fields" in e for e in errors))
 
-    def test_favored_within_set_is_not_unique_cause(self) -> None:
-        errors = _mutated(lambda s: s["invariants"].remove("FAVORED_WITHIN_DECLARED_RIVAL_SET_NE_UNIQUE_CAUSE"))
-        self.assertTrue(any("invariants" in e for e in errors))
+    def test_unknown_independence_cannot_be_support(self) -> None:
+        errors = _mutated(lambda s: s["decision_guards"].remove("INDEPENDENCE_UNKNOWN_NE_INDEPENDENT_SUPPORT"))
+        self.assertTrue(any("decision guards" in e for e in errors))
 
-    def test_post_hoc_state_cannot_disappear(self) -> None:
-        errors = _mutated(lambda s: s["precommitment_states"].remove("CREATED_AFTER_TARGET_EVIDENCE"))
-        self.assertTrue(any("precommitment" in e for e in errors))
+    def test_unresolved_confounder_blocks_favored_disposition(self) -> None:
+        errors = _mutated(lambda s: s["decision_guards"].remove("MATERIAL_CONFOUNDER_UNRESOLVED_BLOCKS_FAVORED_DISPOSITION"))
+        self.assertTrue(any("decision guards" in e for e in errors))
 
-    def test_missing_confounder_hostile_case_is_required(self) -> None:
-        errors = _mutated(lambda s: s["required_hostile_cases"].remove("MISSING_CONFOUNDER_TREATED_ABSENT"))
-        self.assertTrue(any("hostile" in e for e in errors))
+    def test_optional_stopping_guard_is_required(self) -> None:
+        errors = _mutated(lambda s: s["stopping_rule_guards"].remove("STOPPING_RULE_CANNOT_DEPEND_ON_FAVORED_HYPOTHESIS_WINNING"))
+        self.assertTrue(any("stopping-rule guards" in e for e in errors))
+
+    def test_post_evidence_hypothesis_requires_fresh_confirmatory_test(self) -> None:
+        errors = _mutated(lambda s: s["new_hypothesis_guards"].remove("POST_EVIDENCE_HYPOTHESIS_REQUIRES_FRESH_TEST_FOR_CONFIRMATORY_USE"))
+        self.assertTrue(any("new-hypothesis guards" in e for e in errors))
 
     def test_simulation_probability_ceiling_is_required(self) -> None:
         errors = _mutated(lambda s: s["claim_ceiling"].remove("NO_SIMULATION_PROBABILITY_ASSIGNMENT"))
-        self.assertTrue(any("claim ceiling" in e for e in errors))
-
-    def test_contact_ceiling_is_required(self) -> None:
-        errors = _mutated(lambda s: s["claim_ceiling"].remove("NO_EXTERNAL_CONTACT_CLAIM"))
         self.assertTrue(any("claim ceiling" in e for e in errors))
 
     def test_stage_cannot_jump(self) -> None:
