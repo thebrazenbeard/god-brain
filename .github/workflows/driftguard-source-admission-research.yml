@@ -1,0 +1,27 @@
+name: DriftGuard Source Admission Research Conformance
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.json"
+      - "tools/validate_god_brain_driftguard_source_admission.py"
+      - "tests/test_validate_god_brain_driftguard_source_admission.py"
+      - ".github/workflows/driftguard-source-admission-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.json"
+      - "tools/validate_god_brain_driftguard_source_admission.py"
+      - "tests/test_validate_god_brain_driftguard_source_admission.py"
+      - ".github/workflows/driftguard-source-admission-research.yml"
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run DriftGuard source-admission tests
+        run: python3 -m unittest -v tests.test_validate_god_brain_driftguard_source_admission
+      - name: Validate DriftGuard source-admission contract
+        run: python3 tools/validate_god_brain_driftguard_source_admission.py --root .
