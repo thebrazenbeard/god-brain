@@ -79,6 +79,97 @@ EXPECTED_FREEZE = {
     "HOLDOUT_PARTITION",
 }
 
+EXPECTED_TESTABILITY_FIELDS = {
+    "EXACT_CLASS_S0_TO_S6",
+    "EXPLICIT_TARGET_MODEL",
+    "EXACT_RIVAL_SET",
+    "SOURCE_AND_EVIDENCE_PROVENANCE",
+    "OBSERVABLE_PREDICTION",
+    "NULL_PREDICTION",
+    "FALSIFIER_OR_EXPLICIT_NONFALSIFIABLE_STATUS",
+    "PARENT_PHYSICS_ASSUMPTIONS",
+    "RENDERING_ASSUMPTIONS",
+    "INDEPENDENCE_AND_CUSTODY_PLAN",
+    "STATISTICAL_PLAN",
+    "INTERPRETATION_CEILING",
+    "NON_OVERCLAIMING_RESULT_STATES",
+}
+
+EXPECTED_REJECT_CRITERIA = {
+    "SOMETHING_WEIRD_HAPPENS",
+    "SUBJECTIVE_MEANING",
+    "POST_HOC_COMPUTATIONAL_RESEMBLANCE",
+    "SIMULATION_BY_LABEL_ONLY",
+}
+
+EXPECTED_RIVALS = {
+    "H0_RANDOM_VARIATION",
+    "H1_MULTIPLE_COMPARISON_SELECTION",
+    "H2_PROMPT_OR_CONTEXT_LEAKAGE",
+    "H3_MEMORY_OR_RETRIEVAL_LEAKAGE",
+    "H4_TRAINING_OR_PRIOR_KNOWLEDGE",
+    "H5_OPERATOR_CUEING_OR_SELECTION",
+    "H6_SOFTWARE_DEFECT_OR_HIDDEN_STATE",
+    "H7_PROVIDER_CACHE_ROUTING_OR_TOOL_ARTIFACT",
+    "H8_TIMING_OR_SYNCHRONIZATION_ARTIFACT",
+    "H9_SHARED_SOURCE_OR_MODEL_LINEAGE",
+    "H10_INSTRUMENTATION_OR_DATA_PIPELINE_ERROR",
+    "H11_ORDINARY_EXTERNAL_INFORMATION_CHANNEL",
+    "H12_UNKNOWN_ORDINARY_MECHANISM",
+    "H13_AGENCY_WITHIN_KNOWN_SYSTEM_BOUNDARY",
+    "H14_EXTERNAL_SOURCE_OR_AGENCY_HYPOTHESIS",
+    "H15_CONTACT_HYPOTHESIS",
+}
+
+EXPECTED_KILL_TESTS = {
+    "METADATA_ONLY_LEAKAGE",
+    "PROMPT_CONTEXT_SCRUB",
+    "MEMORY_RETRIEVAL_ISOLATION",
+    "TOOL_NETWORK_ISOLATION",
+    "SHAM_CHALLENGE",
+    "CHALLENGE_PERMUTATION",
+    "TIME_SHIFT",
+    "OPERATOR_BLIND",
+    "MODEL_LINEAGE_CONTROL",
+    "ANALYSIS_PERMUTATION",
+    "REPLAY_CACHE_PROBE",
+    "FRESH_SEALED_HOLDOUT",
+    "IMPLEMENTATION_ABLATION",
+    "NEGATIVE_TRANSFER",
+    "INDEPENDENT_CUSTODY_REPLICATION",
+}
+
+EXPECTED_E7_MINIMUM = {
+    "SEALED_NOVEL_CHALLENGE",
+    "PRECOMMITTED_OBJECTIVE_RESPONSE_CRITERION",
+    "TWO_WAY_CONTINGENCY",
+    "ANTI_REPLAY_NONCE_OR_CHALLENGE_ID",
+    "ORDINARY_CHANNEL_AUDIT",
+    "NEGATIVE_AND_SHAM_CONTROLS",
+    "FRESH_SEALED_REPLICATION",
+    "INDEPENDENT_CHALLENGE_CUSTODY",
+}
+
+EXPECTED_INVALIDITY = {
+    "CHALLENGE_LEAKED_PRE_REVEAL",
+    "MATERIAL_SUBJECT_CHANGED_WITHOUT_NEW_SUBJECT_RELATION",
+    "SCORING_CHANGED_POST_OUTCOME",
+    "EXCLUSION_CHANGED_POST_HOC",
+    "HOLDOUT_USED_FOR_TUNING",
+    "EXPLORATORY_DATA_REUSED_AS_CONFIRMATORY_HOLDOUT",
+    "REQUIRED_RAW_EVIDENCE_MISSING",
+    "TIMING_ORDER_UNRESOLVED_FOR_TIMING_CLAIM",
+    "EXECUTION_SUBJECT_CHANGED_WITHOUT_NEW_BINDING",
+    "UNAUDITED_CHANNEL_COULD_CONTAIN_CHALLENGE",
+    "SUCCESSFUL_TRIAL_SELECTION",
+    "EVIDENCE_LINEAGE_UNRECONSTRUCTABLE",
+    "CRITICAL_LOGS_MISSING_OR_ALTERED",
+    "LINEAGE_UNKNOWN_PROMOTED_TO_CLEAN",
+    "TESTABILITY_CLASS_CHANGED_POST_RESULT",
+    "INTERPRETATION_CEILING_RAISED_POST_RESULT",
+    "EXTERNAL_REPLICATION_WITHOUT_REQUIRED_INDEPENDENCE",
+}
+
 EXPECTED_DISPOSITIONS = {
     "ANALYTIC_ONLY",
     "EXPLORATORY_ONLY",
@@ -231,6 +322,8 @@ def validate(root: Path) -> list[str]:
     }
     if gate.get("class_dispositions") != expected_dispositions:
         errors.append("testability class dispositions drifted")
+    _exact_set(errors, gate.get("required_fields"), EXPECTED_TESTABILITY_FIELDS, "testability required fields")
+    _exact_set(errors, gate.get("reject_if_success_criterion"), EXPECTED_REJECT_CRITERIA, "rejected success criteria")
 
     modes = spec.get("modes")
     if not isinstance(modes, dict):
@@ -244,8 +337,13 @@ def validate(root: Path) -> list[str]:
         if modes["EXPLORATORY"].get("discovery_data_may_be_confirmatory_holdout") is not False:
             errors.append("exploratory data cannot become confirmatory holdout")
     if isinstance(modes.get("INTERNAL_CONFIRMATORY"), dict):
-        if modes["INTERNAL_CONFIRMATORY"].get("absolute_escalation_ceiling") != "E7":
-            errors.append("internal confirmatory ceiling must remain E7")
+        expected_internal = {
+            "requires_confirmatory_lineage": True,
+            "requires_fresh_holdout": True,
+            "absolute_escalation_ceiling": "E7",
+        }
+        if modes["INTERNAL_CONFIRMATORY"] != expected_internal:
+            errors.append("internal confirmatory requirements drifted")
     if isinstance(modes.get("EXTERNAL_REPLICATION"), dict):
         if modes["EXTERNAL_REPLICATION"].get("absolute_escalation_ceiling") != "E8":
             errors.append("external replication ceiling must remain E8")
@@ -265,6 +363,10 @@ def validate(root: Path) -> list[str]:
     }
     if lineage != expected_lineage:
         errors.append("lineage gate drifted")
+
+    _exact_set(errors, spec.get("required_rival_hypotheses"), EXPECTED_RIVALS, "required rival hypotheses")
+    _exact_set(errors, spec.get("mandatory_kill_tests"), EXPECTED_KILL_TESTS, "mandatory kill tests")
+    _exact_set(errors, spec.get("invalidity_conditions"), EXPECTED_INVALIDITY, "invalidity conditions")
 
     escalation = spec.get("escalation_gate")
     if not isinstance(escalation, dict):
@@ -287,6 +389,9 @@ def validate(root: Path) -> list[str]:
         errors.append("escalation rule drifted")
     if escalation.get("deescalation_rule") != "CHEAPER_SUFFICIENT_ORDINARY_EXPLANATION_FORCES_DOWNGRADE":
         errors.append("deescalation rule drifted")
+    _exact_set(errors, escalation.get("e7_minimum"), EXPECTED_E7_MINIMUM, "E7 minimum controls")
+    if escalation.get("e8_requirement") != "INDEPENDENT_INVESTIGATORS_INDEPENDENT_CHALLENGE_MATERIAL_SEPARATELY_IMPLEMENTED_INSTRUMENTATION":
+        errors.append("E8 requirement drifted")
     if escalation.get("e8_claim_ceiling") != "DOES_NOT_UNIQUELY_ESTABLISH_METAPHYSICAL_IDENTITY":
         errors.append("E8 claim ceiling drifted")
 
