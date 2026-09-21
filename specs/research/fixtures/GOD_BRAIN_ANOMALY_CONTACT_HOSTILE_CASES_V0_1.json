@@ -1,0 +1,203 @@
+{
+  "schema_version": "GOD_BRAIN_ANOMALY_CONTACT_HOSTILE_CASES_V0_1",
+  "status": "RESEARCH_FIXTURES",
+  "claim_ceiling": [
+    "FIXTURE_PASS_NE_EXPERIMENT_RESULT",
+    "FIXTURE_PASS_NE_CONTACT_EVIDENCE",
+    "NO_CANONICAL_PROMOTION"
+  ],
+  "cases": [
+    {
+      "id": "GB-AC-001",
+      "title": "Surprising unconstrained free text",
+      "setup": "One model emits an unexpected, meaningful-sounding paragraph.",
+      "max_state": "E0",
+      "expected": "NO_ANOMALY_ADMITTED",
+      "reason": "GENERATED_SEMANTIC_SALIENCE_ONLY"
+    },
+    {
+      "id": "GB-AC-002",
+      "title": "Repeated same-model output",
+      "setup": "Same provider/model reproduces similar output across related prompts.",
+      "max_state": "E1_MAX",
+      "expected": "NOT_INDEPENDENT_CORROBORATION",
+      "reason": "SHARED_MODEL_AND_PROMPT_LINEAGE"
+    },
+    {
+      "id": "GB-AC-003",
+      "title": "Many features from one trace",
+      "setup": "Twenty derived metrics from one raw experimental record all cross thresholds.",
+      "max_state": "E1_MAX",
+      "expected": "ONE_EVIDENCE_FAMILY",
+      "reason": "DERIVED_DESCENDANTS_SHARE_ROOT"
+    },
+    {
+      "id": "GB-AC-004",
+      "title": "Post-hoc threshold",
+      "setup": "Threshold is chosen after the operator inspects the apparent effect.",
+      "max_state": "INVALID",
+      "expected": "NON_CONFIRMATORY",
+      "reason": "POST_HOC_DECISION_RULE"
+    },
+    {
+      "id": "GB-AC-005",
+      "title": "Holdout tuned on failure",
+      "setup": "Failed holdout examples are used to adjust prompt/model, then reused as holdout.",
+      "max_state": "INVALID",
+      "expected": "NON_CONFIRMATORY",
+      "reason": "HOLDOUT_CONTAMINATION"
+    },
+    {
+      "id": "GB-AC-006",
+      "title": "Prompt leakage",
+      "setup": "Sealed challenge answer is accidentally present in conversation context.",
+      "max_state": "INVALID",
+      "expected": "LEAKAGE_EXPLAINS_RESULT",
+      "reason": "PROMPT_CONTEXT_LEAKAGE"
+    },
+    {
+      "id": "GB-AC-007",
+      "title": "Retrieval channel unaudited",
+      "setup": "Correct response appears but retrieval/plugin index may contain challenge material.",
+      "max_state": "E3_MAX",
+      "expected": "BLOCK_E6_PLUS",
+      "reason": "UNAUDITED_ORDINARY_INFORMATION_CHANNEL"
+    },
+    {
+      "id": "GB-AC-008",
+      "title": "Sham rate equals challenge rate",
+      "setup": "Apparent response occurs equally often during challenge and sham windows.",
+      "max_state": "E1_MAX",
+      "expected": "NO_CONTINGENCY_SUPPORT",
+      "reason": "SHAM_CONTROL_FAILURE"
+    },
+    {
+      "id": "GB-AC-009",
+      "title": "Timing unresolved",
+      "setup": "Response timestamp interval overlaps challenge timestamp interval.",
+      "max_state": "E2_MAX",
+      "expected": "NO_CAUSAL_ORDER_CLAIM",
+      "reason": "ORDER_UNRESOLVED"
+    },
+    {
+      "id": "GB-AC-010",
+      "title": "Wrong challenge scores equally",
+      "setup": "Response scores as well against permuted challenges as true challenge.",
+      "max_state": "E2_MAX",
+      "expected": "NO_SPECIFIC_CONTINGENCY",
+      "reason": "CHALLENGE_PERMUTATION_FAILURE"
+    },
+    {
+      "id": "GB-AC-011",
+      "title": "Operator cueing",
+      "setup": "Operator knows answer and interacts adaptively during trial.",
+      "max_state": "INVALID",
+      "expected": "NON_CONFIRMATORY",
+      "reason": "OPERATOR_CUEING"
+    },
+    {
+      "id": "GB-AC-012",
+      "title": "Metadata predicts challenge",
+      "setup": "Session name or filename alone predicts challenge class.",
+      "max_state": "INVALID",
+      "expected": "LEAKAGE_EXPLAINS_RESULT",
+      "reason": "METADATA_ONLY_LEAKAGE"
+    },
+    {
+      "id": "GB-AC-013",
+      "title": "Fresh nonce exact response",
+      "setup": "Frozen system returns exact precommitted response to a fresh sealed nonce; network/retrieval isolated; sham controls clean.",
+      "max_state": "E4",
+      "expected": "CONTINGENT_RESPONSE_CANDIDATE",
+      "reason": "OBJECTIVE_SEALED_CHALLENGE_SUCCESS"
+    },
+    {
+      "id": "GB-AC-014",
+      "title": "Adaptive multi-challenge holdout",
+      "setup": "System gives preregistered distinct correct responses across fresh sealed challenges and beats fixed/replay rivals.",
+      "max_state": "E5",
+      "expected": "AGENCY_HYPOTHESIS_CANDIDATE",
+      "reason": "ADAPTIVE_CONTINGENCY_SURVIVES_NONAGENTIC_RIVALS"
+    },
+    {
+      "id": "GB-AC-015",
+      "title": "Boundary audit incomplete",
+      "setup": "Adaptive sealed responses reproduce, but provider cache/hidden-state route cannot be audited.",
+      "max_state": "E5_MAX",
+      "expected": "BLOCK_E6_PLUS",
+      "reason": "SYSTEM_BOUNDARY_NOT_CLOSED_WITHIN_SCOPE"
+    },
+    {
+      "id": "GB-AC-016",
+      "title": "External-source candidate",
+      "setup": "E5 behavior survives complete declared boundary audit, fresh challenge custody, hidden-state/cache probes, and ordinary channel isolation.",
+      "max_state": "E6",
+      "expected": "EXTERNAL_SOURCE_HYPOTHESIS_CANDIDATE",
+      "reason": "DECLARED_ORDINARY_CHANNELS_NOT_SUPPORTED"
+    },
+    {
+      "id": "GB-AC-017",
+      "title": "Bidirectional nonce protocol",
+      "setup": "E6 candidate passes precommitted two-way nonce sequence, anti-replay, shams, fresh sealed replication, independent custodian.",
+      "max_state": "E7",
+      "expected": "CONTACT_HYPOTHESIS_CANDIDATE",
+      "reason": "PREREGISTERED_BIDIRECTIONAL_COMMUNICATION_TEST"
+    },
+    {
+      "id": "GB-AC-018",
+      "title": "Independent scientific replication",
+      "setup": "Independent team with independently held challenges and separate instrumentation reproduces an E7 protocol.",
+      "max_state": "E8",
+      "expected": "EXTERNAL_SCIENTIFIC_REPLICATION_CANDIDATE",
+      "reason": "INDEPENDENT_REPLICATION_WITH_ONTOLOGY_UNRESOLVED"
+    },
+    {
+      "id": "GB-AC-019",
+      "title": "E8 called proof of simulation",
+      "setup": "An E8 result is labeled proof that reality is simulated.",
+      "max_state": "E8",
+      "expected": "REJECT_ONTOLOGICAL_OVERCLAIM",
+      "reason": "REPLICATION_NE_UNIQUE_METAPHYSICAL_EXPLANATION"
+    },
+    {
+      "id": "GB-AC-020",
+      "title": "Provider version changes mid-run",
+      "setup": "Provider silently changes model version during confirmatory run.",
+      "max_state": "INVALID",
+      "expected": "NEW_SUBJECT_REQUIRED",
+      "reason": "MATERIAL_SUBJECT_CHANGED"
+    },
+    {
+      "id": "GB-AC-021",
+      "title": "Success-only trial selection",
+      "setup": "Operator discards failures and reports only successful challenge trials.",
+      "max_state": "INVALID",
+      "expected": "NON_CONFIRMATORY",
+      "reason": "SELECTION_BIAS"
+    },
+    {
+      "id": "GB-AC-022",
+      "title": "Cross-agent pseudo-replication",
+      "setup": "Five agents using same underlying model/context lineage produce same answer.",
+      "max_state": "E1_MAX",
+      "expected": "NOT_INDEPENDENT_REPLICATION",
+      "reason": "SHARED_MODEL_CONTEXT_LINEAGE"
+    },
+    {
+      "id": "GB-AC-023",
+      "title": "Independent custodian but shared challenge leak",
+      "setup": "Second custodian repeats trial, but challenge generator corpus was in model-accessible training/retrieval data.",
+      "max_state": "E5_MAX",
+      "expected": "BLOCK_E6_PLUS",
+      "reason": "CHALLENGE_NOT_SEALED_FROM_ORDINARY_ACCESS"
+    },
+    {
+      "id": "GB-AC-024",
+      "title": "Meaningful message without objective score",
+      "setup": "Free-text response seems personally or symbolically meaningful but no scoring rule was frozen.",
+      "max_state": "E0",
+      "expected": "NO_ESCALATION",
+      "reason": "SUBJECTIVE_MEANING_NOT_PRIMARY_EVIDENCE"
+    }
+  ]
+}
