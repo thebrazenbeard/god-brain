@@ -45,6 +45,76 @@ MANIFEST_PATH = "CHATGPT_REPO_INTERFACE.yaml"
 ROUTING_PATH = "architecture/chatgpt/ROUTING_AND_DELEGATION.yaml"
 DELEGATED_IMPLEMENTATION_TOKEN = "bounded_implementation_explicitly_delegated_to_bt2"
 
+MANIFEST_GOD_BRAIN_OWNS = {
+    "thesis_and_project_meaning",
+    "architecture_and_cross_repo_synthesis",
+    "portfolio_source_admission",
+    "provenance_and_repository_coherence",
+    "research_planning",
+    "main_readiness_classification",
+    "bounded_integration_candidate_preparation",
+    "reconciliation_of_bt2_results",
+}
+MANIFEST_BT2_OWNS = {
+    "worker_dispatch",
+    "independent_review",
+    "adversarial_testing",
+    DELEGATED_IMPLEMENTATION_TOKEN,
+    "qualification_evidence",
+    "engineering_coordination",
+}
+MANIFEST_PROTECTED_EFFECTS = {
+    "merge_or_direct_main_mutation",
+    "deploy_or_install_runtime",
+    "credentials_permissions_or_provider_change",
+    "paid_service_or_compute",
+    "destructive_or_irreversible_durable_state_change",
+    "publication_of_private_material",
+}
+ROUTING_GOD_BRAIN_OWNS = {
+    "project_thesis_and_meaning",
+    "architecture_and_cross_repo_synthesis",
+    "portfolio_source_admission",
+    "provenance_and_repository_coherence",
+    "research_planning",
+    "main_readiness_classification",
+    "bounded_integration_candidate_preparation",
+    "reconciliation_of_bt2_results",
+}
+ROUTING_GOD_BRAIN_DOES_NOT_OWN = {
+    "protected_effect_authority",
+    "automatic_merge_authority",
+}
+ROUTING_BT2_OWNS = MANIFEST_BT2_OWNS
+ROUTING_BT2_DOES_NOT_OWN = {
+    "god_brain_architectural_admission",
+    "canonical_promotion_authority",
+}
+ROUTING_DELEGATION_BINDING = {
+    "repository",
+    "starting_ref_or_exact_head",
+    "exact_files_or_semantic_subject",
+    "task",
+    "allowed_effects",
+    "prohibited_effects",
+    "required_evidence",
+    "return_format",
+}
+ROUTING_REVIEW_NON_GRANTS = {
+    "merge_authority",
+    "deployment_authority",
+    "canonical_promotion",
+    "next_stage_qualification",
+}
+ROUTING_PROTECTED_EFFECTS = {
+    "merge_or_direct_main_mutation",
+    "deployment_or_runtime_install",
+    "credential_permission_provider_or_ruleset_change",
+    "paid_service_or_compute",
+    "destructive_or_irreversible_durable_state_change",
+    "private_material_publication",
+}
+
 
 def _load_yaml_mapping(path: Path, relative: str, errors: list[str]) -> dict[str, Any] | None:
     if not path.is_file():
@@ -85,6 +155,31 @@ def _expect_list_contains(
         errors.append(f"{relative} field {field} must contain {required}")
 
 
+def _expect_exact_string_set(
+    value: Any,
+    expected: set[str],
+    *,
+    relative: str,
+    field: str,
+    errors: list[str],
+) -> None:
+    if type(value) is not list:
+        errors.append(f"{relative} field {field} must be a list")
+        return
+    if not all(type(item) is str and item for item in value):
+        errors.append(f"{relative} field {field} must contain non-empty strings only")
+        return
+    if len(value) != len(set(value)):
+        errors.append(f"{relative} field {field} must not contain duplicates")
+    observed = set(value)
+    missing = expected - observed
+    unexpected = observed - expected
+    if missing:
+        errors.append(f"{relative} field {field} missing: {sorted(missing)}")
+    if unexpected:
+        errors.append(f"{relative} field {field} unexpected: {sorted(unexpected)}")
+
+
 def _get(mapping: dict[str, Any], *path: str) -> Any:
     current: Any = mapping
     for key in path:
@@ -118,10 +213,17 @@ def _validate_manifest(manifest: dict[str, Any], root: Path, errors: list[str]) 
             errors=errors,
         )
 
+    _expect_exact_string_set(
+        _get(manifest, "coordinator_division", "god_brain"),
+        MANIFEST_GOD_BRAIN_OWNS,
+        relative=relative,
+        field="coordinator_division.god_brain",
+        errors=errors,
+    )
     bt2 = _get(manifest, "coordinator_division", "bt2")
-    _expect_list_contains(
+    _expect_exact_string_set(
         bt2,
-        DELEGATED_IMPLEMENTATION_TOKEN,
+        MANIFEST_BT2_OWNS,
         relative=relative,
         field="coordinator_division.bt2",
         errors=errors,
@@ -130,6 +232,20 @@ def _validate_manifest(manifest: dict[str, Any], root: Path, errors: list[str]) 
         errors.append(
             f"{relative} field coordinator_division.bt2 contains unqualified bounded_implementation"
         )
+    _expect_exact_string_set(
+        _get(manifest, "authority", "protected_effects"),
+        MANIFEST_PROTECTED_EFFECTS,
+        relative=relative,
+        field="authority.protected_effects",
+        errors=errors,
+    )
+    _expect_equal(
+        _get(manifest, "authority", "review_is_not_effect_authority"),
+        True,
+        relative=relative,
+        field="authority.review_is_not_effect_authority",
+        errors=errors,
+    )
 
     bootstrap = _get(manifest, "bootstrap")
     expected_refs = {
@@ -175,10 +291,24 @@ def _validate_routing(routing: dict[str, Any], errors: list[str]) -> None:
             errors=errors,
         )
 
+    _expect_exact_string_set(
+        _get(routing, "roles", "god_brain_coordinator", "owns"),
+        ROUTING_GOD_BRAIN_OWNS,
+        relative=relative,
+        field="roles.god_brain_coordinator.owns",
+        errors=errors,
+    )
+    _expect_exact_string_set(
+        _get(routing, "roles", "god_brain_coordinator", "does_not_own_by_role_alone"),
+        ROUTING_GOD_BRAIN_DOES_NOT_OWN,
+        relative=relative,
+        field="roles.god_brain_coordinator.does_not_own_by_role_alone",
+        errors=errors,
+    )
     owns = _get(routing, "roles", "bt2_coordinator", "owns")
-    _expect_list_contains(
+    _expect_exact_string_set(
         owns,
-        DELEGATED_IMPLEMENTATION_TOKEN,
+        ROUTING_BT2_OWNS,
         relative=relative,
         field="roles.bt2_coordinator.owns",
         errors=errors,
@@ -187,25 +317,34 @@ def _validate_routing(routing: dict[str, Any], errors: list[str]) -> None:
         errors.append(
             f"{relative} field roles.bt2_coordinator.owns contains unqualified bounded_implementation"
         )
-
-    required_binding = _get(routing, "delegation", "required_binding")
-    for item in (
-        "repository",
-        "starting_ref_or_exact_head",
-        "exact_files_or_semantic_subject",
-        "task",
-        "allowed_effects",
-        "prohibited_effects",
-        "required_evidence",
-        "return_format",
-    ):
-        _expect_list_contains(
-            required_binding,
-            item,
-            relative=relative,
-            field="delegation.required_binding",
-            errors=errors,
-        )
+    _expect_exact_string_set(
+        _get(routing, "roles", "bt2_coordinator", "does_not_own_by_role_alone"),
+        ROUTING_BT2_DOES_NOT_OWN,
+        relative=relative,
+        field="roles.bt2_coordinator.does_not_own_by_role_alone",
+        errors=errors,
+    )
+    _expect_exact_string_set(
+        _get(routing, "delegation", "required_binding"),
+        ROUTING_DELEGATION_BINDING,
+        relative=relative,
+        field="delegation.required_binding",
+        errors=errors,
+    )
+    _expect_exact_string_set(
+        _get(routing, "review", "pass_does_not_grant"),
+        ROUTING_REVIEW_NON_GRANTS,
+        relative=relative,
+        field="review.pass_does_not_grant",
+        errors=errors,
+    )
+    _expect_exact_string_set(
+        _get(routing, "protected_effects", "classes"),
+        ROUTING_PROTECTED_EFFECTS,
+        relative=relative,
+        field="protected_effects.classes",
+        errors=errors,
+    )
 
 
 def validate_project_interface(root: Path) -> list[str]:
