@@ -1,0 +1,32 @@
+name: Evidence exposure lineage research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.md"
+      - "specs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.json"
+      - "tools/validate_god_brain_evidence_exposure_lineage.py"
+      - "tests/test_validate_god_brain_evidence_exposure_lineage.py"
+      - ".github/workflows/evidence-exposure-lineage-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.md"
+      - "specs/research/GOD_BRAIN_EVIDENCE_EXPOSURE_LINEAGE_V0_1.json"
+      - "tools/validate_god_brain_evidence_exposure_lineage.py"
+      - "tests/test_validate_god_brain_evidence_exposure_lineage.py"
+      - ".github/workflows/evidence-exposure-lineage-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python tools/validate_god_brain_evidence_exposure_lineage.py
+      - run: python -m unittest tests.test_validate_god_brain_evidence_exposure_lineage
+      - run: python -m compileall -q tools tests
+      - run: git diff --check HEAD^ HEAD
