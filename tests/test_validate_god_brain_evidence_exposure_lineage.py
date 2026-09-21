@@ -28,6 +28,14 @@ class EvidenceExposureLineageTests(unittest.TestCase):
     def test_repository_subject_validates(self) -> None:
         self.assertEqual(validate(ROOT), [])
 
+    def test_unknown_top_level_custody_claim_is_rejected(self) -> None:
+        errors = _mutated(lambda s: s.__setitem__("custody_guarantee", True))
+        self.assertTrue(any("top-level machine contract keys" in e for e in errors))
+
+    def test_unknown_top_level_independence_claim_is_rejected(self) -> None:
+        errors = _mutated(lambda s: s.__setitem__("reviewer_independence_proven", True))
+        self.assertTrue(any("top-level machine contract keys" in e for e in errors))
+
     def test_proven_unexposed_stays_forbidden(self) -> None:
         errors = _mutated(lambda s: s.__setitem__("forbidden_statuses", []))
         self.assertTrue(any("PROVEN_UNEXPOSED" in e for e in errors))
