@@ -8,6 +8,26 @@ from typing import Any
 DOC_PATH = "docs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.md"
 SPEC_PATH = "specs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.json"
 
+EXPECTED_TOP_LEVEL_KEYS = {
+    "schema_version",
+    "status",
+    "repository",
+    "base_head",
+    "event_id",
+    "lanes",
+    "lane_roles",
+    "first_pass_exposure_classes",
+    "subject_packet_required_fields",
+    "first_pass_required_fields",
+    "workflow_states",
+    "reconciliation_dispositions",
+    "reconciliation_factors",
+    "invariants",
+    "required_hostile_cases",
+    "research_stage",
+    "claim_ceiling",
+}
+
 EXPECTED_LANES = {
     "GOD_BRAIN_COORDINATOR",
     "GOD_BRAIN_REZON_REASONER",
@@ -165,6 +185,9 @@ def validate(root: Path) -> list[str]:
         spec = _load(root / SPEC_PATH)
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
         return [f"invalid three-lane protocol: {exc}"]
+
+    if set(spec) != EXPECTED_TOP_LEVEL_KEYS:
+        errors.append("top-level machine contract keys must be exact closed set")
 
     if spec.get("schema_version") != "GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1":
         errors.append("schema version drifted")
