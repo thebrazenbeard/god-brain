@@ -39,17 +39,19 @@ The useful transfer is not “use DriftGuard’s benchmark.” It is the protoco
 
 At exact head `351b7a57b7213bd72cf881aa2bbaa449fb0fbc8f` the DriftGuard PR reports 279/279 tests passing on Ubuntu and Windows plus compile/diff/smoke checks.
 
-Fresh review readback shows BT2 self-hostile `PASS_WITH_CLAIM_CEILING` on the current head.
+Fresh review readback still shows BT2 self-hostile `PASS_WITH_CLAIM_CEILING` on this head.
 
 That is **not independent corroboration**.
 
-The visible Vera hostile review applies to predecessor head `1f4779800a9f45ae0a499823c7c1757f7103e4ab`, where it found an EXECUTING-state retry-authority escape. The current head claims that defect repaired, but a fresh independent exact-head Vera disposition was not observed during this assessment.
+A Vera hostile exact-head rereview later examined this same head. Vera explicitly states that the review is **not independent corroboration** because that lane has prior exposure to the R11 design/review history. Its corrected final disposition on exact head `351b7a57b7213bd72cf881aa2bbaa449fb0fbc8f` is `CHANGES_REQUIRED` (review `PRR_kwDOUh0Fi88AAAABOiir_A`), superseding an earlier same-head PASS.
+
+The blocker is specific: after `begin_execution()`, the governed run path catches every `Exception` and routes it through semantic-failure invalidation. Unexpected runtime/infrastructure failures such as SQLite/OSError/unexpected RuntimeError can therefore terminalize `EXECUTING -> INVALIDATED` and reopen successor eligibility even though execution outcome is ambiguous.
 
 Therefore the source disposition here is:
 
-`RESEARCH_ONLY_PENDING_INDEPENDENT_EXACT_HEAD_REVIEW`
+`RESEARCH_ONLY_BLOCKED_BY_HOSTILE_EXACT_HEAD_REVIEW`
 
-No review verdict from an older head is carried forward.
+The independent-review state remains `NOT_OBSERVED`; the hostile Vera review does not become independent merely because it is exact-head. A repaired DriftGuard source must move to a new exact head, and God Brain must re-bind both source identity and review evidence before any admission upgrade.
 
 ## Candidate transferable mechanisms
 
@@ -144,9 +146,9 @@ Receipts should be admitted only after exact-subject rebinding at the transition
 
 Candidate admission class:
 
-`RESEARCH_ONLY_PENDING_INDEPENDENT_EXACT_HEAD_REVIEW`
+`RESEARCH_ONLY_BLOCKED_BY_HOSTILE_EXACT_HEAD_REVIEW`
 
-If a fresh independent exact-head review of DriftGuard PR #34 passes without changing the head, the following mechanisms are reasonable candidates for later `ADAPT_WITH_PROVENANCE` treatment:
+The mechanisms below remain research candidates only. They must not be upgraded from this failed source cut. DriftGuard must first repair the runtime/infrastructure-exception ambiguity on a new exact head; God Brain must then re-bind that source and obtain a fresh exact-head review satisfying the admission gate before later `ADAPT_WITH_PROVENANCE` treatment:
 
 - durable attempt ancestry;
 - disclosed predecessor-holdout ancestry;
@@ -177,7 +179,7 @@ If God Brain later runs anomaly/contact experiments, this pattern may help preve
 This delta supports only a source-admission research judgment.
 
 It does not establish:
-- independent exact-head review of DriftGuard PR #34;
+- independent exact-head PASS of a repaired DriftGuard PR #34 successor;
 - God Brain runtime integration;
 - a God Brain detector implementation;
 - holdout non-access;
