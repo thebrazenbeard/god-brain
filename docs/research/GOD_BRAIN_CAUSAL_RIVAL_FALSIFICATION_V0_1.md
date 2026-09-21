@@ -48,7 +48,7 @@ It is intentionally separate from experiment admission. A design may be structur
 
 `CONTACT_CANDIDATE != SIMULATOR_IDENTITY`
 
-## Minimum rival families
+## Minimum testable rival families
 
 For anomaly/contact/simulation-adjacent work, a causal comparison should consider whether the observation could arise from at least these families when applicable:
 
@@ -96,6 +96,8 @@ A display label is non-identity metadata. Keeping the same label does not preser
 
 `HYPOTHESIS_LABEL != HYPOTHESIS_IDENTITY`
 
+Material changes to predictions, causal assumptions, falsifiers, counterfactual predictions, or claim ceiling must preserve revision lineage. A new ID cannot erase its parent or the earliest point at which the hypothesis lineage saw target evidence. This prevents a post-evidence rewrite from being laundered into a fresh precommitted hypothesis.
+
 `NEW_HYPOTHESIS_ID != ERASED_REVISION_TIMING`
 
 ## Precommitment state
@@ -133,6 +135,22 @@ A comparison should bind:
 The comparison must preserve observations that are compatible with multiple hypotheses.
 
 `COMPATIBLE_WITH_H != CAUSED_BY_H`
+
+## Evidence independence
+
+Each evidence item used as support must carry its observation subject, provenance roots, shared-lineage groups, exposure references, independence state, and the basis for that state.
+
+Allowed independence states are:
+
+- INDEPENDENT_WITHIN_DECLARED_SCOPE
+- DEPENDENT_SHARED_LINEAGE
+- INDEPENDENCE_UNKNOWN
+
+`DEPENDENT_EVIDENCE != INDEPENDENT_SUPPORT`
+
+`INDEPENDENCE_UNKNOWN != INDEPENDENT_SUPPORT`
+
+Separate chats, agents, models, or repetitions do not create independence by themselves.
 
 ## Rival elimination
 
@@ -221,6 +239,16 @@ These are comparison states, not ontology claims.
 
 Even `MODEL_DISCRIMINATING_RESULT_CANDIDATE` requires exact precommitted predictions and evidence that genuinely differs among rivals.
 
+## Decision and stopping guards
+
+A favored or model-discriminating disposition is blocked when a required applicable rival family is absent, a material confounder is unresolved, or a negative control has failed. A discriminating test must actually induce different predictions among rivals.
+
+The decision rule and stopping rule must be precommitted before the target outcome is visible. Stopping because the favored hypothesis has finally won is optional stopping, not a precommitted decision rule.
+
+`OPTIONAL_STOPPING != PRECOMMITTED_DECISION_RULE`
+
+If a stopping rule is changed after target evidence is visible, the affected result becomes exploratory and must not retain confirmatory status.
+
 ## New hypotheses after evidence
 
 New explanations may be generated after seeing evidence, but must be marked post-hoc and carried forward to a fresh test if confirmatory use is desired.
@@ -252,7 +280,10 @@ A future implementation should reject or correctly classify at least:
 17. ablation leaves result unchanged but component called necessary;
 18. falsified physical submodel relabeled refutation of generic simulation;
 19. anomaly state promoted to contact by rival count alone;
-20. internal causal-comparison PASS promoted to external scientific validation.
+20. internal causal-comparison PASS promoted to external scientific validation;
+21. optional stopping after a favorable outcome;
+22. unknown/dependent evidence relabeled as independent support;
+23. unresolved material confounder coexisting with a favored disposition.
 
 ## Relationship to other God Brain research
 
