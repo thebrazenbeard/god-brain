@@ -53,14 +53,19 @@ A durable study identity must be derived from a frozen semantic subject, not sup
 The exact subject digest must be computed from one canonical subject payload. At minimum, the contract must specify:
 
 - SHA-256 or an explicitly versioned successor digest;
-- canonical deterministic serialization (for example RFC 8785 JCS or an equivalently pinned canonical JSON profile);
-- canonical ordering for semantically unordered collections;
+- canonical deterministic serialization: RFC 8785 JSON Canonicalization Scheme (JCS) for V0.1;
+- the exact semantically unordered subject fields: `CANDIDATE_IDENTITIES_AND_DIGESTS`, `SPECIFICATION_DIGESTS`, and `PROVENANCE_ROOTS`;
+- those unordered collections are sorted lexicographically by each element's UTF-8 RFC 8785 canonical bytes before the complete subject is serialized;
 - exact type/domain validation before hashing;
 - exclusion of display labels, timestamps, branch names, attempt IDs, and path aliases that do not change the scientific subject.
 
 `DISPLAY_METADATA_CHANGED != STUDY_SUBJECT_CHANGED`
 
 `NONCANONICAL_SERIALIZATION_CHANGED != SCIENTIFIC_SUBJECT_CHANGED`
+
+For V0.1 there is exactly one serialization profile. An implementation must not substitute another "equivalent" canonical JSON profile while retaining the V0.1 identity claim.
+
+The three declared unordered fields are the only collections whose element order is normalized by this contract. Order in any other list/sequence remains subject-significant unless a later reviewed schema version says otherwise.
 
 The digest identifies one exact canonicalized subject. It is **not** a semantic-equivalence oracle.
 
