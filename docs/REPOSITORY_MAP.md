@@ -1,5 +1,7 @@
 # Hyperconnectome Brain Repository Map
 
+> **God Brain provenance notice:** This file is inherited Hyperconnectome Brain source-lineage material. Its HC roles, authority, "current" language, and direct-main powers do **not** govern God Brain. For God Brain currentness and authority, use `CURRENT.md`, `README.md`, and fresh God Brain project-interface/governance state. The predecessor body below is preserved as lineage evidence.
+
 ## Purpose
 
 This repository defines the reusable HC-series Hyperconnectome Brain template. Core architecture is identity-neutral. Named identities belong only in clearly labeled governance, source-history, research, case-study, comparison, or provenance material where the identity itself is relevant.
