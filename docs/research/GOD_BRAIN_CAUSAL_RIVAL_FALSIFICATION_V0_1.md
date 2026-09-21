@@ -88,9 +88,15 @@ Every hypothesis should bind:
 - EVIDENCE_REFERENCES
 - CLAIM_CEILING
 
-Hypothesis identity is not merely a display label. Material changes to predictions, falsifiers, causal assumptions, or interpretation ceiling create a revised hypothesis state.
+Hypothesis identity is not merely a display label. For V0.1, identity-bearing fields are proposition, hypothesis class, predicted and tension/nonpredicted observations, causal and auxiliary assumptions, confounders/common causes, selection mechanisms, falsifiers, counterfactual predictions, and claim ceiling.
+
+A material change to any identity-bearing field requires either a new `HYPOTHESIS_ID` or an explicit revision record binding predecessor ID, successor ID, changed identity fields, and change timing relative to target evidence.
+
+A display label is non-identity metadata. Keeping the same label does not preserve identity, and minting a new ID does not erase whether the revision happened after target evidence.
 
 `HYPOTHESIS_LABEL != HYPOTHESIS_IDENTITY`
+
+`NEW_HYPOTHESIS_ID != ERASED_REVISION_TIMING`
 
 ## Precommitment state
 
