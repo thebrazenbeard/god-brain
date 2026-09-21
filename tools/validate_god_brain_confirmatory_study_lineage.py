@@ -28,6 +28,14 @@ EXPECTED_INVARIANTS = {
     "ANOMALY_NE_CONTACT",
     "CONTACT_CANDIDATE_NE_SIMULATOR_IDENTITY",
     "PROTOCOL_RIGOR_NE_UNIQUE_CAUSAL_EXPLANATION",
+    "DISPLAY_METADATA_CHANGED_NE_STUDY_SUBJECT_CHANGED",
+    "NONCANONICAL_SERIALIZATION_CHANGED_NE_SCIENTIFIC_SUBJECT_CHANGED",
+    "STUDY_SUBJECT_DIGEST_NE_SEMANTIC_EQUIVALENCE_PROOF",
+    "NEW_STUDY_SUBJECT_DIGEST_NE_CLEAN_NEW_LINEAGE",
+    "UNLINKED_ROOT_NE_INDEPENDENT_STUDY",
+    "NEW_LABEL_NE_NEW_LINEAGE",
+    "PRE_EXPOSURE_REVISION_NE_SAME_SUBJECT_ATTEMPT",
+    "POST_EXPOSURE_REDESIGN_NE_UNTOUCHED_CONFIRMATION",
 }
 
 EXPECTED_SUBJECT_FIELDS = {
@@ -74,6 +82,12 @@ EXPECTED_HOSTILE = {
     "CROSS_ATTEMPT_RECEIPT",
     "CONTENT_NONREUSE_PROMOTED_TO_INDEPENDENCE",
     "PROTOCOL_PASS_PROMOTED_TO_EXTERNAL_SCIENTIFIC_VALIDATION",
+    "CANONICAL_PAYLOAD_REORDERED_NEW_DIGEST",
+    "DISPLAY_METADATA_CHANGES_STUDY_IDENTITY",
+    "PARAPHRASED_EQUIVALENT_QUESTION_CLAIMS_CLEAN_ROOT",
+    "UNLINKED_NEW_ROOT_CLAIMS_INDEPENDENCE",
+    "POST_EXPOSURE_REDESIGN_OMITS_CHANGED_FIELDS",
+    "PRE_EXPOSURE_REVISION_MISLABELED_SAME_SUBJECT",
 }
 
 EXPECTED_CEILING = {
@@ -95,6 +109,8 @@ EXPECTED_CEILING = {
     "NO_MERGE_AUTHORITY",
     "NO_DEPLOYMENT_AUTHORITY",
     "NO_CANONICAL_PROMOTION",
+    "NO_SEMANTIC_EQUIVALENCE_PROOF",
+    "NO_COMPLETE_LINEAGE_ROOT_DISCOVERY",
 }
 
 
@@ -162,6 +178,40 @@ def validate(root: Path) -> list[str]:
         errors.append("display label must not be identity")
     _exact_set(errors, identity.get("required_subject_fields"), EXPECTED_SUBJECT_FIELDS, "required_subject_fields")
 
+    canonical = spec.get("canonical_subject_digest")
+    expected_canonical = {
+        "algorithm": "SHA-256",
+        "serialization_profile": "RFC8785_JCS_OR_EQUIVALENT_VERSIONED_CANONICAL_JSON",
+        "canonicalize_semantically_unordered_collections": True,
+        "validate_types_before_hashing": True,
+        "excluded_nonsubject_metadata": [
+            "DISPLAY_LABEL",
+            "OBSERVED_AT",
+            "BRANCH_NAME",
+            "ATTEMPT_ID",
+            "REPOSITORY_PATH_ALIAS",
+        ],
+        "digest_is_semantic_equivalence_proof": False,
+    }
+    if canonical != expected_canonical:
+        errors.append("canonical subject digest contract drifted")
+
+    registry = spec.get("lineage_registry")
+    expected_registry = {
+        "required": True,
+        "states": [
+            "KNOWN_LINEAGE",
+            "NEW_ROOT_PENDING_EQUIVALENCE_CHECK",
+            "ANCESTRY_UNKNOWN",
+        ],
+        "new_digest_establishes_clean_root": False,
+        "unlinked_root_establishes_independence": False,
+        "new_root_requires_governed_admission": True,
+        "complete_hidden_history_discovery_claim": False,
+    }
+    if registry != expected_registry:
+        errors.append("lineage registry contract drifted")
+
     successors = spec.get("successor_classes")
     if not isinstance(successors, dict) or set(successors) != {"SAME_SUBJECT_ATTEMPT", "SUCCESSOR_REDESIGN"}:
         errors.append("successor classes must be exact")
@@ -184,6 +234,25 @@ def validate(root: Path) -> list[str]:
         }:
             errors.append("successor-redesign semantics drifted")
 
+    timing = spec.get("change_timing_classes")
+    expected_timing = {
+        "PRE_EXPOSURE_SUBJECT_REVISION": {
+            "requires_new_study_subject_digest": True,
+            "requires_predecessor_study_relation": True,
+            "preserves_precommit_history": True,
+            "inherits_holdout_exposure": False,
+        },
+        "POST_EXPOSURE_REDESIGN": {
+            "requires_new_study_subject_digest": True,
+            "requires_predecessor_study_relation": True,
+            "requires_changed_field_disclosure": True,
+            "preserves_prior_evidence_exposure": True,
+            "may_claim_untouched_confirmation_of_predecessor": False,
+        },
+    }
+    if timing != expected_timing:
+        errors.append("change-timing semantics drifted")
+
     _exact_set(errors, spec.get("holdout_ancestry_required_fields"), EXPECTED_HOLDOUT_FIELDS, "holdout ancestry fields")
     _exact_set(errors, spec.get("invariants"), EXPECTED_INVARIANTS, "invariants")
     _exact_set(errors, spec.get("required_hostile_cases"), EXPECTED_HOSTILE, "required hostile cases")
@@ -202,6 +271,10 @@ def validate(root: Path) -> list[str]:
         "VALID_RECEIPT != VALID_FOR_THIS_SUBJECT",
         "DIGEST_NONREUSE != STATISTICAL_INDEPENDENCE",
         "GOVERNED_CONFIRMATORY_PASS != ANOMALY",
+        "STUDY_SUBJECT_DIGEST != SEMANTIC_EQUIVALENCE_PROOF",
+        "NEW_STUDY_SUBJECT_DIGEST != CLEAN_NEW_LINEAGE",
+        "UNLINKED_ROOT != INDEPENDENT_STUDY",
+        "POST_EXPOSURE_REDESIGN != UNTOUCHED_CONFIRMATION",
     ):
         if marker not in doc:
             errors.append(f"research doc missing marker: {marker}")
