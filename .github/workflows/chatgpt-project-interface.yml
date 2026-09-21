@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install pinned YAML parser
+        run: python3 -m pip install PyYAML==6.0.2
       - name: Run project-interface unit tests
         run: python3 -m unittest -v tests.test_validate_chatgpt_project_interface
       - name: Validate project interface

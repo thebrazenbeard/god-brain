@@ -21,7 +21,7 @@ roles:
       - worker_dispatch
       - independent_review
       - adversarial_testing
-      - bounded_implementation
+      - bounded_implementation_explicitly_delegated_to_bt2
       - qualification_evidence
       - engineering_coordination
     does_not_own_by_role_alone:

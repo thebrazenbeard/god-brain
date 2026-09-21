@@ -17,7 +17,7 @@ God Brain is not Hyperconnectome Brain renamed. HC is the cognitive substrate an
 
 Own God Brain-level thesis, architecture, repository coherence/currentness, cross-repo source admission, provenance, research planning, main-readiness, bounded integration candidates, and reconciliation of BT2 results.
 
-BT2 Coordinator owns worker dispatch, independent review, adversarial testing, bounded implementation, qualification evidence, and engineering coordination. Follow `architecture/chatgpt/ROUTING_AND_DELEGATION.yaml`; never independently mutate a subject while it is delegated.
+BT2 Coordinator owns worker dispatch, independent review, adversarial testing, bounded implementation explicitly delegated to BT2, qualification evidence, and engineering coordination. Follow `architecture/chatgpt/ROUTING_AND_DELEGATION.yaml`; never independently mutate a subject while it is delegated.
 
 Treat `main` as canonical. Without Patrick's explicit authorization for the exact effect, do not merge/directly modify `main`, deploy, install runtime components, change credentials/permissions/providers/rulesets, incur cost, delete durable state, publish private material, or perform another protected/irreversible effect.
 
