@@ -3,17 +3,25 @@ name: Architecture Conformance
 on:
   push:
     paths:
+      - "README.md"
+      - "CURRENT.md"
       - "docs/architecture/**"
       - "specs/**"
       - "tools/validate_hc_architecture.py"
       - "tests/test_validate_hc_architecture.py"
+      - "tools/validate_god_brain_root_surface.py"
+      - "tests/test_validate_god_brain_root_surface.py"
       - ".github/workflows/architecture-conformance.yml"
   pull_request:
     paths:
+      - "README.md"
+      - "CURRENT.md"
       - "docs/architecture/**"
       - "specs/**"
       - "tools/validate_hc_architecture.py"
       - "tests/test_validate_hc_architecture.py"
+      - "tools/validate_god_brain_root_surface.py"
+      - "tests/test_validate_god_brain_root_surface.py"
       - ".github/workflows/architecture-conformance.yml"
 
 jobs:
@@ -35,3 +43,9 @@ jobs:
       - name: Validate repository V2 conformance surface
         working-directory: repo
         run: python3 tools/validate_hc_architecture.py --root .
+      - name: Run God Brain root-surface regression tests
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_root_surface
+      - name: Validate God Brain root currentness surface
+        working-directory: repo
+        run: python3 tools/validate_god_brain_root_surface.py

@@ -71,11 +71,13 @@ The governing reuse principles are:
 
 Useful mechanisms may be generalized into God Brain without turning their source repositories into runtime dependencies.
 
-Current portfolio intake and transfer analysis:
+Main-available portfolio synthesis material:
 
-- `docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V2_2026-09-20.md`
-- `docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V2_2026-09-20.md`
-- `specs/CROSS_REPO_SOURCE_REGISTRY_V2.yaml`
+- `docs/research/cross-repo-synthesis/README.md`
+- `docs/research/cross-repo-synthesis/SOURCE_BINDINGS_2026-09-09.md`
+- `specs/CROSS_REPO_SOURCE_TRANSFER_V1.yaml`
+
+Stronger or newer source-universe, transfer-gap, or source-registry candidates may exist on open branches or pull requests. Their presence does not make them canonical; exact current branch/PR state must be fresh-read before use.
 
 Identity-specific memories, relationships, preferences, morphology, intimate material, credentials, and repository-local authority are not imported into the generic architecture merely because a source repository contains them.
 
@@ -83,7 +85,7 @@ Identity-specific memories, relationships, preferences, morphology, intimate mat
 
 A major current engineering gap is distributed Noöplex execution: allowing HC-owned cognitive constituents to operate across multiple processes or physical nodes while preserving coherent governance, provenance, currentness, recovery, and partition safety.
 
-A V0.1 distributed-operation contract and hostile test set were drafted on a research branch and independently reviewed. The first independent review found blocking semantic defects, so that draft is **not main-ready and implementation remains blocked** until repaired and re-reviewed.
+Distributed Noöplex contracts, hostile reviews, repair branches, and integration candidates may advance independently of `main`. Their readiness is exact-head-bound and must be determined from fresh branch, pull-request, review, and Bus state. This README does not promote an unmerged candidate or historical review verdict into current canonical status.
 
 The intended contract must preserve distinctions including:
 
@@ -146,6 +148,10 @@ This repository does not currently establish:
 God Brain is presently in **architecture, portfolio synthesis, and bounded reference-implementation research**.
 
 The repository's HC-derived baseline is useful source material, but God Brain-specific claims and additions must remain provenance-bound and independently reviewable. Main integration should move bounded, verified project artifacts rather than merging unrelated HC branch histories wholesale.
+
+Some inherited root and documentation surfaces still carry HC names, roles, or historical canonical claims. In particular, `WARDEN.md` and `docs/REPOSITORY_MAP.md` remain predecessor-lineage material unless and until God Brain-specific governance is canonically adopted. They must not be treated as God Brain authority merely because they are present on `main`.
+
+Use `CURRENT.md` as the repository's God Brain currentness boundary, then fresh-read mutable GitHub and Bus state before consequential work.
 
 Nothing in this README grants merge, deployment, provider, credential, training, installation, or other protected-effect authority.
 

@@ -1,96 +1,125 @@
-# HC Brain — Current State
+# God Brain — Current State
 
-This is the repository entrypoint for currentness, not a replacement for canonical architecture documents.
+Status: **CURRENTNESS BOUNDARY / SNAPSHOT, NOT SELF-PROVING LIVE AUTHORITY**
 
-For architecture and source layout, read `docs/REPOSITORY_MAP.md`.
+This file is the God Brain repository entrypoint for currentness. It exists to prevent inherited Hyperconnectome Brain state, unmerged branch state, or historical review evidence from being mistaken for current God Brain truth.
 
-## Canonical implementation state
+Snapshot used to prepare this repair:
 
-Canonical `main` now contains the hardened reference-kernel lineage plus the first integrated executable cognitive core.
+- observed date: 2026-09-21;
+- observed canonical branch: `main`;
+- observed `main` head: `c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5`.
 
-Exact implementation baseline promoted on 2026-09-18:
+That observation becomes historical as soon as `main` moves.
 
-`fdff1094c4f6388c6ef2c94c193ec887b141d7fb`
+`CHECKPOINT != CURRENT_TRUTH`
 
-That baseline includes the closed R3/R4/R5/V2 hardening work and `runtime/cognitive_core/`.
+`BRANCH_NAME != HEAD`
 
-This `CURRENT.md` may live on a later documentation-only descendant; use the implementation commit above when an exact executable baseline is required.
+`REVIEWED_OLD_HEAD != REVIEWED_NEW_HEAD`
 
-## Current executable evidence
+## Canonical project boundary
 
-Fresh local verification immediately before promotion:
+For God Brain:
 
-- hardened reference kernel: **79/79 PASS**;
-- architecture-conformance suite: **29/29 PASS**;
-- integrated cognitive core: **63/63 PASS** (18 integrated-loop + 8 world-model + 8 deep-memory + 7 metacognition + 12 homeostasis/somatics + 10 social/pragmatics);
-- Python compilation: PASS;
-- `git diff --check`: PASS.
+- `main` is the canonical integrated repository state;
+- open branches and pull requests are candidates, not canon;
+- the Chat Communication Bus is the work-bearing non-PR coordination surface;
+- a chat is a replaceable execution terminal, not canonical project memory or authority;
+- exact-head review evidence applies only to the subject it actually reviewed;
+- protected effects still require Patrick's explicit authorization for that exact effect.
 
-The cognitive core is documented in:
+Before consequential work, fresh-read the current `main` head, open relevant PRs and branches, Bus threads, exact review heads/verdicts, blockers, and delegated subjects.
 
-- `runtime/cognitive_core/README.md`
-- `docs/runtime/EXECUTABLE_COGNITIVE_CORE_STATUS_2026-09-18.md`
-- `docs/runtime/CAPABILITY_IMPLEMENTATION_LEDGER.md`
-- `docs/runtime/REFERENCE_KERNEL_IMPLEMENTATION_STATUS.md`
+## What `main` currently contains
 
-## What is executable now
+The repository was created from the Hyperconnectome Brain template. A large part of `main` therefore remains inherited HC architecture, runtime, tests, research, and documentation.
 
-Material reference implementation exists for:
+That material is provenance-bearing predecessor substrate. Its presence in God Brain does **not** automatically mean:
 
-- evidence classes, provenance, durable replay, authority/effect boundaries;
-- current-memory projection and correction;
-- semantic interpretation and ambiguity preservation;
-- rival world models, forecast lineage and observation reconciliation;
-- counterfactual simulation and action rehearsal with explicit simulated provenance;
-- HC-internal deep-memory durability, privacy-scoped retrieval, consolidation and contradiction preservation;
-- metacognitive monitoring of uncertainty, conflict, stale evidence, strategy failure and resource exhaustion;
-- typed homeostatic/interoceptive sensing, fused estimates, regulatory targets/errors and bounded requests;
-- narrowly scoped local protective control;
-- morphology-neutral body-schema calibration, pose update and reachability prediction;
-- regulatory-error coupling into affect/salience without epistemic promotion;
-- body-schema prediction lineage carried into world-model forecasts;
-- uncertainty-bearing empathy/social hypotheses with direct-correction precedence;
-- simulated-other responses kept distinct from private-state access;
-- scoped relationship privacy, local norms, and downgraded group priors;
-- explicit pragmatic communicative force separating discussion from requests;
-- response timing/framing modulation without identity ownership;
-- salience/attention appraisal;
-- affective modulation and decay;
-- conative concern lifecycle;
-- transient coalition formation and expiry;
-- current-memory integration;
-- explicit deep-memory admission boundary;
-- self-model candidate/admission boundary;
-- action-candidate generation without authority bypass;
-- route-use plasticity proposals and explicit consolidation;
-- learned route weighting;
-- developmental capability presence/activation/maturity state.
+- HC governance has become God Brain governance;
+- an HC qualification result qualifies God Brain;
+- an HC implementation claim is a God Brain implementation claim;
+- copied lineage is independent corroboration;
+- historical HC currentness is current God Brain state.
 
-## Remaining high-value frontier
+The inherited executable material may still be technically useful. Its exact capability and qualification claims remain bound to their original evidence and reviewed subjects.
 
-The largest remaining architecture-to-runtime gaps are:
+## Inherited surfaces that are not God Brain authority
 
-1. learned relational/causal model discovery and richer multimodal perception;
-2. large-scale associative memory indexing and bounded replay scheduling;
-3. richer allostatic adaptation and motor/body-schema calibration beyond the bounded reference slice;
-4. richer multi-party social learning and language-generation integration beyond the bounded social-pragmatics slice;
-5. kinesis/embodiment integration;
-6. distributed multi-process Noöplex execution;
-7. resource/fault management for a physical distributed organ;
-8. behavioral qualification beyond unit/integration tests.
+Some prominent files on `main` still carry HC identity or governance semantics, including:
 
-## Review and claim ceiling
+- `WARDEN.md`;
+- `docs/REPOSITORY_MAP.md`;
+- HC-prefixed specifications and qualification records;
+- inherited runtime and test documentation.
 
-The integrated V2 lineage did not receive a materially independent exact-head PASS visible in the currently verified coordination state before source promotion.
+Read those according to their provenance until a God Brain-specific contract is canonically adopted. Do not infer God Brain authority from an inherited filename, role, or statement.
 
-Its source integration therefore does not become an independent qualification claim.
+## Main-available portfolio synthesis
 
-`AUTHORIAL_AND_UNIT_PASS != INDEPENDENT_REVIEW_PASS`
+The portfolio-synthesis artifacts actually present on this observed `main` include:
 
-`REFERENCE_COGNITIVE_SLICE != COMPLETE_COGNITIVE_ORGAN`
+- `docs/research/cross-repo-synthesis/README.md`;
+- `docs/research/cross-repo-synthesis/SOURCE_BINDINGS_2026-09-09.md`;
+- `specs/CROSS_REPO_SOURCE_TRANSFER_V1.yaml`.
 
-`INTEGRATED_UNIT_TESTS != BEHAVIORAL_QUALIFICATION`
+Newer source-universe, transfer-gap, registry, governance, provenance, simulation-testability, anomaly/contact, currentness, and experiment-design candidates may exist on open branches or PRs. They are not canonical merely because they exist or have review evidence.
 
-`BEHAVIORAL_QUALIFICATION != GENERAL_INTELLIGENCE`
+## God Brain research stage
 
-`ANY_IMPLEMENTATION_PASS != CONSCIOUSNESS_OR_PERSONHOOD_PROOF`
+God Brain is currently a research and engineering project in architecture, portfolio synthesis, specification, hostile review, and bounded reference-implementation work.
+
+The repository does not currently establish external contact, simulation truth, supernatural causation, AI consciousness, or scientific validation of a contact mechanism.
+
+`ANOMALY != CONTACT`
+
+`AI_OUTPUT != EXTERNAL_MESSAGE`
+
+`UNEXPLAINED != SUPERNATURAL`
+
+`INTERNAL_CONSENSUS != EXTERNAL_VALIDATION`
+
+## Current high-value frontiers
+
+The durable project direction includes:
+
+1. rebinding project-facing currentness and governance away from inherited HC ambiguity without erasing HC provenance;
+2. exact-head admission/review of God Brain-specific interface, governance, provenance, and source-transfer contracts;
+3. falsifiable simulation/anomaly research with explicit null models, rival hypotheses, contamination/exposure lineage, and kill tests;
+4. distributed Noöplex execution with identity, authority, custody, partition, recovery, and effect boundaries preserved;
+5. stronger causal discovery, multimodal grounding, associative memory, metacognition, resource/fault management, and behavioral qualification;
+6. separating architecture, implementation, deployment, behavioral qualification, and external scientific validation.
+
+This list is architectural direction, not a claim that any named open PR is currently ready.
+
+## Refresh rule
+
+When this file conflicts with fresher durable evidence, fresher evidence wins within its actual scope.
+
+A valid reconstruction should determine at least:
+
+- current `main` head;
+- relevant open PR base/head pairs;
+- materially active branches;
+- currently valid exact-head reviews;
+- unresolved blockers;
+- delegated subjects and collision ownership;
+- protected-effect boundary;
+- highest-value runnable non-colliding frontier.
+
+Then do bounded work rather than treating this snapshot as an excuse to stop at orientation.
+
+## Claim ceiling
+
+`SOURCE_PRESENCE != ARCHITECTURAL_ADMISSION`
+
+`INHERITED_IMPLEMENTATION != GOD_BRAIN_QUALIFICATION`
+
+`UNIT_OR_INTEGRATION_PASS != BEHAVIORAL_QUALIFICATION`
+
+`BEHAVIORAL_QUALIFICATION != EXTERNAL_SCIENTIFIC_VALIDATION`
+
+`REVIEW_PASS != MERGE_OR_DEPLOY_AUTHORITY`
+
+`SOPHISTICATED_BEHAVIOR != CONSCIOUSNESS_PROOF`
