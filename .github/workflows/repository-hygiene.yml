@@ -1,0 +1,48 @@
+name: Repository Hygiene
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests runtime
+
+      - name: Parse JSON contracts
+        working-directory: repo
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          for path in sorted(Path(".").rglob("*.json")):
+              with path.open("r", encoding="utf-8") as handle:
+                  json.load(handle)
+              print(path)
+          PY
+
+      - name: Run repository unit-test discovery
+        working-directory: repo
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
