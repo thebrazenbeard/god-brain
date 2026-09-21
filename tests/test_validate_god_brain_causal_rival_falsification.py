@@ -32,6 +32,32 @@ class CausalRivalFalsificationTests(unittest.TestCase):
         errors = _mutated(lambda s: s.__setitem__("unique_cause_proven", True))
         self.assertTrue(any("top-level machine contract keys" in e for e in errors))
 
+    def test_identity_contract_cannot_drop_causal_assumptions(self) -> None:
+        errors = _mutated(
+            lambda s: s["hypothesis_identity_contract"]["identity_bearing_fields"].remove(
+                "CAUSAL_ASSUMPTIONS"
+            )
+        )
+        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+
+    def test_material_identity_change_rule_is_exact(self) -> None:
+        errors = _mutated(
+            lambda s: s["hypothesis_identity_contract"].__setitem__(
+                "material_identity_change_requires",
+                "UNCHANGED_HYPOTHESIS_ID_ALLOWED",
+            )
+        )
+        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+
+    def test_new_id_cannot_erase_post_evidence_revision_timing(self) -> None:
+        errors = _mutated(
+            lambda s: s["hypothesis_identity_contract"].__setitem__(
+                "new_id_does_not_erase_revision_timing",
+                False,
+            )
+        )
+        self.assertTrue(any("hypothesis identity contract" in e for e in errors))
+
     def test_unknown_ordinary_mechanism_is_required(self) -> None:
         errors = _mutated(lambda s: s["minimum_rival_families"].remove("UNKNOWN_ORDINARY_MECHANISM"))
         self.assertTrue(any("minimum rival" in e for e in errors))
