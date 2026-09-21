@@ -48,6 +48,48 @@ These are source-level blocker observations, not independent scientific evidence
 
 A durable study identity must be derived from a frozen semantic subject, not supplied as a free-form namespace.
 
+## Exact identity versus semantic equivalence
+
+The exact subject digest must be computed from one canonical subject payload. At minimum, the contract must specify:
+
+- SHA-256 or an explicitly versioned successor digest;
+- canonical deterministic serialization (for example RFC 8785 JCS or an equivalently pinned canonical JSON profile);
+- canonical ordering for semantically unordered collections;
+- exact type/domain validation before hashing;
+- exclusion of display labels, timestamps, branch names, attempt IDs, and path aliases that do not change the scientific subject.
+
+`DISPLAY_METADATA_CHANGED != STUDY_SUBJECT_CHANGED`
+
+`NONCANONICAL_SERIALIZATION_CHANGED != SCIENTIFIC_SUBJECT_CHANGED`
+
+The digest identifies one exact canonicalized subject. It is **not** a semantic-equivalence oracle.
+
+`STUDY_SUBJECT_DIGEST != SEMANTIC_EQUIVALENCE_PROOF`
+
+A paraphrased evidentiary question or differently encoded but scientifically equivalent subject can still produce a different digest if the governed semantic representation changes. Therefore a new digest does not by itself establish a clean new lineage.
+
+`NEW_STUDY_SUBJECT_DIGEST != CLEAN_NEW_LINEAGE`
+
+## Lineage-family registry and new-root admission
+
+God Brain needs a durable lineage-family registry above individual study-subject digests.
+
+The registry's purpose is not to prove semantic equivalence automatically. Its purpose is to prevent a new digest from being silently treated as ancestry-free merely because exact-digest equality failed.
+
+A new subject enters one of these states:
+
+- `KNOWN_LINEAGE` — linked to an admitted predecessor/root family;
+- `NEW_ROOT_PENDING_EQUIVALENCE_CHECK` — proposed as a genuinely new study root but not yet cleared against relevant prior work;
+- `ANCESTRY_UNKNOWN` — available evidence cannot determine whether relevant predecessor lineage exists.
+
+Only an explicitly governed new-root admission may establish a new lineage root. A label change, a new digest, a new branch, a new chat, or a new operator cannot do so by itself.
+
+`UNLINKED_ROOT != INDEPENDENT_STUDY`
+
+`NEW_LABEL != NEW_LINEAGE`
+
+The registry cannot prove that all hidden historical studies have been discovered. That remains a claim-ceiling limit.
+
 ## Study subject manifest
 
 A future `ConfirmatoryStudySubject` should bind at minimum:
@@ -66,9 +108,11 @@ A future `ConfirmatoryStudySubject` should bind at minimum:
 - claim ceiling;
 - provenance roots required by the question.
 
-Its canonical digest is the durable study identity.
+Its canonical digest, computed under the pinned canonicalization profile, is the exact durable study-subject identity.
 
-`STUDY_SUBJECT_DIGEST = STUDY_IDENTITY`
+`STUDY_SUBJECT_DIGEST = EXACT_CANONICAL_STUDY_SUBJECT_IDENTITY`
+
+It does not prove semantic uniqueness across every possible re-expression of the same scientific question.
 
 A human label may describe the study, but cannot create a new clean lineage.
 
@@ -114,7 +158,21 @@ This rule still does not detect transformed near-duplicates, common upstream gen
 
 ## Same-subject attempt versus redesigned successor
 
-Two successor classes must be explicit.
+Two successor classes must be explicit. Subject changes must also record whether they occurred before or after confirmatory evidence exposure.
+
+### PRE_EXPOSURE_SUBJECT_REVISION
+
+If frozen subject material changes before any HOLDOUT reveal or confirmatory execution, the replacement still receives a new study-subject digest and a predecessor relation. It preserves precommit history, but it need not inherit nonexistent HOLDOUT exposure.
+
+`PRE_EXPOSURE_REVISION != SAME_SUBJECT_ATTEMPT`
+
+### POST_EXPOSURE_REDESIGN
+
+If frozen subject material changes after HOLDOUT reveal or confirmatory execution, the successor must preserve the exact exposure lineage and explicitly identify the changed subject fields.
+
+`POST_EXPOSURE_REDESIGN != UNTOUCHED_CONFIRMATION`
+
+Two successor classes must be explicit at the attempt/study relationship level.
 
 ### SAME_SUBJECT_ATTEMPT
 
@@ -197,6 +255,8 @@ This contract does not prove:
 - absence of hidden historical experiments;
 - absence of parallel unanchored ledgers;
 - external custody;
+- automatic semantic-equivalence detection across differently expressed study subjects;
+- completeness of lineage-root discovery;
 - statistical significance;
 - causal truth;
 - production superiority.
@@ -242,7 +302,13 @@ A future fixture/reference implementation should at minimum reject or distinguis
 15. receipt from another study subject;
 16. receipt from another attempt;
 17. exact-content nonreuse falsely promoted to statistical independence;
-18. current protocol state falsely promoted to external scientific validation.
+18. current protocol state falsely promoted to external scientific validation;
+19. canonical subject payload reordered but incorrectly treated as a new study;
+20. display label/timestamp/path alias change incorrectly changes study identity;
+21. semantically equivalent question paraphrased into a new digest and treated as ancestry-free;
+22. unlinked new subject digest asserted to be an independent new root without governed admission;
+23. post-exposure redesign omits changed-field disclosure or predecessor linkage;
+24. pre-exposure subject revision is silently represented as the same exact subject.
 
 ## Research-stage placement
 
