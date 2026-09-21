@@ -181,8 +181,14 @@ def validate(root: Path) -> list[str]:
     canonical = spec.get("canonical_subject_digest")
     expected_canonical = {
         "algorithm": "SHA-256",
-        "serialization_profile": "RFC8785_JCS_OR_EQUIVALENT_VERSIONED_CANONICAL_JSON",
+        "serialization_profile": "RFC8785_JCS",
         "canonicalize_semantically_unordered_collections": True,
+        "unordered_collection_fields": [
+            "CANDIDATE_IDENTITIES_AND_DIGESTS",
+            "SPECIFICATION_DIGESTS",
+            "PROVENANCE_ROOTS",
+        ],
+        "unordered_collection_order": "LEXICOGRAPHIC_UTF8_BY_RFC8785_CANONICAL_ELEMENT_BYTES",
         "validate_types_before_hashing": True,
         "excluded_nonsubject_metadata": [
             "DISPLAY_LABEL",
