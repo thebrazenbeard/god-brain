@@ -18,12 +18,31 @@ on:
       - "tests/test_validate_god_brain_anomaly_contact_protocol.py"
       - ".github/workflows/anomaly-contact-protocol-research.yml"
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Run anomaly/contact protocol tests
-        run: python3 -m unittest -v tests.test_validate_god_brain_anomaly_contact_protocol
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
       - name: Validate anomaly/contact protocol
-        run: python3 tools/validate_god_brain_anomaly_contact_protocol.py --root .
+        working-directory: repo
+        run: python3 tools/validate_god_brain_anomaly_contact_protocol.py
+      - name: Run hostile regression tests
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_anomaly_contact_protocol
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
