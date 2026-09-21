@@ -126,6 +126,117 @@ class GodBrainProjectFileArchitectureTests(unittest.TestCase):
             any("MUTABLE_OPERATIONAL_STATE.rule mismatch" in error for error in errors)
         )
 
+
+    def test_root_manifest_cannot_own_forbidden_live_state(self) -> None:
+        def mutate(spec: dict) -> None:
+            stratum(spec, "ROOT_DISCOVERY_MANIFEST")["owns"].append(
+                "live_provider_status"
+            )
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "ROOT_DISCOVERY_MANIFEST.owns unexpected" in error
+                and "live_provider_status" in error
+                for error in errors
+            )
+        )
+        self.assertTrue(any("owns and stratum ROOT_DISCOVERY_MANIFEST.forbidden overlap" in error for error in errors))
+
+    def test_stratum_semantic_sets_reject_extra_authority_member(self) -> None:
+        def mutate(spec: dict) -> None:
+            stratum(spec, "CONTINUATION_CHECKPOINTS")["owns"].append(
+                "merge_authority"
+            )
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "CONTINUATION_CHECKPOINTS.owns unexpected" in error
+                and "merge_authority" in error
+                for error in errors
+            )
+        )
+        self.assertTrue(any("overlap" in error and "merge_authority" in error for error in errors))
+
+    def test_future_current_pointer_required_and_forbidden_are_disjoint(self) -> None:
+        def mutate(spec: dict) -> None:
+            spec["future_current_pointer_contract"]["required_fields"].append(
+                "provider_health"
+            )
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "required_fields unexpected" in error
+                and "provider_health" in error
+                for error in errors
+            )
+        )
+        self.assertTrue(
+            any(
+                "required_fields and forbidden_fields overlap" in error
+                and "provider_health" in error
+                for error in errors
+            )
+        )
+
+    def test_exact_semantic_set_rejects_duplicate_member(self) -> None:
+        def mutate(spec: dict) -> None:
+            stratum(spec, "REVIEW_EVIDENCE")["required_binding"].append(
+                "reviewer_identity"
+            )
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "REVIEW_EVIDENCE.required_binding must not contain duplicates"
+                in error
+                for error in errors
+            )
+        )
+
+    def test_claim_ceiling_rejects_extra_authority_claim(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec["claim_ceiling"].append("MERGE_AUTHORITY_GRANTED")
+        )
+        self.assertTrue(
+            any(
+                "claim_ceiling unexpected" in error
+                and "MERGE_AUTHORITY_GRANTED" in error
+                for error in errors
+            )
+        )
+
+    def test_top_level_extra_authority_field_is_rejected(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec.__setitem__("merge_authority", True)
+        )
+        self.assertTrue(
+            any("top-level machine contract keys unexpected" in error for error in errors)
+        )
+
+    def test_stratum_extra_authority_field_is_rejected(self) -> None:
+        def mutate(spec: dict) -> None:
+            stratum(spec, "CONTINUATION_CHECKPOINTS")["grants_merge_authority"] = True
+
+        errors = validate_mutation(mutate)
+        self.assertTrue(
+            any(
+                "stratum CONTINUATION_CHECKPOINTS keys unexpected" in error
+                and "grants_merge_authority" in error
+                for error in errors
+            )
+        )
+
+    def test_promotion_order_keeps_patrick_exact_authority_gate(self) -> None:
+        errors = validate_mutation(
+            lambda spec: spec["promotion_order"].remove(
+                "PATRICK_EXPLICIT_CANONICAL_PROMOTION_AUTHORITY"
+            )
+        )
+        self.assertTrue(any("promotion_order drifted" in error for error in errors))
+
     def test_duplicate_stratum_id_is_rejected(self) -> None:
         def mutate(spec: dict) -> None:
             spec["strata"][-1]["id"] = "ROOT_DISCOVERY_MANIFEST"
