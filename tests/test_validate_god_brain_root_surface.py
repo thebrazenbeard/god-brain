@@ -20,6 +20,40 @@ class GodBrainRootSurfaceTests(unittest.TestCase):
             errors = validate_root_surface(root)
             self.assertTrue(any("God Brain" in error or "inherited HC" in error for error in errors))
 
+    def test_observed_branch_must_remain_main(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "README.md").write_text("# God Brain\n", encoding="utf-8")
+            (root / "CURRENT.md").write_text(
+                "# God Brain — Current State\n"
+                "- observed canonical branch: `develop`;\n"
+                "- observed `main` head: `c0f6af7143aa5916bae96eb1f0ee9c9de6505cf5`.\n"
+                "CHECKPOINT != CURRENT_TRUTH\n"
+                "REVIEWED_OLD_HEAD != REVIEWED_NEW_HEAD\n"
+                "INHERITED_IMPLEMENTATION != GOD_BRAIN_QUALIFICATION\n"
+                "REVIEW_PASS != MERGE_OR_DEPLOY_AUTHORITY\n",
+                encoding="utf-8",
+            )
+            errors = validate_root_surface(root)
+            self.assertTrue(any("observed canonical branch drifted" in error for error in errors))
+
+    def test_observed_head_must_match_v1_snapshot(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "README.md").write_text("# God Brain\n", encoding="utf-8")
+            (root / "CURRENT.md").write_text(
+                "# God Brain — Current State\n"
+                "- observed canonical branch: `main`;\n"
+                "- observed `main` head: `0000000000000000000000000000000000000000`.\n"
+                "CHECKPOINT != CURRENT_TRUTH\n"
+                "REVIEWED_OLD_HEAD != REVIEWED_NEW_HEAD\n"
+                "INHERITED_IMPLEMENTATION != GOD_BRAIN_QUALIFICATION\n"
+                "REVIEW_PASS != MERGE_OR_DEPLOY_AUTHORITY\n",
+                encoding="utf-8",
+            )
+            errors = validate_root_surface(root)
+            self.assertTrue(any("observed main head drifted" in error for error in errors))
+
     def test_missing_literal_repo_path_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
