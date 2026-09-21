@@ -1,0 +1,30 @@
+name: DriftGuard R11 source-admission delta research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_R11_SOURCE_ADMISSION_DELTA_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_R11_SOURCE_ADMISSION_DELTA_V0_1.json"
+      - "tools/validate_god_brain_driftguard_r11_source_admission_delta.py"
+      - "tests/test_validate_god_brain_driftguard_r11_source_admission_delta.py"
+      - ".github/workflows/driftguard-r11-source-admission-delta-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_R11_SOURCE_ADMISSION_DELTA_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_R11_SOURCE_ADMISSION_DELTA_V0_1.json"
+      - "tools/validate_god_brain_driftguard_r11_source_admission_delta.py"
+      - "tests/test_validate_god_brain_driftguard_r11_source_admission_delta.py"
+      - ".github/workflows/driftguard-r11-source-admission-delta-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python tools/validate_god_brain_driftguard_r11_source_admission_delta.py
+      - run: python -m unittest tests.test_validate_god_brain_driftguard_r11_source_admission_delta
+      - run: python -m compileall -q tools tests
+      - run: git diff --check HEAD^ HEAD
