@@ -121,14 +121,28 @@ A successor has been requested using the exact-pointer receipt pattern proven in
 
 Track A remains blocked until that successor is review-clean.
 
-### A5 — root rebinding not yet represented by a current reviewed successor
+### A5 — reviewed root/governance rebinding proposal available
 
-Even if A0–A4 become review-clean, a fresh composite still needs:
+Historical reviewed proposal PR #8 remains a valid design input:
 
-- God Brain-specific `docs/REPOSITORY_MAP.md`;
-- explicit classification around unchanged `WARDEN.md` as HC predecessor governance;
-- cross-file conformance proving no dual/current authority;
-- future machine current pointer only after its canonical targets coexist.
+- exact head: `930392a8edebebf089f98a5e65311bbfe2b12c6a`;
+- exact proposal blob: `f8cc859f6d37a745453d9a6c092a09f31b287562`;
+- durable review: Bus commit `a7d066937dfbf36a03b6e80c7382462fbdcba16a`;
+- disposition: `GOVERNANCE_REBINDING_PROPOSAL_REVIEW_PASS`;
+- current PR state: closed as `HISTORICAL_ONLY / REVIEWED_PREDECESSOR_BASE`.
+
+The proposal already establishes the preferred implementation direction:
+- rebind `docs/REPOSITORY_MAP.md` to God Brain while preserving the HC architecture inventory as substrate;
+- leave `WARDEN.md` unchanged in the first pass;
+- classify `WARDEN.md` as `HC_PREDECESSOR_GOVERNANCE_SOURCE`;
+- use a separate God Brain governance contract;
+- do not import HC authority or qualification by implication.
+
+This is design evidence only.
+
+`PROPOSAL_REVIEW_PASS != REBINDING_IMPLEMENTATION_PASS`
+
+The fresh Track A composite still needs to implement that proposal against then-current `main`, verify cross-file coherence, and receive exact-head review.
 
 Do not merge component branches wholesale.
 
