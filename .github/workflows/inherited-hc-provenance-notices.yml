@@ -1,0 +1,43 @@
+name: Inherited HC provenance notices
+
+on:
+  push:
+    paths:
+      - "WARDEN.md"
+      - "docs/REPOSITORY_MAP.md"
+      - "tools/validate_inherited_hc_notices.py"
+      - "tests/test_validate_inherited_hc_notices.py"
+      - ".github/workflows/inherited-hc-provenance-notices.yml"
+  pull_request:
+    paths:
+      - "WARDEN.md"
+      - "docs/REPOSITORY_MAP.md"
+      - "tools/validate_inherited_hc_notices.py"
+      - "tests/test_validate_inherited_hc_notices.py"
+      - ".github/workflows/inherited-hc-provenance-notices.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+      - name: Validate inherited HC notices
+        working-directory: repo
+        run: python3 tools/validate_inherited_hc_notices.py
+      - name: Run notice regression tests
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_inherited_hc_notices
