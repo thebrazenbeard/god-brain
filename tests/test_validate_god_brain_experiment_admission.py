@@ -60,7 +60,7 @@ class ExperimentAdmissionArchitectureTests(unittest.TestCase):
     def test_internal_confirmation_cannot_claim_e8(self) -> None:
         def mutate(spec):
             spec["modes"]["INTERNAL_CONFIRMATORY"]["absolute_escalation_ceiling"] = "E8"
-        self.assertTrue(any("internal confirmatory ceiling" in e for e in _mutated(mutate)))
+        self.assertTrue(any("internal confirmatory requirements" in e for e in _mutated(mutate)))
 
     def test_external_replication_requires_independent_instrumentation(self) -> None:
         def mutate(spec):
