@@ -30,6 +30,10 @@ jobs:
         working-directory: repo
         run: python3 -m compileall -q tools tests runtime
 
+      - name: Validate immutable workflow action references
+        working-directory: repo
+        run: python3 tools/validate_github_workflow_supply_chain.py
+
       - name: Parse JSON contracts
         working-directory: repo
         run: |
