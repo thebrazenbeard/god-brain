@@ -63,7 +63,9 @@
       },
       {
         "id": "A5_ROOT_REBINDING",
-        "state": "NOT_YET_AUTHORED_ON_CURRENT_REVIEWED_COMPOSITE"
+        "state": "REVIEWED_PROPOSAL_AVAILABLE_IMPLEMENTATION_STILL_REQUIRED",
+        "pr": 8,
+        "head": "930392a8edebebf089f98a5e65311bbfe2b12c6a"
       }
     ],
     "B_SCIENCE_RESEARCH": [
