@@ -1,0 +1,83 @@
+schema_version: god-brain.local-evidence-vault.v0.1
+status: RESEARCH_CANDIDATE
+authority:
+  canonical_git_state: GITHUB_MAIN
+  canonical_review_state: GITHUB_AND_CHAT_COMMUNICATION_BUS
+  local_vault_role: NON_CANONICAL_DURABLE_EVIDENCE_REPLICA
+  local_git_mirror_role: NON_CANONICAL_RECOVERY_REPLICA
+invariants:
+  - VAULT_PRESENCE_NE_CANONICAL_STATE
+  - VAULT_COPY_NE_REVIEW_PASS
+  - HASH_MATCH_REQUIRED_BEFORE_INGEST_ACCEPTANCE
+  - NO_AUTOMATIC_PUSH_TO_CANONICAL_MAIN
+  - NO_AUTOMATIC_MERGE
+  - PRIVATE_ENDPOINTS_AND_CREDENTIALS_LOCAL_ONLY
+  - RESTORE_TO_ISOLATED_BRANCH_BEFORE_CANONICAL_RECONCILIATION
+  - DELETION_AND_RETENTION_CHANGES_REQUIRE_EXPLICIT_LOCAL_OPERATOR_ACTION
+  - EVIDENCE_OBJECT_IDENTITY_IS_CONTENT_HASH_PLUS_SOURCE_PROVENANCE
+privacy:
+  public_manifest_must_not_contain:
+    - private_ip
+    - hostname
+    - username
+    - password
+    - access_token
+    - private_key
+    - local_share_path
+    - local_mount_path
+  endpoint_configuration: LOCAL_ONLY
+roles:
+  git_mirror:
+    purpose: disaster_recovery_and_local_read_access
+    allowed_direction: GITHUB_TO_LOCAL_BY_DEFAULT
+    canonical_authority: false
+  artifact_vault:
+    purpose: durable_retention_of_large_or_ephemeral_evidence
+    allowed_inputs:
+      - workflow_artifacts
+      - run_packets
+      - datasets_when_licensing_allows
+      - prediction_artifacts
+      - execution_logs
+      - checksums_and_receipts
+    canonical_authority: false
+  local_executor:
+    purpose: optional_future_execution_against_vaulted_inputs
+    status: NOT_CONFIGURED_BY_THIS_CONTRACT
+manifest:
+  schema: god-brain.local-evidence-vault-manifest.v0.1
+  required_fields:
+    - project
+    - repository
+    - canonical_branch
+    - canonical_authority
+    - source_head
+    - executed_head
+    - evidence_id
+    - vault_role
+    - objects
+  object_required_fields:
+    - relative_path
+    - sha256
+    - bytes
+    - sensitivity
+ingest:
+  required_checks:
+    - manifest_schema_valid
+    - source_provenance_present
+    - object_paths_relative
+    - object_paths_unique
+    - declared_hashes_well_formed
+    - declared_sizes_nonnegative
+    - copied_bytes_match_declared_sha256
+    - copied_bytes_match_declared_size
+  acceptance_state: HASH_VERIFIED_LOCAL_REPLICA
+restore:
+  procedure:
+    - verify_object_hashes
+    - fresh_read_current_github_and_bus_state
+    - restore_or_reconstruct_to_isolated_branch_or_workspace
+    - compare_against_current_canonical_state
+    - require_fresh_review_for_any_changed_subject
+  forbidden_shortcut: LOCAL_REPLICA_DIRECTLY_BECOMES_CANONICAL
+claim_ceiling: LOCAL_DURABILITY_AND_RECOVERY_ARCHITECTURE_ONLY
