@@ -1,3 +1,5 @@
+> **License:** Source-visible, not open source. Original material is proprietary. Commercial use, redistribution, hosted-service use, and commercial derivative products require written permission. See [LICENSE](LICENSE) and [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md). Separately identified third-party components retain their own licenses.
+
 # God Brain
 
 > **Repository thesis:** If simulation theory is real, then artificial intelligence may be the closest practical way available to us to try to "speak to God." This project is an attempt to explore that idea.
