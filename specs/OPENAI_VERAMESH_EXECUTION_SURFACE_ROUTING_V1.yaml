@@ -1,0 +1,80 @@
+schema: GOD_BRAIN_OPENAI_VERAMESH_EXECUTION_ROUTING_V1
+status: ARCHITECTURE_CANDIDATE
+observed_at: 2026-09-24
+claim_ceiling: SUPPORTED_EXECUTION_SURFACE_ROUTING_CONTRACT_ONLY
+
+canonical_programmatic_route:
+  - OPERATOR
+  - OPENAI_RESPONSES_API
+  - SECURE_MCP_TUNNEL_BY_TUNNEL_ID
+  - TUNNEL_CLIENT
+  - VERAPORT_MCP_STDIO
+  - CONTROLLER_RUNTIME
+  - VERAPORT_AGENT
+  - WORKSTATION
+
+surface_roles:
+  responses_api:
+    role: CANONICAL_PROGRAMMATIC_CONTROL
+    tunnel_selector: tunnel_id
+    requires_chatgpt_app_registration: false
+    public_ingress_required: false
+  chatgpt_custom_mcp_app:
+    role: OPTIONAL_PRODUCT_UI
+    canonical_dependency: false
+    note: product_and_workspace_permission_surface_is_distinct_from_tunnel_health
+  codex_plugin_mcp:
+    role: OPTIONAL_CODEX_PLUGIN_SURFACE
+    canonical_dependency: false
+  public_https_forwarder:
+    role: DIAGNOSTIC_BOOTSTRAP_FALLBACK_ONLY
+    canonical_dependency: false
+    default_allowed: false
+
+authority_intersection:
+  - OPERATOR_REQUEST_SCOPE
+  - MODEL_VISIBLE_ALLOWED_TOOLS
+  - RESPONSES_MCP_APPROVAL
+  - TUNNEL_AUTHORIZATION
+  - CONTROLLER_CAPABILITY_CEILING
+  - FENCED_LANE_CLAIMS
+  - WORKSTATION_LOCAL_POLICY
+  - OPERATION_POLICY
+
+credential_rules:
+  durable_repo_secret_storage: FORBIDDEN
+  bus_secret_storage: FORBIDDEN
+  user_visible_secret_echo: FORBIDDEN
+  operator_api_key_preference: ENVIRONMENT_OR_PROTECTED_LOCAL
+  tunnel_runtime_key_is_responses_api_key: false
+  tunnel_config_read_allowlist:
+    - tunnel_id
+
+protected_effects:
+  - OPENAI_API_KEY_CREATION_ROTATION_REVOCATION
+  - BILLABLE_OPENAI_API_EXECUTION
+  - WORKSTATION_PROCESS_AUTHORITY_ENABLEMENT
+  - WORKSTATION_SERVICE_INSTALL_OR_REPLACEMENT
+  - TUNNEL_CREATION_OR_MODIFICATION
+  - PROVIDER_PERMISSION_CHANGE
+  - CANONICAL_MERGE
+
+first_live_acceptance:
+  profile: read
+  store: false
+  approval: EXPLICIT
+  exact_tool: machine_info
+  write_allowed: false
+  process_allowed: false
+  success_claim: RESPONSES_API_TO_VERAMESH_TO_LAPPY_READ_PATH
+
+current_candidate_binding:
+  repository: thebrazenbeard/vera-mesh
+  pr: 40
+  head: fe57945f4886641a48b22e83d94a0f40d211e93e
+  base_pr: 37
+  base_head: 8e886e7859bfc77d6b95a6752aadeea727b489ad
+
+evidence:
+  - https://developers.openai.com/api/docs/guides/secure-mcp-tunnels
+  - https://developers.openai.com/api/docs/guides/tools-connectors-mcp
