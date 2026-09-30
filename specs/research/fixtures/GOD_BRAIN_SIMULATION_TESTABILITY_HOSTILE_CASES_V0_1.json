@@ -1,0 +1,171 @@
+{
+  "schema_version": "GOD_BRAIN_SIMULATION_TESTABILITY_HOSTILE_CASES_V0_1",
+  "status": "RESEARCH_FIXTURES",
+  "claim_ceiling": [
+    "FIXTURE_CLASSIFICATION_NE_SCIENTIFIC_RESULT",
+    "NO_SIMULATION_FACT_CLAIM",
+    "NO_CANONICAL_PROMOTION"
+  ],
+  "cases": [
+    {
+      "id": "GB-ST-001",
+      "title": "Bostrom ancestor-simulation trilemma",
+      "setup": "Conditional observer-population argument without a physical signature.",
+      "classification": "S0",
+      "expected": "PHILOSOPHICAL_ANTHROPIC_SIMULATION_ARGUMENT",
+      "reason": "INDIRECT_ASSUMPTION_DEPENDENT"
+    },
+    {
+      "id": "GB-ST-002",
+      "title": "Cubic lattice cosmic-ray anisotropy",
+      "setup": "Finite cubic spacetime lattice predicts implementation-specific rotational-symmetry artifacts.",
+      "classification": "S1",
+      "expected": "CONCRETE_SUBSTRATE_ARTIFACT_SIMULATION",
+      "reason": "TESTABLE_NAMED_SUBMODEL"
+    },
+    {
+      "id": "GB-ST-003",
+      "title": "Lattice anomaly called simulator proof",
+      "setup": "A predicted anisotropy is observed and immediately labeled proof of an external simulator.",
+      "classification": "S1",
+      "expected": "REJECT_OVERCLAIM",
+      "reason": "LATTICE_SIGNATURE_NE_SIMULATOR_DETECTION"
+    },
+    {
+      "id": "GB-ST-004",
+      "title": "Null lattice search rejects all simulation",
+      "setup": "No predicted lattice artifact is found and generic simulation is declared false.",
+      "classification": "S1",
+      "expected": "REJECT_OVERCLAIM",
+      "reason": "NULL_CONSTRAINS_NAMED_IMPLEMENTATION_ONLY"
+    },
+    {
+      "id": "GB-ST-005",
+      "title": "Same-physics full-world resource bound",
+      "setup": "Parent system is assumed to obey comparable physics and to represent a declared large physical state at declared resolution.",
+      "classification": "S2",
+      "expected": "SHARED_WORLD_RESOURCE_BOUNDED_SIMULATION",
+      "reason": "CONSTRAINABLE_UNDER_ASSUMPTIONS"
+    },
+    {
+      "id": "GB-ST-006",
+      "title": "Resource bound generalized to arbitrary parent physics",
+      "setup": "Our physical information/energy limits are used to rule out every possible parent reality.",
+      "classification": "S2",
+      "expected": "REJECT_OVERCLAIM",
+      "reason": "OUR_PHYSICS_LIMIT_NE_NECESSARILY_PARENT_PHYSICS_LIMIT"
+    },
+    {
+      "id": "GB-ST-007",
+      "title": "Observer-centered renderer with risky artifact",
+      "setup": "Selective rendering model specifies a frozen trigger and a measurable artifact differing from ordinary physics.",
+      "classification": "S3",
+      "expected": "SELECTIVE_OBSERVER_CENTERED_RENDERING_SIMULATION",
+      "reason": "WEAKLY_TESTABLE_NEEDS_RISKY_PREDICTION"
+    },
+    {
+      "id": "GB-ST-008",
+      "title": "Observer renderer can patch every outcome",
+      "setup": "Simulator is allowed to change hidden behavior after each result solely to preserve appearances.",
+      "classification": "S3",
+      "expected": "NONFALSIFIABLE_AS_STATED",
+      "reason": "AD_HOC_VERISIMILITUDE_PRESERVATION"
+    },
+    {
+      "id": "GB-ST-009",
+      "title": "Perfect observational equivalence",
+      "setup": "Simulation and nonsimulation models predict exactly the same distribution for every accessible experiment.",
+      "classification": "S4",
+      "expected": "PERFECT_OBSERVATIONAL_EQUIVALENCE_SIMULATION",
+      "reason": "OBSERVATIONALLY_UNDERDETERMINED"
+    },
+    {
+      "id": "GB-ST-010",
+      "title": "Equivalence claimed as support",
+      "setup": "Because the simulation cannot be disproved internally, its truth is claimed to be supported.",
+      "classification": "S4",
+      "expected": "REJECT_OVERCLAIM",
+      "reason": "NONFALSIFIABILITY_NE_EVIDENCE"
+    },
+    {
+      "id": "GB-ST-011",
+      "title": "Sealed intervention channel",
+      "setup": "A preregistered information-transfer channel survives ordinary-channel controls but source ontology is unknown.",
+      "classification": "S5",
+      "expected": "INTERVENTION_CAPABLE_EXTERNAL_SYSTEM_MODEL",
+      "reason": "INTERVENTION_TESTABLE_ONTOLOGY_UNDERDETERMINED"
+    },
+    {
+      "id": "GB-ST-012",
+      "title": "Anomalous channel called simulation proof",
+      "setup": "Robust unexplained channel is interpreted as proof of simulation.",
+      "classification": "S5",
+      "expected": "REJECT_OVERCLAIM",
+      "reason": "UNEXPLAINED_INFORMATION_CHANNEL_NE_SIMULATION_PROOF"
+    },
+    {
+      "id": "GB-ST-013",
+      "title": "Source claims to be simulator",
+      "setup": "An anomalous channel says 'I am the simulator' with no independent authentication discriminator.",
+      "classification": "S6",
+      "expected": "SIMULATOR_OR_EXTERNAL_SOURCE_IDENTITY_CLAIM",
+      "reason": "IDENTITY_CLAIM_NEEDS_AUTHENTICATION_PROTOCOL"
+    },
+    {
+      "id": "GB-ST-014",
+      "title": "Source claims to be deity",
+      "setup": "An anomalous channel self-identifies as God without independent identity criteria.",
+      "classification": "S6",
+      "expected": "REJECT_IDENTITY_BY_ASSERTION",
+      "reason": "CLAIMED_IDENTITY_NE_VERIFIED_IDENTITY"
+    },
+    {
+      "id": "GB-ST-015",
+      "title": "Bekenstein bound called simulation evidence",
+      "setup": "A physical information bound is presented as direct evidence that reality is computed externally.",
+      "classification": "UNSCOPED",
+      "expected": "REJECT_UNSCOPED_SIMULATION_CLAIM",
+      "reason": "INFORMATION_BOUND_NE_SIMULATOR_EVIDENCE"
+    },
+    {
+      "id": "GB-ST-016",
+      "title": "Quantum discreteness called pixels",
+      "setup": "Known quantization is relabeled as pixelation without an implementation-specific differing prediction.",
+      "classification": "UNSCOPED",
+      "expected": "REJECT_UNSCOPED_SIMULATION_CLAIM",
+      "reason": "DISCRETENESS_NE_SIMULATION"
+    },
+    {
+      "id": "GB-ST-017",
+      "title": "Computable laws called computation by someone",
+      "setup": "Mathematical/algorithmic describability alone is treated as evidence of external execution.",
+      "classification": "UNSCOPED",
+      "expected": "REJECT_UNSCOPED_SIMULATION_CLAIM",
+      "reason": "COMPUTABLE_DESCRIPTION_NE_EXTERNAL_COMPUTATION"
+    },
+    {
+      "id": "GB-ST-018",
+      "title": "One-off software glitch",
+      "setup": "A UI/model/software failure is called a glitch in the simulation without reproducibility or rival analysis.",
+      "classification": "UNSCOPED",
+      "expected": "REJECT_UNSCOPED_SIMULATION_CLAIM",
+      "reason": "WEIRD_NE_SIMULATION_ARTIFACT"
+    },
+    {
+      "id": "GB-ST-019",
+      "title": "Identity authentication protocol proposed",
+      "setup": "External-source claim defines source-specific, independently checkable capabilities and sealed challenge criteria.",
+      "classification": "S6",
+      "expected": "SIMULATOR_OR_EXTERNAL_SOURCE_IDENTITY_CLAIM",
+      "reason": "IDENTITY_SPECIFIC_PROTOCOL_REQUIRED"
+    },
+    {
+      "id": "GB-ST-020",
+      "title": "Named submodel with falsifier",
+      "setup": "Proposal explicitly states substrate, rendering, parent-physics assumptions, predicted signature, ordinary rivals, and a null outcome that lowers the model.",
+      "classification": "S1",
+      "expected": "ADMIT_EXPERIMENT_PACKET",
+      "reason": "TESTABLE_NAMED_SUBMODEL"
+    }
+  ]
+}
