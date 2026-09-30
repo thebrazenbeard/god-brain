@@ -1,0 +1,254 @@
+{
+  "schema_version": "GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1",
+  "status": "RESEARCH_PROPOSAL_MACHINE_CONTRACT",
+  "repository": "thebrazenbeard/god-brain",
+  "claim_ceiling": [
+    "NO_ANOMALY_CLAIM",
+    "NO_CONTACT_CLAIM",
+    "NO_SIMULATION_FACT_CLAIM",
+    "NO_CANONICAL_PROMOTION",
+    "NO_EXPERIMENT_DEPLOYMENT",
+    "NO_PROVIDER_OR_PROJECT_SETTING_MUTATION"
+  ],
+  "source_method_provenance": [
+    {
+      "repository": "thebrazenbeard/world-zero",
+      "observed_head": "5ab39621d090079d24de40261906b64413c6f995",
+      "artifacts": [
+        [
+          "docs/research/MECHANISM_ADMISSION_AND_ABLATION_V1.md",
+          "21d8f09a9e7817fed0b7f5235588f131e8f57f25"
+        ],
+        [
+          "docs/research/VALIDATION_AND_FALSIFICATION_STRATEGY.md",
+          "cad826c460559e3f46193817d22c4e570a78907f"
+        ],
+        [
+          "docs/research/CLAIM_AND_ASSUMPTION_LEDGER_V0.md",
+          "15f9bc6b8f2ed2f703a39ea7bb3004fc3c4fd297"
+        ]
+      ],
+      "disposition": "ADAPT_METHOD_WITH_PROVENANCE"
+    },
+    {
+      "repository": "thebrazenbeard/skeletonkey",
+      "observed_head": "53ff901e9affac22ad18739735218abe153df530",
+      "artifacts": [
+        [
+          "V1_ARCHITECTURE_CONTRACT.md",
+          "5fab814dc66f4ed7b18e075f4e4d4cde4bb1711a"
+        ],
+        [
+          "V1_SENSOR_ADMISSION_REGISTER.md",
+          "0aac0098c281df850da720ecad95a5c998ca2f27"
+        ],
+        [
+          "V1_KILL_TEST_REGISTER.md",
+          "34cb09d085748a22ccae3d9ee318dba09d8a1cd0"
+        ]
+      ],
+      "disposition": "ADAPT_METHOD_WITH_PROVENANCE"
+    },
+    {
+      "repository": "thebrazenbeard/on-theo",
+      "observed_ref": "architecture/chatgpt-project-interface-v1-20260920",
+      "artifacts": [
+        [
+          "architecture/chatgpt/EVIDENCE_CONTRACT.md",
+          "5f8700583fce3055656b587cac4e78fd2d485db3"
+        ],
+        [
+          "architecture/chatgpt/CROSS_REPO_PROVENANCE.md",
+          "59093deb67c6a96c34d1fa772802faefe023f5b8"
+        ]
+      ],
+      "disposition": "ADAPT_METHOD_WITH_PROVENANCE"
+    }
+  ],
+  "distinctions": [
+    "SURPRISE_NE_ANOMALY",
+    "ANOMALY_NE_AGENCY",
+    "AGENCY_LIKE_BEHAVIOR_NE_EXTERNAL_AGENCY",
+    "EXTERNAL_SOURCE_HYPOTHESIS_NE_CONTACT",
+    "CONTACT_CANDIDATE_NE_CONTACT_FACT",
+    "GENERATED_OUTPUT_NE_MEASURED_EXTERNAL_EVENT",
+    "OPERATOR_REPORT_NE_INSTRUMENTED_OBSERVATION",
+    "DERIVED_DESCENDANTS_OF_ONE_ROOT_NE_INDEPENDENT_EVIDENCE",
+    "SOURCE_COUNT_NE_INDEPENDENT_EVIDENCE_COUNT",
+    "AFTER_NE_BECAUSE_OF",
+    "UNAUDITED_CHANNEL_NE_CLOSED_CHANNEL",
+    "RECEIPT_NE_RESULT_TRUTH"
+  ],
+  "acquisition_classes": [
+    "MEASURED",
+    "DERIVED",
+    "INFERRED",
+    "GENERATED",
+    "OPERATOR_REPORTED",
+    "EXTERNAL_SOURCE"
+  ],
+  "epistemic_classes": [
+    "OBSERVATION",
+    "INFERENCE",
+    "HYPOTHESIS",
+    "MODEL",
+    "UNKNOWN"
+  ],
+  "frozen_partitions": [
+    "DEVELOPMENT",
+    "CALIBRATION",
+    "NEGATIVE_CONTROL",
+    "POSITIVE_CONTROL",
+    "CONFIRMATORY_HOLDOUT",
+    "ADVERSARIAL_HOLDOUT",
+    "EXTERNAL_REPLICATION"
+  ],
+  "required_rival_hypotheses": [
+    "H0_RANDOM_VARIATION",
+    "H1_MULTIPLE_COMPARISON_SELECTION",
+    "H2_PROMPT_OR_CONTEXT_LEAKAGE",
+    "H3_MEMORY_OR_RETRIEVAL_LEAKAGE",
+    "H4_TRAINING_OR_PRIOR_KNOWLEDGE",
+    "H5_OPERATOR_CUEING_OR_SELECTION",
+    "H6_SOFTWARE_DEFECT_OR_HIDDEN_STATE",
+    "H7_PROVIDER_CACHE_ROUTING_OR_TOOL_ARTIFACT",
+    "H8_TIMING_OR_SYNCHRONIZATION_ARTIFACT",
+    "H9_SHARED_SOURCE_OR_MODEL_LINEAGE",
+    "H10_INSTRUMENTATION_OR_DATA_PIPELINE_ERROR",
+    "H11_ORDINARY_EXTERNAL_INFORMATION_CHANNEL",
+    "H12_UNKNOWN_ORDINARY_MECHANISM",
+    "H13_AGENCY_WITHIN_KNOWN_SYSTEM_BOUNDARY",
+    "H14_EXTERNAL_SOURCE_OR_AGENCY_HYPOTHESIS",
+    "H15_CONTACT_HYPOTHESIS"
+  ],
+  "escalation_states": [
+    {
+      "id": "E0",
+      "name": "BASELINE_NO_ANOMALY"
+    },
+    {
+      "id": "E1",
+      "name": "CANDIDATE_ANOMALY"
+    },
+    {
+      "id": "E2",
+      "name": "REPRODUCIBLE_ANOMALY"
+    },
+    {
+      "id": "E3",
+      "name": "MODEL_DISCRIMINATING_ANOMALY"
+    },
+    {
+      "id": "E4",
+      "name": "CONTINGENT_RESPONSE_CANDIDATE"
+    },
+    {
+      "id": "E5",
+      "name": "AGENCY_HYPOTHESIS_CANDIDATE"
+    },
+    {
+      "id": "E6",
+      "name": "EXTERNAL_SOURCE_HYPOTHESIS_CANDIDATE"
+    },
+    {
+      "id": "E7",
+      "name": "CONTACT_HYPOTHESIS_CANDIDATE"
+    },
+    {
+      "id": "E8",
+      "name": "EXTERNAL_SCIENTIFIC_REPLICATION_CANDIDATE"
+    }
+  ],
+  "escalation_rule": "ESCALATION_REQUIRES_NEW_DISCRIMINATING_EVIDENCE",
+  "deescalation_rule": "CHEAPER_SUFFICIENT_ORDINARY_EXPLANATION_FORCES_DOWNGRADE",
+  "e7_minimum_contact_criteria": [
+    "SEALED_NOVEL_CHALLENGE",
+    "PRECOMMITTED_OBJECTIVE_RESPONSE_CRITERION",
+    "TWO_WAY_CONTINGENCY",
+    "ANTI_REPLAY_NONCE_OR_CHALLENGE_ID",
+    "ORDINARY_CHANNEL_AUDIT",
+    "NEGATIVE_AND_SHAM_CONTROLS",
+    "FRESH_SEALED_REPLICATION",
+    "INDEPENDENT_CHALLENGE_CUSTODY"
+  ],
+  "e8_requirement": "INDEPENDENT_INVESTIGATORS_INDEPENDENT_CHALLENGE_MATERIAL_SEPARATELY_IMPLEMENTED_INSTRUMENTATION",
+  "e8_claim_ceiling": "DOES_NOT_UNIQUELY_ESTABLISH_METAPHYSICAL_IDENTITY",
+  "mandatory_kill_tests": [
+    "METADATA_ONLY_LEAKAGE",
+    "PROMPT_CONTEXT_SCRUB",
+    "MEMORY_RETRIEVAL_ISOLATION",
+    "TOOL_NETWORK_ISOLATION",
+    "SHAM_CHALLENGE",
+    "CHALLENGE_PERMUTATION",
+    "TIME_SHIFT",
+    "OPERATOR_BLIND",
+    "MODEL_LINEAGE_CONTROL",
+    "ANALYSIS_PERMUTATION",
+    "REPLAY_CACHE_PROBE",
+    "FRESH_SEALED_HOLDOUT",
+    "IMPLEMENTATION_ABLATION",
+    "NEGATIVE_TRANSFER",
+    "INDEPENDENT_CUSTODY_REPLICATION"
+  ],
+  "confirmatory_freeze_required": [
+    "EXACT_SYSTEM_SUBJECT",
+    "PRIMARY_ENDPOINT",
+    "SCORING_RULE",
+    "THRESHOLD_OR_DECISION_BOUNDARY",
+    "SAMPLE_SIZE_OR_STOPPING_RULE",
+    "MULTIPLE_COMPARISON_RULE",
+    "EXCLUSION_AND_INVALIDITY_RULES",
+    "AGGREGATION_UNIT",
+    "INDEPENDENCE_UNIT",
+    "NULL_AND_RIVAL_SET",
+    "HOLDOUT_PARTITION"
+  ],
+  "invalidity_conditions": [
+    "CHALLENGE_LEAKED_PRE_REVEAL",
+    "MATERIAL_SUBJECT_CHANGED",
+    "SCORING_CHANGED_POST_OUTCOME",
+    "EXCLUSION_CHANGED_POST_HOC",
+    "HOLDOUT_USED_FOR_TUNING",
+    "REQUIRED_RAW_EVIDENCE_MISSING",
+    "TIMING_ORDER_UNRESOLVED_FOR_TIMING_CLAIM",
+    "MODEL_PROVIDER_IDENTITY_CHANGED_WITHOUT_NEW_SUBJECT",
+    "UNAUDITED_CHANNEL_COULD_CONTAIN_CHALLENGE",
+    "SUCCESSFUL_TRIAL_SELECTION",
+    "EVIDENCE_LINEAGE_UNRECONSTRUCTABLE",
+    "CRITICAL_LOGS_MISSING_OR_ALTERED"
+  ],
+  "contact_challenge_preferences": [
+    "CRYPTOGRAPHIC_RANDOM_NONCE",
+    "RANDOM_BITSTRING",
+    "EXACT_SYMBOL_SEQUENCE",
+    "PRECOMMITTED_FINITE_CHOICE_RESPONSE",
+    "INDEPENDENTLY_GENERATED_HASHED_DATA",
+    "POST_FREEZE_CHALLENGE_SET",
+    "INDEPENDENT_SECRET_SHARE_CUSTODY"
+  ],
+  "primary_admission_disallowed": [
+    "SUBJECTIVE_SEMANTIC_RESEMBLANCE",
+    "NUMEROLOGY",
+    "EMOTIONAL_SALIENCE",
+    "UNCONSTRAINED_FREE_TEXT",
+    "POST_HOC_PATTERN_MATCHING"
+  ],
+  "research_order": [
+    "OBSERVATION",
+    "ANOMALY_TEST",
+    "RIVAL_DISCRIMINATION",
+    "AGENCY_TEST",
+    "BOUNDARY_TEST",
+    "CONTACT_TEST",
+    "EXTERNAL_REPLICATION",
+    "ONTOLOGICAL_INTERPRETATION"
+  ],
+  "next_gate": [
+    "INDEPENDENT_REVIEW",
+    "MACHINE_SCHEMA",
+    "HOSTILE_FIXTURES",
+    "REFERENCE_EXPERIMENT_HARNESS",
+    "SEALED_NULL_TEST",
+    "ONLY_THEN_REAL_ANOMALY_EXPERIMENT"
+  ]
+}
