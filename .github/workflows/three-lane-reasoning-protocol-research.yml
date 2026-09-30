@@ -1,0 +1,32 @@
+name: Three-lane reasoning protocol research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.md"
+      - "specs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.json"
+      - "tools/validate_god_brain_three_lane_reasoning_protocol.py"
+      - "tests/test_validate_god_brain_three_lane_reasoning_protocol.py"
+      - ".github/workflows/three-lane-reasoning-protocol-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.md"
+      - "specs/research/GOD_BRAIN_THREE_LANE_REASONING_PROTOCOL_V0_1.json"
+      - "tools/validate_god_brain_three_lane_reasoning_protocol.py"
+      - "tests/test_validate_god_brain_three_lane_reasoning_protocol.py"
+      - ".github/workflows/three-lane-reasoning-protocol-research.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python tools/validate_god_brain_three_lane_reasoning_protocol.py
+      - run: python -m unittest tests.test_validate_god_brain_three_lane_reasoning_protocol
+      - run: python -m compileall -q tools tests
+      - run: git diff --check HEAD^ HEAD
