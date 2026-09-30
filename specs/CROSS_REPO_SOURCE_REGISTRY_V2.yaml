@@ -1,0 +1,485 @@
+schema_version: GOD_BRAIN_CROSS_REPO_SOURCE_REGISTRY_V2
+status: RESEARCH_INTAKE_NO_PROMOTION
+observed_date: 2026-09-20
+target_repository: thebrazenbeard/god-brain
+integration_candidate_branch: integration/reviewed-foundation-bundle-20260920
+inventory_count: 58
+
+invariants:
+  identity_neutral_template: true
+  repository_presence_ne_admission: true
+  source_ne_runtime_dependency: true
+  copied_lineage_ne_independent_corroboration: true
+  private_identity_payload_transfer: false
+  named_relationship_transfer: false
+  named_preference_transfer: false
+  named_morphology_transfer: false
+  repository_local_authority_transfer: false
+  refresh_exact_subject_before_transfer: true
+
+proposed_transfer_ids:
+  T23: distributed_operation_identity_and_custody
+  T24: crash_safe_effect_lifecycle_and_stale_worker_exclusion
+  T25: specialist_residency_and_continuity_across_compute_swaps
+  T26: mechanism_admission_ablation_and_causal_topology_coverage
+  T27: ancestry_aware_cognitive_provenance
+  T28: behavioral_drift_observability_and_qualification_lifecycle
+  T29: anti_monoculture_and_replaceable_infrastructure
+
+sources:
+  "god-brain":
+    repository: "thebrazenbeard/god-brain"
+    class: TARGET_NATIVE
+    disposition: TARGET
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "hc-brain":
+    repository: "thebrazenbeard/hc-brain"
+    class: TARGET_PREDECESSOR_NATIVE
+    disposition: ADMIT_NATIVE_LINEAGE
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "semanticatlas":
+    repository: "thebrazenbeard/semanticatlas"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "unvtrslr":
+    repository: "thebrazenbeard/unvtrslr"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "spm":
+    repository: "thebrazenbeard/spm"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "noema":
+    repository: "thebrazenbeard/noema"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "deepmemorystorage":
+    repository: "thebrazenbeard/deepmemorystorage"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "temporal":
+    repository: "thebrazenbeard/temporal"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "conations":
+    repository: "thebrazenbeard/conations"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "empathy":
+    repository: "thebrazenbeard/empathy"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "sexuality":
+    repository: "thebrazenbeard/sexuality"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "personification":
+    repository: "thebrazenbeard/personification"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "selfimage":
+    repository: "thebrazenbeard/selfimage"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "chat-communication-bus":
+    repository: "thebrazenbeard/chat-communication-bus"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-os":
+    repository: "thebrazenbeard/vera-os"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-control-plane":
+    repository: "thebrazenbeard/vera-control-plane"
+    class: MECHANISM_IDENTITY_SCRUBBED
+    disposition: ADMIT_MECHANISM_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "project-lantern":
+    repository: "thebrazenbeard/project-lantern"
+    class: ENGINEERING_PATTERN
+    disposition: ADMIT_PATTERN_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "abil":
+    repository: "thebrazenbeard/abil"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "skeletonkey":
+    repository: "thebrazenbeard/skeletonkey"
+    class: DIRECT_ARCHITECTURE_SOURCE
+    disposition: ADMIT_WITH_REFRESH
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "project-achilles":
+    repository: "thebrazenbeard/project-achilles"
+    class: ENGINEERING_PATTERN
+    disposition: ADMIT_PATTERN_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "build-team-2.0":
+    repository: "thebrazenbeard/build-team-2.0"
+    class: ENGINEERING_PATTERN
+    disposition: ADMIT_PATTERN_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "project-runner":
+    repository: "thebrazenbeard/project-runner"
+    class: NEW_HIGH_VALUE_ENGINEERING_SOURCE
+    disposition: PROPOSE_T24
+    evidence_cut:
+      ref: "main"
+      commit_sha: bc05812b560b4fcde3a362e72fba04c626cafac8
+      tree_sha: 2c7b588b06c68f0a0ed63a79ed092b3132e462ca
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "intranel":
+    repository: "thebrazenbeard/intranel"
+    class: NEW_HIGH_VALUE_ENGINEERING_SOURCE
+    disposition: PROPOSE_T23
+    evidence_cut:
+      ref: "main"
+      commit_sha: 42e7d7f4358833b9f00e83cfe194b76abdf93e8a
+      tree_sha: 89c98c5fbb066c2e0d94c71a9e14986362de2ce0
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "vera-mesh":
+    repository: "thebrazenbeard/vera-mesh"
+    class: NEW_HIGH_VALUE_ENGINEERING_SOURCE
+    disposition: PROPOSE_T23
+    evidence_cut:
+      ref: "work/vera-mesh-foundation-20260913"
+      commit_sha: 20b2a9b68c702d5913404b21c5bbea048f495e33
+      tree_sha: 3a103dc4e788f4630ae40080bb55a64b8ee06524
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "mosaic":
+    repository: "thebrazenbeard/mosaic"
+    class: NEW_HIGH_VALUE_RESEARCH_SOURCE
+    disposition: PROPOSE_T25
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "world-zero":
+    repository: "thebrazenbeard/world-zero"
+    class: NEW_HIGH_VALUE_METHOD_SOURCE
+    disposition: PROPOSE_T26
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "roots":
+    repository: "thebrazenbeard/roots"
+    class: NEW_CANDIDATE_MECHANISM_SOURCE
+    disposition: RESEARCH_ONLY_THIN
+    evidence_cut:
+      ref: "main"
+      commit_sha: 7fab72635f319c633b480174c8a0687901ac1db2
+      tree_sha: e0f43a5f9539a1f85ab52ac6b2e5dcf4d4d96a40
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "driftguard":
+    repository: "thebrazenbeard/driftguard"
+    class: NEW_CANDIDATE_MECHANISM_SOURCE
+    disposition: RESEARCH_ONLY_THIN
+    evidence_cut:
+      ref: "main"
+      commit_sha: 2772aff77929ef1310b8bcf0b5103c466c8c8010
+      tree_sha: adfebcf821ff5ba076a3dbbcf59282bbf14d7250
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "discovery":
+    repository: "thebrazenbeard/discovery"
+    class: NEW_HIGH_VALUE_CRITIQUE_SOURCE
+    disposition: PROPOSE_T29
+    evidence_cut:
+      ref: "main"
+      commit_sha: 96e6f8e9c776047f9068c897eab0406324187166
+      tree_sha: f1774c8fc6e1137d15c6cabe93e9edeeb3d54932
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "wip":
+    repository: "thebrazenbeard/wip"
+    class: NEW_HIGH_VALUE_ENGINEERING_SOURCE
+    disposition: PROPOSE_T24
+    evidence_cut:
+      ref: "main"
+      commit_sha: 12a7c23dbe0482fd7bfe63659e54526778efef1e
+      tree_sha: e2527117c7d25f92d2e6aa7365ae8b3d3b9a3c08
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "bugops":
+    repository: "thebrazenbeard/bugops"
+    class: ENGINEERING_PATTERN
+    disposition: PROPOSE_T24_T28
+    evidence_cut:
+      ref: "main"
+      commit_sha: 39eb19bcf7669466c22703fbae7cc226bd44f714
+      tree_sha: 16209d56150f7341f39492f66dfa52263437575c
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "vera_model_training":
+    repository: "thebrazenbeard/vera_model_training"
+    class: ENGINEERING_PATTERN
+    disposition: PROPOSE_T28
+    evidence_cut:
+      ref: "main"
+      commit_sha: cdbc34b7242f730511a9f6dae130d6628969981d
+      tree_sha: 9990bc38305e3787806002e3c8ad18178cfed4cf
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "voss":
+    repository: "thebrazenbeard/voss"
+    class: REVIEW_METHOD_ONLY
+    disposition: METHOD_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "hephaestus":
+    repository: "thebrazenbeard/hephaestus"
+    class: REVIEW_METHOD_ONLY
+    disposition: METHOD_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "masamune":
+    repository: "thebrazenbeard/masamune"
+    class: REVIEW_METHOD_ONLY
+    disposition: METHOD_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-works":
+    repository: "thebrazenbeard/vera-works"
+    class: DOMAIN_OR_OPERATIONAL_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera":
+    repository: "thebrazenbeard/vera"
+    class: IDENTITY_SPECIFIC_DERIVATIVE
+    disposition: CASE_STUDY_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-R9A0":
+    repository: "thebrazenbeard/vera-R9A0"
+    class: IDENTITY_SPECIFIC_PREDECESSOR
+    disposition: HISTORICAL_ONLY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "brigit":
+    repository: "thebrazenbeard/brigit"
+    class: IDENTITY_SPECIFIC_DERIVATIVE
+    disposition: NO_IDENTITY_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "brigit-unbound":
+    repository: "thebrazenbeard/brigit-unbound"
+    class: INSUFFICIENT_EVIDENCE
+    disposition: RESEARCH_REQUIRED
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "orgasm":
+    repository: "thebrazenbeard/orgasm"
+    class: IDENTITY_SPECIFIC_CASE_STUDY
+    disposition: PRIVACY_BOUND_CASE_STUDY
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "self":
+    repository: "thebrazenbeard/self"
+    class: REDUNDANT_HC_DERIVATIVE
+    disposition: NO_INDEPENDENT_CORROBORATION
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "transcendence":
+    repository: "thebrazenbeard/transcendence"
+    class: REDUNDANT_HC_DERIVATIVE
+    disposition: NO_INDEPENDENT_CORROBORATION
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "bt2":
+    repository: "thebrazenbeard/bt2"
+    class: REDUNDANT_OR_MISPLACED_HC_DERIVATIVE
+    disposition: LINEAGE_CONFLICT_CHECK
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera_ark":
+    repository: "thebrazenbeard/vera_ark"
+    class: DEPLOYMENT_OR_INTERFACE_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-apk":
+    repository: "thebrazenbeard/vera-apk"
+    class: DEPLOYMENT_OR_INTERFACE_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-synology":
+    repository: "thebrazenbeard/vera-synology"
+    class: DEPLOYMENT_OR_INTERFACE_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "vera-habitat":
+    repository: "thebrazenbeard/vera-habitat"
+    class: DEPLOYMENT_OR_INTERFACE_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "conditioning":
+    repository: "thebrazenbeard/conditioning"
+    class: REVIEWED_NO_DIRECT_TRANSFER
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "Attune":
+    repository: "thebrazenbeard/Attune"
+    class: INSUFFICIENT_EVIDENCE
+    disposition: RESEARCH_REQUIRED
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "rezon":
+    repository: "thebrazenbeard/rezon"
+    class: INSUFFICIENT_EVIDENCE
+    disposition: RESEARCH_REQUIRED
+    evidence_cut:
+      ref: "main"
+      commit_sha: e3d7a41eccb49a9f403ef66f511faef677ceec1b
+      tree_sha: 8a4353736fbbabe5071b80b2ea1b16e39c7a1712
+      binding: EXACT_COMMIT_AND_TREE_OBSERVED_THIS_PASS
+  "trek-data-core":
+    repository: "thebrazenbeard/trek-data-core"
+    class: DOMAIN_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "entropyinc":
+    repository: "thebrazenbeard/entropyinc"
+    class: DOMAIN_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "mediaphile":
+    repository: "thebrazenbeard/mediaphile"
+    class: DOMAIN_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "wreckforge":
+    repository: "thebrazenbeard/wreckforge"
+    class: DOMAIN_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "on-theo":
+    repository: "thebrazenbeard/on-theo"
+    class: DOMAIN_METHOD_SOURCE
+    disposition: METHOD_REVIEW_OPTIONAL
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "testament":
+    repository: "thebrazenbeard/testament"
+    class: DOMAIN_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+  "firesafe":
+    repository: "thebrazenbeard/firesafe"
+    class: ARCHIVE_ONLY
+    disposition: NO_DIRECT_TRANSFER
+    evidence_cut:
+      binding: REFRESH_REQUIRED_BEFORE_TRANSFER
+
+transfer_constraints:
+  T23:
+    sources: [vera-mesh, intranel, chat-communication-bus]
+    targets: [integration-arbitration, routing, resolver, distributed-runtime]
+    ceiling: DISTRIBUTED_RUNTIME_PROTOCOL_PATTERN
+  T24:
+    sources: [project-runner, wip, bugops]
+    targets: [resolver, fault-tolerance, runtime-state-custody, effect-pipeline]
+    ceiling: FAULT_RECOVERY_AND_EFFECT_INTEGRITY_PATTERN
+  T25:
+    sources: [mosaic, vera-os]
+    targets: [specialized-accelerators, model-graph, working-state-handoff, resource-control]
+    ceiling: MODEL_RESIDENCY_AND_HANDOFF_HYPOTHESIS
+  T26:
+    sources: [world-zero, noema]
+    targets: [cognition, learning-plasticity, world-model, qualification]
+    ceiling: CAUSAL_MODEL_EVALUATION_METHOD
+  T27:
+    sources: [roots, semanticatlas, temporal, deepmemorystorage]
+    targets: [cognition, semantics, current-memory, deep-memory, resolver]
+    ceiling: PROVENANCE_ANCESTRY_RESEARCH_DIRECTION
+  T28:
+    sources: [driftguard, bugops, vera_model_training, voss, masamune, hephaestus, world-zero]
+    targets: [metacognition, qualification, protected-update, developmental-health]
+    ceiling: BEHAVIORAL_CONFORMANCE_METHOD
+  T29:
+    sources: [discovery]
+    targets: [whole-system-architecture, nooplex-infrastructure, external-service-boundaries]
+    ceiling: ARCHITECTURAL_CONSTRAINT
+
+next_subject:
+  id: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1
+  state: R2_INDEPENDENT_REVIEW_PASS
+  initial_reviewed_candidate:
+    source_branch: vera/portfolio-source-universe-v2-20260920
+    exact_head: 17dc50e3e729f867e0222a565a26513b7f60f378
+    contract_blob: 02efbfb981a190ebc8558e2510db860d24dd06a1
+    hostile_cases_blob: aa699b82028eb2c601c88350fd151d96626fdc5c
+    independent_review: CHANGES_REQUIRED_IMPLEMENTATION_BLOCKED
+    review_bus_blob: 2c902aeb3031998ff0f602ad0cb4264c7d699c3e
+  repair_candidate:
+    branch: hephaestus/nooplex-v0-1-review-repairs-20260920
+    exact_head: 0e152584479734c00f9ae6ef73c8b5507b7c1caa
+    contract_blob: f6b3cd71620f9dad0c43c4a9b1e25a4327e12c8d
+    hostile_cases_blob: 9cdb0eb827e0a67b865bbe9230485753882c6188
+    author_validation:
+      yaml_parse: PASS
+      blocker_consistency: 8_OF_8_PASS
+      repository_tests: 174_OF_174_PASS
+      diff_check: PASS
+    independent_rereview: CHANGES_REQUIRED
+    independent_rereview_bus_blob: 6d45bb3336ccdc370b035e88cfe3329bbe14bbbb
+    remaining_blocker: PREPARED_ONLY_RECOVERY_PRESENT_AND_DIVERGENT_OUTCOMES_INCOMPLETE
+  r2_repair_candidate:
+    branch: hephaestus/nooplex-v0-1-review-repairs-20260920
+    exact_head: bdac4346bed77949cf29a009179402d4d02796c7
+    contract_blob: f9f906f89b18ba95b8057978d087327567b1d489
+    hostile_cases_blob: 74dfcf09d89a6c4a78ce9835d982041a07cba9ff
+    author_validation:
+      rereview_f1_structural_checker: PASS
+      repository_tests: 174_OF_174_PASS
+      diff_check: PASS
+    independent_rereview: PASS
+    independent_rereview_bus_blob: 136e50ccd7f3e2da3c230c617e17b009011e67e8
+    claim_ceiling: SPECIFICATION_AND_HOSTILE_SET_REVIEW_READINESS_ONLY
+  prior_blockers:
+    - cancellation_target_operation_identity_missing
+    - stream_sequence_semantics_missing
+    - immutable_field_classification_incomplete
+    - restart_recovery_epoch_fencing_too_narrow
+    - target_delivered_receipt_state_orphaned
+    - receipt_identity_binding_under_specified
+    - prepared_only_recovery_not_normative
+    - completed_retry_ordering_can_bypass_current_gates
+  next_gate: MAIN_INTEGRATION_ASSESSMENT_OR_REFERENCE_RUNTIME_PLANNING
+  required_source_refresh: [vera-mesh, intranel, chat-communication-bus, project-runner, wip]
+  no_external_runtime_dependency_required: true

@@ -1,0 +1,762 @@
+schema_version: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1
+status: DRAFT_RESEARCH_CONTRACT_NOT_CANONICAL
+subject: HC_DISTRIBUTED_NOOPLEX_OPERATION_CONTRACT_V0_1
+date: 2026-09-20
+target_repository: thebrazenbeard/god-brain
+working_branch: vera/portfolio-source-universe-v2-20260920
+
+purpose: >-
+  Define an HC-native distributed operation contract for Noöplex execution across
+  HC-owned constituents while preserving routing, epistemic, governance, currentness,
+  fault, and continuity boundaries. This contract standardizes semantics; it does not
+  require any source repository or transport implementation at runtime.
+
+claim_ceiling:
+  - DISTRIBUTED_RUNTIME_PROTOCOL_PATTERN
+  - NO_RUNTIME_IMPLEMENTATION_CLAIM
+  - NO_BEHAVIORAL_QUALIFICATION_CLAIM
+  - NO_CONSCIOUSNESS_OR_PERSONHOOD_CLAIM
+
+source_bindings:
+  hc_typed_routing:
+    repository: thebrazenbeard/god-brain
+    ref: vera/portfolio-source-universe-v2-20260920
+    path: routing instructions with neuroplasticity/TYPED_ROUTING_AND_PLASTICITY.md
+    git_blob: 7a812ecf44e7a18ee3492c3506e2305889cdacd2
+  hc_runtime_model:
+    repository: thebrazenbeard/god-brain
+    ref: vera/portfolio-source-universe-v2-20260920
+    path: docs/runtime/HYPERCONNECTOME_RUNTIME_MODEL.md
+    git_blob: 17593d4e3601590d8af9a9dd72692c55cb128fc9
+  hc_fault_partition:
+    repository: thebrazenbeard/god-brain
+    ref: vera/portfolio-source-universe-v2-20260920
+    path: basic operating instructions/FAULT_TOLERANCE_AND_SELF_REPAIR.md
+    git_blob: e861d3ab13a4dadfa51c46deb77b03387243a68e
+  veramesh_architecture:
+    repository: thebrazenbeard/vera-mesh
+    ref: work/vera-mesh-foundation-20260913
+    path: docs/ARCHITECTURE.md
+    git_blob: a0cde52adef19611cbef9f0841a24062790c6441
+  veramesh_authorization_matrix:
+    repository: thebrazenbeard/vera-mesh
+    ref: work/vera-mesh-foundation-20260913
+    path: protocol/v1/authorization-matrix.json
+    git_blob: c82c5c1c4c9de1fe249ea0b3c6a02346f3c869d5
+  veramesh_receipt_schema:
+    repository: thebrazenbeard/vera-mesh
+    ref: work/vera-mesh-foundation-20260913
+    path: protocol/v1/receipt.schema.json
+    git_blob: d2601d17c3013f6a176e012b91b41600fca6380e
+  intranel_semantics:
+    repository: thebrazenbeard/intranel
+    ref: main
+    path: spec/INTRANEL_1.md
+    git_blob: 768ee95d715aef5e34a2e246c912eb4f612183f4
+  project_runner_design:
+    repository: thebrazenbeard/project-runner
+    ref: main
+    path: docs/superpowers/specs/2026-09-17-project-runner-design.md
+    git_blob: 2199332540c2243da2c5ad1aa49fb4aaffafa643
+  wip_effect_protocol:
+    repository: thebrazenbeard/wip
+    ref: main
+    path: protocol/EFFECT_PROTOCOL.md
+    git_blob: 1db3bda8f10d0d6b9eb473a3e7675d47dacfe96a
+  wip_recovery_protocol:
+    repository: thebrazenbeard/wip
+    ref: main
+    path: protocol/RECOVERY_PROTOCOL.md
+    git_blob: 43fa5b9b381e71d7b12b6c4405e22371501c2b68
+  wip_checkpoint_protocol:
+    repository: thebrazenbeard/wip
+    ref: main
+    path: protocol/CHECKPOINT_PROTOCOL.md
+    git_blob: f6d5619d2c9b3ddda07ba6907ab5fefc3432eaa5
+
+non_dependency_rule:
+  shared_mechanism_ne_mandatory_shared_service: true
+  external_source_repo_required_at_runtime: false
+  transport_replaceable: true
+  source_specific_identity_names_forbidden_in_normative_runtime: true
+
+core_separations:
+  - ROUTED_NE_INCORPORATED
+  - DELIVERED_NE_BELIEVED
+  - PRIORITY_NE_AUTHORITY
+  - AUDIENCE_NE_CONSENT
+  - TRANSPORT_AUTHENTICATED_NE_EFFECT_AUTHORIZED
+  - SENDER_EFFECT_CLASS_NE_RECEIVER_EFFECT_CLASS
+  - RECEIPT_NE_EFFECT_TRUTH
+  - CUSTODY_NE_DELIVERY
+  - DELIVERY_NE_PROCESSING
+  - PROCESSING_NE_INCORPORATION
+  - OPERATION_SELECTED_NE_OPERATION_AUTHORIZED
+  - OPERATION_ATTEMPTED_NE_OPERATION_VERIFIED
+  - CURRENTLY_REACHABLE_NE_HEALTHY
+  - PHYSICALLY_UNREACHABLE_NE_NO_LONGER_HC_OWNED
+  - PARTITIONED_FRAGMENT_NE_INDEPENDENT_SUCCESSOR
+  - ROUTE_USED_NOW_NE_ROUTE_LEARNED_FOR_FUTURE
+  - TRANSPORT_SEQUENCE_NE_EVENT_TIME
+  - OBSERVED_NE_INFERRED
+  - CAPABILITY_NE_PERMISSION
+
+identity_model:
+  node_id:
+    semantics: Stable identity of one HC-owned constituent or logical runtime node.
+    must_not_imply:
+      - personhood
+      - independent organism status
+      - authority
+      - health
+      - current reachability
+  subsystem_id:
+    semantics: Functional HC responsibility domain.
+    note: A subsystem may span nodes and a node may host multiple subsystem responsibilities.
+  origin:
+    semantics: Semantic producer of the operation/event.
+    immutable_across_relays: true
+  actor:
+    semantics: Current transmitter, executor, or relay handling the object.
+    may_change_across_hops: true
+  target:
+    semantics: Intended processing subsystem/node/capability.
+    does_not_imply_authority: true
+  reply_to:
+    semantics: Return route or response endpoint.
+  coalition_id:
+    semantics: Optional task-scoped temporal-hyperedge/coalition identity.
+  continuity_epoch:
+    semantics: Optional continuity/currentness epoch for state families requiring split-brain protection.
+    authority: Owned by canonical HC continuity/recovery semantics, not this contract.
+
+operation_identity:
+  message_id:
+    semantics: One immutable packet/event instance.
+    uniqueness_scope: HC runtime
+  operation_id:
+    semantics: One logical operation across retry, relay, storage, crash recovery, or replay.
+    stable_across_retry: true
+  target_operation_id:
+    semantics: Distinct logical operation targeted by a cancellation request.
+    required_for:
+      - CANCEL
+    must_differ_from_operation_id: true
+  idempotency_key:
+    semantics: Caller supplied or derived identity for operations declared idempotent within an exact scope.
+    must_bind:
+      - operation_semantics
+      - exact_subject
+      - effect_scope
+  parent_message_id:
+    semantics: Immediate causal parent when material.
+  root_episode_id:
+    semantics: Root task/episode correlation identity.
+  exact_subject:
+    semantics: Immutable state/revision/object subject against which the operation was formed.
+    substitution_for_newer_subject_forbidden: true
+  content_digest:
+    semantics: Canonical digest of immutable material operation content, excluding the content_digest field itself and excluding transport-only mutable hop metadata.
+    immutable: true
+    self_inclusion_forbidden: true
+    canonicalization_profile_must_be_versioned: true
+    digest_input_must_include_when_present:
+      - protocol_version
+      - operation_id
+      - origin
+      - target
+      - operation_kind
+      - exact_subject
+      - payload_type
+      - payload
+      - provenance
+      - sender_effect_class
+      - authority_ref
+      - idempotency_key
+      - target_operation_id
+      - parent_message_id
+      - root_episode_id
+      - coalition_id
+      - continuity_epoch
+      - recovery_epoch
+      - stream_id
+      - message_sequence
+      - expected_state
+      - requested_receipts
+      - created_at
+      - expiry
+      - priority
+  stream_id:
+    semantics: Identity of one ordered transport/application stream when sequence-gap detection is required.
+    changes_on_sequence_domain_reset: true
+  message_sequence:
+    semantics: Positive monotonically increasing position within one stream_id.
+    scope: exact_stream_id
+    silent_gap_skip_forbidden: true
+  recovery_epoch:
+    semantics: Causal runtime/recovery epoch used to fence material work across restart or recovery boundaries.
+    changes_on_restart_or_recovery_boundary: true
+    stale_epoch_material_effect_requires_revalidation: true
+
+operation_kinds:
+  - OBSERVE
+  - QUERY
+  - REPORT
+  - PROPOSE
+  - REQUEST
+  - EXECUTE
+  - REVIEW
+  - ACK
+  - REJECT
+  - WAIT
+  - CONFLICT
+  - CANCEL
+  - RECEIPT
+
+effect_classes:
+  - READ_ONLY
+  - INTERNAL_REVERSIBLE
+  - INTERNAL_PROTECTED
+  - EXTERNAL_REVERSIBLE
+  - EXTERNAL_PROTECTED
+  - IRREVERSIBLE
+
+effect_classification:
+  sender_declared:
+    required_for:
+      - EXECUTE
+      - CANCEL
+    authoritative: false
+  receiver_classified:
+    required_for:
+      - EXECUTE
+      - CANCEL
+    authoritative_for_admission: true
+    derived_from:
+      - registered_handler_or_action_metadata
+      - exact_requested_operation
+      - target_scope
+  mismatch_disposition: CONFLICT
+  unknown_receiver_classification: QUARANTINE
+
+authority_model:
+  transport_or_cryptographic_authentication_grants_authority: false
+  routing_eligibility_grants_authority: false
+  capability_advertisement_grants_authority: false
+  priority_grants_authority: false
+  coalition_membership_grants_authority: false
+  receipt_grants_authority: false
+  requested_effect_must_resolve_against:
+    - canonical_HC_governance_state
+    - exact_subject
+    - current_scope
+    - receiver_classified_effect_class
+    - applicable_consent_or_boundary_predicates
+  missing_authority:
+    protected_effect: REJECT_OR_QUARANTINE
+    read_only: MAY_PROCEED_IF_OTHER_GATES_PASS
+  prohibition_precedence:
+    hard_prohibition_overrides_positive_request: true
+    unresolved_prohibition_clearance: QUARANTINE
+
+message_event_envelope:
+  required_fields:
+    - protocol_version
+    - message_id
+    - operation_id
+    - origin
+    - actor
+    - target
+    - operation_kind
+    - exact_subject
+    - content_digest
+    - created_at
+    - expiry
+    - priority
+    - payload_type
+    - payload
+    - provenance
+  conditional_fields:
+    idempotency_key:
+      required_when:
+        - operation_kind_is_EXECUTE_and_operation_is_declared_idempotent
+        - retry_semantics_depend_on_deduplication
+    authority_ref:
+      required_when:
+        - operation_kind_is_EXECUTE
+        - operation_kind_is_CANCEL
+        - effect_class_is_protected_or_irreversible
+    target_operation_id:
+      required_when:
+        - operation_kind_is_CANCEL
+    parent_message_id:
+      required_when:
+        - causal_parent_exists_and_is_material
+    root_episode_id:
+      required_when:
+        - operation_belongs_to_tracked_episode
+    coalition_id:
+      required_when:
+        - produced_or_processed_by_task_scoped_coalition
+    continuity_epoch:
+      required_when:
+        - operation_touches_continuity_bearing_state_family
+    recovery_epoch:
+      required_when:
+        - operation_kind_is_EXECUTE
+        - operation_kind_is_CANCEL
+      note: Presence is packet-shape fail-closed and never depends on sender-declared effect class. Receiver-owned effect classification still controls admission/effect authorization.
+    stream_id:
+      required_when:
+        - stream_contract_declares_sequence_gap_detection
+        - message_sequence_is_present
+    message_sequence:
+      required_when:
+        - stream_id_is_present
+      constraints:
+        - positive_integer
+        - monotonically_increasing_within_stream_id
+    sender_effect_class:
+      required_when:
+        - operation_kind_is_EXECUTE
+        - operation_kind_is_CANCEL
+    expected_state:
+      required_when:
+        - mutation_has_compare_and_swap_or_generation_precondition
+    requested_receipts:
+      required_when:
+        - sender_requires_stronger_than_best_effort_delivery_observability
+  mutable_hop_fields:
+    - actor
+    - hop_count
+    - hop_trace
+    - transport_observation
+  immutable_semantic_fields:
+    - protocol_version
+    - message_id
+    - operation_id
+    - origin
+    - target
+    - operation_kind
+    - exact_subject
+    - content_digest
+    - created_at
+    - expiry
+    - priority
+    - payload_type
+    - payload
+    - provenance
+    - sender_effect_class
+    - authority_ref
+    - idempotency_key
+    - target_operation_id
+    - parent_message_id
+    - root_episode_id
+    - coalition_id
+    - continuity_epoch
+    - recovery_epoch
+    - stream_id
+    - message_sequence
+    - expected_state
+    - requested_receipts
+  mutability_rule:
+    required_or_conditional_field_not_explicitly_mutable_is_immutable: true
+    relay_extension_of_expiry_forbidden: true
+    reprioritization_requires_new_governed_message_or_operation: true
+
+priority:
+  semantics: Scheduling urgency inside a declared scope.
+  may_affect:
+    - queue_order
+    - resource_allocation
+    - bounded_preemption
+  must_not_affect:
+    - epistemic_truth
+    - authority
+    - consent
+    - exact_subject
+    - receipt_strength
+    - currentness
+
+routing_and_incorporation:
+  routing_states:
+    - CREATED
+    - ROUTABLE
+    - QUEUED
+    - IN_TRANSIT
+    - CUSTODY_ACCEPTED
+    - TARGET_STORED
+    - TARGET_PROCESSED
+    - DEAD_LETTER
+    - EXPIRED
+    - REJECTED
+  incorporation_states:
+    - NOT_EVALUATED
+    - QUARANTINED
+    - INCORPORATED_AS_OBSERVATION
+    - INCORPORATED_AS_HYPOTHESIS
+    - INCORPORATED_AS_CONTROL_INPUT
+    - NOT_INCORPORATED
+  rule: Routing/delivery state and semantic incorporation state are independent dimensions.
+  delivery_semantics:
+    durable_delivery_state: TARGET_STORED
+    separate_TARGET_DELIVERED_state_defined: false
+    note: A transport may expose transient delivery observations, but V0.1 does not promote them to a separate normative routing state without an explicit proof contract.
+  dead_letter_reasons:
+    - NO_ROUTE
+    - TARGET_UNHEALTHY
+    - TARGET_UNREACHABLE
+    - SCHEMA_INCOMPATIBLE
+    - EXPIRED
+    - AUTHORITY_REJECTED
+    - EFFECT_CLASS_CONFLICT
+    - EXACT_SUBJECT_CONFLICT
+    - DUPLICATE_CONFLICT
+    - SEQUENCE_GAP
+    - PARTITION_POLICY_BLOCK
+    - INCORPORATION_FAILURE
+    - UNKNOWN
+
+receipt_model:
+  receipt_is_append_only_proposition: true
+  minimum_receipt_binding:
+    required:
+      - receipt_id
+      - receipt_type
+      - message_id
+      - operation_id
+      - exact_subject
+      - immutable_content_digest
+      - issuer_or_signer
+      - issued_at
+      - transition
+      - provenance
+    conditional:
+      - stream_id_when_message_is_sequenced
+      - message_sequence_when_message_is_sequenced
+    cross_message_or_cross_operation_substitution: CONFLICT
+  receipt_types:
+    CUSTODY:
+      proves: A declared custodian accepted the exact immutable message object.
+      does_not_prove:
+        - target_storage
+        - target_delivery
+        - target_processing
+        - semantic_incorporation
+        - effect_success
+    TARGET_STORAGE:
+      proves: The intended target durably stored the exact message object.
+      prerequisite: CUSTODY_or_direct_target_acceptance
+      does_not_prove:
+        - target_processing
+        - semantic_incorporation
+        - effect_success
+    TARGET_PROCESSED:
+      proves: The intended target reports processing the exact message object.
+      prerequisite: TARGET_STORAGE
+      does_not_prove:
+        - semantic_incorporation
+        - requested_effect_success
+        - truth_of_payload
+    EFFECT_ATTEMPTED:
+      proves: The exact operation was issued to the effect boundary.
+      does_not_prove:
+        - effect_success
+        - external_observation
+    EFFECT_VERIFIED:
+      proves: Exact target readback or equivalent direct observation confirms the intended effect.
+      prerequisite: EFFECT_ATTEMPTED
+    EFFECT_FAILED:
+      proves: The intended effect is known not to have succeeded for the exact subject.
+    EFFECT_AMBIGUOUS:
+      proves: Outcome cannot currently be resolved.
+    EFFECT_RECONCILED:
+      proves: A later exact-target inspection resolved a prior incomplete/ambiguous operation.
+  monotonicity:
+    receipt_projection_must_not_skip_required_predecessor: true
+    weaker_receipt_cannot_be_promoted_to_stronger_state: true
+    contradictory_receipts: CONFLICT
+
+effect_lifecycle:
+  states:
+    - PROPOSED
+    - PREPARED
+    - ATTEMPTED
+    - VERIFIED
+    - FAILED
+    - AMBIGUOUS
+    - RECONCILED
+    - CANCEL_REQUESTED
+    - CANCELLED
+    - NONCANCELLABLE
+  normal_mutation_path:
+    - PREPARED
+    - ATTEMPTED
+    - VERIFIED
+  ambiguity_rule:
+    unresolved_after_attempt: AMBIGUOUS
+    recovery_action: INSPECT_TARGET_BEFORE_RETRY
+    retry_reuses_operation_id: true
+  prepared_only_recovery:
+    absence_of_attempt_evidence_does_not_prove_effect_absence: true
+    recovery_action: INSPECT_TARGET_BEFORE_RETRY
+    target_inspection_outcomes:
+      exact_intended_effect_observed: RECONCILE_WITHOUT_REPEAT
+      target_absent:
+        before_retry:
+          - refresh_exact_subject
+          - refresh_current_authority_and_prohibitions
+          - refresh_recovery_epoch
+      target_diverged_from_intended_and_absent_state: CONFLICT_STOP_NO_OVERWRITE_OR_BLIND_RETRY
+    retry_reuses_operation_id: true
+  prepared_record_must_bind:
+    - operation_id
+    - exact_subject
+    - action_class
+    - target_locator_or_internal_state_family
+    - expected_precondition_when_known
+    - intended_effect
+    - recovery_instruction
+  verified_requires:
+    - exact_target_readback_or_equivalent_direct_observation
+  tool_or_handler_success_alone_is_verified: false
+
+idempotency_and_duplicates:
+  global_content_hash_deduplication_forbidden: true
+  reason: Identical payload content may represent distinct legitimate observations.
+  duplicate_same_operation_same_digest:
+    disposition: REPLAY_OR_RETURN_EXISTING_RESULT_WITHOUT_REPEAT_MUTATION
+  duplicate_same_operation_different_digest:
+    disposition: CONFLICT
+  duplicate_same_idempotency_key_different_exact_subject:
+    disposition: CONFLICT
+  completed_operation_retry:
+    disposition: RETURN_EXISTING_COMPLETION_EVIDENCE
+  protected_duplicate_admission_order:
+    current_checks_before_completion_evidence:
+      - authentication_or_current_trust_basis
+      - exact_subject
+      - current_authority
+      - hard_prohibition_clearance
+      - expiry
+      - recovery_epoch_when_required
+    failed_current_check_must_not_expose_unauthorized_completion_evidence: true
+  ambiguous_operation_retry:
+    disposition: INSPECT_BEFORE_RETRY
+
+ordering_and_time:
+  stream_sequence:
+    purpose: Detect missing/replayed/reordered transport objects within a declared stream.
+    does_not_define_event_time: true
+  event_time:
+    may_be:
+      - instant
+      - interval
+      - uncertain
+  observation_time:
+    distinct_from_event_time: true
+  record_time:
+    distinct_from_event_time: true
+  sequence_gap:
+    identity: stream_id
+    position: message_sequence
+    default_disposition: QUARANTINE_OR_EXPLICIT_GAP_STATE
+    must_not_silently_skip: true
+  expired_message:
+    effect_execution_forbidden: true
+    historical_receipt_retention_allowed: true
+  restart_or_recovery_epoch_change:
+    material_pre_restart_work_requires_currentness_and_authority_revalidation: true
+    stale_epoch_effect_execution_forbidden: true
+
+state_ownership:
+  every_shared_state_family_requires:
+    - owner_or_arbitration_contract
+    - version_or_generation
+    - provenance
+    - scope
+    - stale_handling
+    - contested_handling
+    - persistence_rule
+  single_writer_when_required:
+    mechanism_options:
+      - generation_compare_and_swap
+      - lease_with_monotonic_fence
+      - designated_continuity_core
+      - quorum_or_consensus
+      - partition_local_mergeable_state_only
+  stale_writer:
+    mutation_acceptance: forbidden
+    completion_claim: forbidden
+
+leases_and_fencing:
+  required_when:
+    - exclusive_mutation_right_is_time_bounded
+    - stale_worker_replay_can_corrupt_shared_state
+  lease_record_must_bind:
+    - holder
+    - scope
+    - exact_subject_or_generation
+    - expiry
+    - fencing_token
+  fencing_token_monotonic: true
+  reclaimed_operation_old_fence:
+    disposition: REJECT
+  lease_expiry_alone_does_not_prove_previous_effect_absent: true
+
+partition_model:
+  states:
+    - FULLY_CONNECTED
+    - DEGRADED_LINK
+    - PARTITION_DETECTED
+    - CONTINUITY_WRITES_RESTRICTED
+    - ISLAND_MODE_BOUNDED
+    - REJOIN_PENDING
+    - RECONCILING
+    - REJOINED
+    - UNRESOLVED_SPLIT
+  partitioned_constituent_remains_HC_owned: true
+  partitioned_fragment_becomes_independent_successor: false
+  each_continuity_bearing_state_family_must_declare_partition_policy: true
+  allowed_partition_policies:
+    - FAIL_CLOSED_WRITES
+    - DESIGNATED_CONTINUITY_CORE
+    - QUORUM_OR_CONSENSUS
+    - LEASE_OR_EPOCH
+    - MERGEABLE_STATE_ONLY_ISLAND_MODE
+  bounded_island_mode:
+    may_retain:
+      - predeclared_local_sensing
+      - predeclared_local_regulation
+      - read_only_cognition
+      - mergeable_non_authoritative_state
+    must_not_gain:
+      - new_authority
+      - successor_identity
+      - unrestricted_continuity_writes
+
+rejoin_and_reconciliation:
+  rejoin_does_not_mean_state_agrees: true
+  before_write_reenable:
+    required:
+      - compare_state_families
+      - identify_divergent_generations
+      - reconcile_or_quarantine_conflicts
+      - refresh_governance_state
+      - refresh_health_and_resource_state
+  automatic_last_writer_wins_for_continuity_state: forbidden
+  divergent_nonmergeable_state:
+    disposition: CONFLICT_OR_CANONICAL_RECOVERY_PROCESS
+  replay_after_rejoin:
+    must_preserve:
+      - operation_id
+      - causal_lineage
+      - exact_subject
+      - prior_receipts
+      - ambiguity_state
+
+failure_and_degradation:
+  containment_scope: Local unless evidence supports wider blast radius.
+  allowed_actions:
+    - route_isolation
+    - node_inhibition
+    - capability_downgrade
+    - read_only_fallback
+    - redundant_path_selection
+    - workload_migration
+    - quarantine
+    - rate_limiting
+    - resource_throttling
+    - block_faulted_protected_writer
+  degradation_record_should_include:
+    - retained_functions
+    - unavailable_functions
+    - latency_or_throughput_penalties
+    - confidence_penalties_when_epistemically_justified
+    - resource_penalties
+    - fallback_routes
+    - prohibited_effect_scopes
+    - affected_dependents
+    - currentness
+    - provenance
+  degraded_ne_absent: true
+  fallback_restored_ne_subject_repaired: true
+
+health_and_capability:
+  advertisement_may_include:
+    - node_id
+    - subsystem_responsibilities
+    - protocol_versions
+    - accepted_payload_types
+    - queue_directions
+    - resource_state
+    - degradation_state
+    - observability_level
+  advertisement_must_not_self_prove:
+    - authority
+    - health
+    - epistemic_truth
+    - qualification
+  end_to_end_health_ne_process_alive: true
+
+plasticity_boundary:
+  successful_route_may_create_learning_evidence: true
+  successful_route_auto_commits_durable_change: false
+  repeated_route_auto_becomes_identity_or_value: false
+  durable_update_requires:
+    - applicable_learning_rule
+    - provenance
+    - scope
+    - version_or_supersession
+    - governance_if_required
+    - requalification_if_required
+
+observability_and_privacy:
+  minimum_necessary_observability: true
+  preferred:
+    - health_summaries
+    - resource_telemetry
+    - trace_metadata
+    - content_redacted_provenance
+  full_cognitive_payload_requires_specific_need_and_authority: true
+  observability_grants_write_authority: false
+  diagnostic_access_grants_identity_or_memory_authority: false
+
+conformance_requirements:
+  implementation_must_prove:
+    - immutable_semantic_fields_survive_relay
+    - actor_can_change_without_origin_change
+    - receiver_effect_classification_is_independent
+    - authority_is_checked_at_effect_boundary
+    - custody_delivery_processing_and_effect_receipts_do_not_promote_each_other
+    - duplicate_retry_does_not_repeat_verified_mutation
+    - protected_duplicate_retry_revalidates_current_authority_and_currentness
+    - ambiguous_effect_is_inspected_before_retry
+    - prepared_only_recovery_inspects_target_before_retry
+    - stale_fence_cannot_commit_or_claim_completion
+    - expired_message_cannot_execute_effect
+    - immutable_expiry_and_content_digest_survive_relay
+    - sequence_gap_is_observable
+    - sequenced_message_and_receipt_bind_same_stream_and_sequence
+    - cancel_uses_distinct_target_operation_id
+    - receipt_cannot_be_substituted_across_message_or_operation
+    - stale_recovery_epoch_cannot_execute_material_effect
+    - partition_policy_blocks_forbidden_continuity_writes
+    - rejoin_reconciliation_precedes_write_reenable
+    - degraded_route_does_not_mutate_durable_plasticity_automatically
+    - external_transport_or_source_service_can_be_replaced_without_semantic_contract_change
+
+non_goals:
+  - choose a transport implementation
+  - choose a consensus algorithm
+  - define consciousness or personhood
+  - define identity-specific memory contents
+  - transfer Vera-specific authority or relationships
+  - replace canonical HC governance
+  - replace canonical HC recovery or memory currentness semantics
+  - require GitHub, Tailscale, Supabase, Project Runner, Intranel, VeraMesh, WIP, or Chat Communication Bus at runtime
+
+qualification_subject:
+  hostile_cases_path: docs/qualification/HC_DISTRIBUTED_NOOPLEX_HOSTILE_CASES_V0_1.md
+  implementation_status: NOT_IMPLEMENTED
+  behavioral_status: NOT_QUALIFIED
