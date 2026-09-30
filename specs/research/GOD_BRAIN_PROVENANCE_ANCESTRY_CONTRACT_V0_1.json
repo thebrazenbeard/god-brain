@@ -1,0 +1,224 @@
+{
+  "schema_version": "GOD_BRAIN_PROVENANCE_ANCESTRY_CONTRACT_V0_1",
+  "status": "RESEARCH_PROPOSAL_MACHINE_CONTRACT",
+  "repository": "thebrazenbeard/god-brain",
+  "claim_ceiling": [
+    "NO_CANONICAL_PROMOTION",
+    "NO_RUNTIME_IMPLEMENTATION_CLAIM",
+    "NO_COMPLETE_LINEAGE_CAPTURE_CLAIM",
+    "NO_INDEPENDENCE_PROOF_FROM_UNKNOWN_ANCESTRY",
+    "NO_PRIVATE_PAYLOAD_TRANSFER"
+  ],
+  "source_provenance": [
+    {
+      "repository": "thebrazenbeard/roots",
+      "observed_head": "7fab72635f319c633b480174c8a0687901ac1db2",
+      "artifacts": [
+        [
+          "README.md",
+          "a1783c610866124870e35dc68a5ed822368cbdd1"
+        ]
+      ],
+      "disposition": "CONCEPT_SEED_ONLY"
+    },
+    {
+      "repository": "thebrazenbeard/semanticatlas",
+      "observed_head": "5669a727b870a490ecee748b2cd712a2fc4a54c5",
+      "artifacts": [
+        [
+          "README.md",
+          "64e567868f6a893538f155f76ec32afb5432310e"
+        ],
+        [
+          "vocabulary/relation_types_v0.1.json",
+          "d25570c9fbcd9fbf80b118e42e9c1496fc5f7d76"
+        ],
+        [
+          "schemas/semantic_atlas_v0.1.schema.json",
+          "f4592c2ea71896296df29cb821dde317e086f77a"
+        ]
+      ],
+      "disposition": "ADAPT_WITH_PROVENANCE"
+    },
+    {
+      "repository": "thebrazenbeard/temporal",
+      "observed_head": "02f1091d359866e1b1b645b87651750c726a6396",
+      "artifacts": [
+        [
+          "README.md",
+          "91691b5e34d8af8e738fb62ff7cfa26e49bf6ca5"
+        ],
+        [
+          "temporal.py",
+          "f47895bb142a1d48f2981726ef10680974f0b9df"
+        ]
+      ],
+      "disposition": "ADAPT_WITH_PROVENANCE"
+    },
+    {
+      "repository": "thebrazenbeard/deepmemorystorage",
+      "observed_head": "e734f760373bdce887d22791964838700a668ce4",
+      "artifacts": [
+        [
+          "README.md",
+          "377cb979174e57394f3c0bf9d685054030579b4d"
+        ],
+        [
+          "schema/DEEP_MEMORY_RECORD_V1.md",
+          "8f7488afcc3505664944cd561dc84d55dbd03e0b"
+        ]
+      ],
+      "disposition": "ADAPT_MECHANISM_ONLY"
+    }
+  ],
+  "invariants": [
+    "SOURCE_PRESENCE_NE_ADMISSION",
+    "SOURCE_COUNT_NE_INDEPENDENT_CORROBORATION",
+    "SAME_ROOT_DESCENDANTS_NE_INDEPENDENT_EVIDENCE",
+    "TEMPORAL_ORDER_NE_CAUSAL_DERIVATION",
+    "DERIVED_FROM_NE_EQUIVALENT_TO",
+    "REFINES_NE_SUPERSEDES",
+    "RETRIEVED_NE_INCORPORATED",
+    "HISTORICAL_EVIDENCE_NE_CURRENT_AUTHORITY",
+    "SEMANTIC_SIMILARITY_NE_PROVENANCE_EQUIVALENCE",
+    "PRIVACY_PROJECTION_NE_RAW_SOURCE",
+    "RUNTIME_ID_NE_IDENTITY",
+    "PROVENANCE_NE_TRUTH",
+    "PROVENANCE_NE_AUTHORITY",
+    "PROVENANCE_NE_CURRENTNESS",
+    "DISTINCT_INSTANCE_NE_INDEPENDENT_EVIDENCE",
+    "RETRIEVAL_REUSE_NE_NEW_EVIDENCE",
+    "REVIEW_OF_PARENT_HEAD_NE_REVIEW_OF_CHILD_HEAD",
+    "PROVENANCE_POINTER_NE_PAYLOAD_TRANSFER",
+    "DERIVED_FROM_REPO_NE_RUNTIME_COUPLED_TO_REPO",
+    "PROVENANCE_DAG_NE_ALL_RELATIONS_GRAPH"
+  ],
+  "artifact_classes": [
+    "SOURCE_INSTANCE",
+    "EVIDENCE_SPAN",
+    "PROJECTION",
+    "DERIVED_ARTIFACT",
+    "INTERPRETATION",
+    "PROPOSITION",
+    "MEMORY_RECORD",
+    "REVIEW_RECORD"
+  ],
+  "provenance_edge_types": [
+    "EXTRACTED_FROM",
+    "DERIVED_FROM",
+    "SUMMARIZED_FROM",
+    "TRANSLATED_FROM",
+    "NORMALIZED_FROM",
+    "REDACTED_FROM",
+    "COPIED_FROM",
+    "GENERATED_USING",
+    "AGGREGATED_FROM",
+    "RETRIEVED_FROM",
+    "REPLAYED_FROM"
+  ],
+  "lifecycle_edge_types": [
+    "REFINES",
+    "SUPERSEDES",
+    "RETRACTS",
+    "EVOLVED_FROM"
+  ],
+  "epistemic_edge_types": [
+    "SUPPORTS",
+    "CONTRADICTS"
+  ],
+  "identity_edge_types": [
+    "EQUIVALENT_TO",
+    "DISTINCT_FROM",
+    "RELATED_NOT_EQUIVALENT"
+  ],
+  "temporal_edge_types": [
+    "PRECEDES",
+    "FOLLOWS"
+  ],
+  "ancestry_rules": {
+    "provenance_edges_form_dag": true,
+    "semantic_or_lifecycle_edges_do_not_implicitly_enter_provenance_dag": true,
+    "root_definition": "represented provenance ancestor with no represented provenance parent",
+    "unknown_root_state": "ANCESTRY_UNKNOWN",
+    "unknown_ancestry_does_not_imply_independence": true
+  },
+  "independence_states": [
+    "INDEPENDENT_WITHIN_DECLARED_SCOPE",
+    "PARTIALLY_SHARED_ANCESTRY",
+    "SHARED_ROOT_ANCESTRY",
+    "COMMON_GENERATION_CHANNEL",
+    "ANCESTRY_UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "independence_rules": [
+    "DIFFERENT_ARTIFACT_IDS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_REPOSITORY_PATHS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_CHATS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_AGENTS_DO_NOT_IMPLY_INDEPENDENCE",
+    "DIFFERENT_MODELS_DO_NOT_IMPLY_INDEPENDENCE_WITHOUT_RELEVANT_ANCESTRY_ANALYSIS",
+    "DIFFERENT_TIMESTAMPS_DO_NOT_IMPLY_INDEPENDENCE",
+    "PROJECTION_AND_SOURCE_ARE_NOT_INDEPENDENT",
+    "CORRECTION_AND_CORRECTED_SOURCE_ARE_NOT_INDEPENDENT_SUPPORT",
+    "COPIED_DOWNSTREAM_CITATION_IS_NOT_SECOND_SOURCE",
+    "INDEPENDENCE_IS_CLAIM_RELATIVE"
+  ],
+  "currentness_states": [
+    "CURRENT",
+    "HISTORICAL",
+    "SUPERSEDED",
+    "RETRACTED",
+    "UNRESOLVED",
+    "UNKNOWN"
+  ],
+  "required_artifact_fields": [
+    "artifact_id",
+    "artifact_class",
+    "created_at",
+    "currentness",
+    "privacy_class",
+    "parents",
+    "root_family_ids",
+    "independence_state",
+    "provenance_ceiling"
+  ],
+  "parent_edge_required_fields": [
+    "artifact_id",
+    "edge_type"
+  ],
+  "invalid_states": [
+    "SELF_PARENT_EDGE",
+    "UNKNOWN_PROVENANCE_EDGE_TYPE",
+    "DUPLICATE_PARENT_EDGE",
+    "PROVENANCE_CYCLE",
+    "INDEPENDENT_STATE_WITH_SHARED_MATERIAL_ROOT",
+    "PRIVACY_PROJECTION_CLAIMS_RAW_SOURCE_IDENTITY",
+    "EXACT_EVIDENCE_SPAN_WITHOUT_SOURCE_VERSION_REPRESENTATION_BINDING",
+    "DERIVED_ARTIFACT_WITHOUT_TRANSFORM_IDENTITY",
+    "REVIEW_VERDICT_BOUND_TO_DIFFERENT_HEAD",
+    "SUPERSESSION_DELETES_PREDECESSOR_HISTORY",
+    "CHRONOLOGY_USED_AS_CAUSAL_PROOF",
+    "UNKNOWN_ANCESTRY_PROMOTED_TO_INDEPENDENT"
+  ],
+  "privacy_rules": {
+    "provenance_without_payload_transfer_allowed": true,
+    "opaque_source_id_allowed": true,
+    "content_digest_allowed_when_safe": true,
+    "privacy_projection_must_retain_lineage": true,
+    "digest_match_does_not_grant_publication_authority": true
+  },
+  "query_contracts": [
+    "WHY_DO_WE_BELIEVE_THIS",
+    "WHERE_DID_THIS_COME_FROM",
+    "ARE_THESE_RESULTS_INDEPENDENT",
+    "WHAT_CHANGED",
+    "IS_THIS_CURRENT"
+  ],
+  "next_gate": [
+    "INDEPENDENT_REVIEW",
+    "MACHINE_SCHEMA",
+    "HOSTILE_ANCESTRY_FIXTURES",
+    "REFERENCE_GRAPH_EVALUATOR",
+    "CROSS_REPO_TRANSFER_RECEIPT_INTEGRATION"
+  ],
+  "source_provenance_verification_receipt": "state/research/provenance/GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1.json"
+}

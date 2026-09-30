@@ -1,0 +1,73 @@
+{
+  "schema_version": "GOD_BRAIN_SOURCE_PROVENANCE_POINTER_RECEIPT_V0_1",
+  "status": "EXACT_GIT_POINTERS_VERIFIED",
+  "verification_surface": "GITHUB_EXACT_HEAD_FILE_READBACK",
+  "verified_on": "2026-09-20",
+  "payload_copied": false,
+  "currentness_claim": false,
+  "entries": [
+    {
+      "repository": "thebrazenbeard/roots",
+      "observed_head": "7fab72635f319c633b480174c8a0687901ac1db2",
+      "path": "README.md",
+      "git_blob": "a1783c610866124870e35dc68a5ed822368cbdd1",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/semanticatlas",
+      "observed_head": "5669a727b870a490ecee748b2cd712a2fc4a54c5",
+      "path": "README.md",
+      "git_blob": "64e567868f6a893538f155f76ec32afb5432310e",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/semanticatlas",
+      "observed_head": "5669a727b870a490ecee748b2cd712a2fc4a54c5",
+      "path": "vocabulary/relation_types_v0.1.json",
+      "git_blob": "d25570c9fbcd9fbf80b118e42e9c1496fc5f7d76",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/semanticatlas",
+      "observed_head": "5669a727b870a490ecee748b2cd712a2fc4a54c5",
+      "path": "schemas/semantic_atlas_v0.1.schema.json",
+      "git_blob": "f4592c2ea71896296df29cb821dde317e086f77a",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/temporal",
+      "observed_head": "02f1091d359866e1b1b645b87651750c726a6396",
+      "path": "README.md",
+      "git_blob": "91691b5e34d8af8e738fb62ff7cfa26e49bf6ca5",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/temporal",
+      "observed_head": "02f1091d359866e1b1b645b87651750c726a6396",
+      "path": "temporal.py",
+      "git_blob": "f47895bb142a1d48f2981726ef10680974f0b9df",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/deepmemorystorage",
+      "observed_head": "e734f760373bdce887d22791964838700a668ce4",
+      "path": "README.md",
+      "git_blob": "377cb979174e57394f3c0bf9d685054030579b4d",
+      "result": "MATCH"
+    },
+    {
+      "repository": "thebrazenbeard/deepmemorystorage",
+      "observed_head": "e734f760373bdce887d22791964838700a668ce4",
+      "path": "schema/DEEP_MEMORY_RECORD_V1.md",
+      "git_blob": "8f7488afcc3505664944cd561dc84d55dbd03e0b",
+      "result": "MATCH"
+    }
+  ],
+  "claim_ceiling": [
+    "POINTERS_MATCH_AT_VERIFICATION",
+    "NO_PAYLOAD_TRANSFER",
+    "NO_CURRENTNESS_CLAIM",
+    "NO_INDEPENDENCE_CLAIM",
+    "NO_AUTHORITY_OR_CANONICAL_PROMOTION"
+  ]
+}

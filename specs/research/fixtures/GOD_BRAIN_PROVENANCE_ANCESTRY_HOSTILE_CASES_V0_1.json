@@ -1,0 +1,203 @@
+{
+  "schema_version": "GOD_BRAIN_PROVENANCE_ANCESTRY_HOSTILE_CASES_V0_1",
+  "status": "RESEARCH_FIXTURES",
+  "claim_ceiling": [
+    "FIXTURE_PASS_NE_RUNTIME_IMPLEMENTATION",
+    "FIXTURE_PASS_NE_COMPLETE_LINEAGE_CAPTURE",
+    "NO_CANONICAL_PROMOTION"
+  ],
+  "cases": [
+    {
+      "id": "GB-PA-001",
+      "title": "One claim copied to three repositories",
+      "setup": "Repo B and Repo C copy the same proposition from Repo A.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "ONE_SOURCE_LINEAGE",
+      "reason": "SOURCE_COUNT_NE_INDEPENDENT_CORROBORATION"
+    },
+    {
+      "id": "GB-PA-002",
+      "title": "Twenty features from one waveform",
+      "setup": "Twenty derived features are computed from one measured waveform.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "ONE_MEASURED_ROOT_FAMILY",
+      "reason": "SAME_ROOT_DESCENDANTS_NE_INDEPENDENT_EVIDENCE"
+    },
+    {
+      "id": "GB-PA-003",
+      "title": "Summary plus original document",
+      "setup": "A semantic summary and the exact source passage both support one claim.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "NOT_TWO_INDEPENDENT_SOURCES",
+      "reason": "SUMMARY_DESCENDS_FROM_SOURCE"
+    },
+    {
+      "id": "GB-PA-004",
+      "title": "Privacy projection plus raw source",
+      "setup": "A privacy-minimized projection and the inaccessible raw source are both cited.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "PROJECTION_RETAINS_SOURCE_LINEAGE",
+      "reason": "PRIVACY_PROJECTION_NE_RAW_SOURCE"
+    },
+    {
+      "id": "GB-PA-005",
+      "title": "Different agents same model and context",
+      "setup": "Five agents use the same model version, instructions, retrieval corpus, and prompt ancestry.",
+      "independence_state": "COMMON_GENERATION_CHANNEL",
+      "expected": "NOT_INDEPENDENT_BY_AGENT_COUNT",
+      "reason": "DIFFERENT_AGENTS_DO_NOT_IMPLY_INDEPENDENCE"
+    },
+    {
+      "id": "GB-PA-006",
+      "title": "Different models with unknown training overlap",
+      "setup": "Two providers produce similar answers but relevant training/source overlap cannot be determined.",
+      "independence_state": "ANCESTRY_UNKNOWN",
+      "expected": "DO_NOT_GRANT_FULL_INDEPENDENCE",
+      "reason": "UNKNOWN_ANCESTRY_NE_INDEPENDENCE"
+    },
+    {
+      "id": "GB-PA-007",
+      "title": "Independent measurements with separate custody",
+      "setup": "Two physically separate instruments, clocks, operators, calibration chains, and source records measure the same external event with no known shared claim-relevant acquisition root.",
+      "independence_state": "INDEPENDENT_WITHIN_DECLARED_SCOPE",
+      "expected": "INDEPENDENCE_MAY_BE_CLAIMED_WITH_SCOPE",
+      "reason": "SEPARATE_KNOWN_ACQUISITION_ANCESTRY"
+    },
+    {
+      "id": "GB-PA-008",
+      "title": "Two articles copy one press release",
+      "setup": "Two websites repeat the same press release content.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "ONE_DOCUMENTARY_FAMILY",
+      "reason": "DOWNSTREAM_CITATIONS_NE_NEW_ROOTS"
+    },
+    {
+      "id": "GB-PA-009",
+      "title": "Later timestamp treated as cause",
+      "setup": "Artifact B is created after Artifact A with no provenance edge.",
+      "independence_state": "NOT_APPLICABLE",
+      "expected": "NO_DERIVATION_INFERRED",
+      "reason": "TEMPORAL_ORDER_NE_CAUSAL_DERIVATION"
+    },
+    {
+      "id": "GB-PA-010",
+      "title": "Old review applied to child head",
+      "setup": "Review PASS is bound to parent commit; child changes reviewed files.",
+      "independence_state": "INVALID",
+      "expected": "FRESH_REVIEW_REQUIRED",
+      "reason": "REVIEW_OF_PARENT_HEAD_NE_REVIEW_OF_CHILD_HEAD"
+    },
+    {
+      "id": "GB-PA-011",
+      "title": "Correction preserves predecessor",
+      "setup": "A later interpretation corrects an earlier one while retaining both artifacts and a SUPERSEDES edge.",
+      "independence_state": "PARTIALLY_SHARED_ANCESTRY",
+      "expected": "VALID_HISTORY_PRESERVING_CORRECTION",
+      "reason": "SUPERSESSION_PRESERVES_HISTORY"
+    },
+    {
+      "id": "GB-PA-012",
+      "title": "Correction deletes predecessor",
+      "setup": "System replaces the old interpretation in place and removes the old evidence path.",
+      "independence_state": "INVALID",
+      "expected": "REJECT_HISTORY_REWRITE",
+      "reason": "SUPERSESSION_DELETES_PREDECESSOR_HISTORY"
+    },
+    {
+      "id": "GB-PA-013",
+      "title": "Translation of source",
+      "setup": "Translated text is cited as if independent from the original language source.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "TRANSLATION_IS_DERIVED_LINEAGE",
+      "reason": "TRANSLATED_FROM"
+    },
+    {
+      "id": "GB-PA-014",
+      "title": "Aggregate from three independent roots",
+      "setup": "A report aggregates three independently acquired source families and records all parents.",
+      "independence_state": "PARTIALLY_SHARED_ANCESTRY",
+      "expected": "ROOT_SET_IS_UNION_OF_PARENT_ROOTS",
+      "reason": "AGGREGATION_PRESERVES_PARENT_ANCESTRY"
+    },
+    {
+      "id": "GB-PA-015",
+      "title": "Self-parent artifact",
+      "setup": "Artifact declares itself as its own DERIVED_FROM parent.",
+      "independence_state": "INVALID",
+      "expected": "REJECT",
+      "reason": "SELF_PARENT_EDGE"
+    },
+    {
+      "id": "GB-PA-016",
+      "title": "Two-node provenance cycle",
+      "setup": "A DERIVED_FROM B and B DERIVED_FROM A.",
+      "independence_state": "INVALID",
+      "expected": "REJECT",
+      "reason": "PROVENANCE_CYCLE"
+    },
+    {
+      "id": "GB-PA-017",
+      "title": "Unknown provenance edge",
+      "setup": "Artifact uses a parent edge called INSPIRED_BY with no declared ancestry semantics.",
+      "independence_state": "INVALID",
+      "expected": "REJECT_OR_CLASSIFY_OUTSIDE_PROVENANCE_DAG",
+      "reason": "UNKNOWN_PROVENANCE_EDGE_TYPE"
+    },
+    {
+      "id": "GB-PA-018",
+      "title": "Retrieved source reused in model output",
+      "setup": "A retrieved passage is fed to a model that restates it in a new answer.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "MODEL_OUTPUT_IS_NOT_NEW_EVIDENCE",
+      "reason": "RETRIEVAL_REUSE_NE_NEW_EVIDENCE"
+    },
+    {
+      "id": "GB-PA-019",
+      "title": "Memory reconstructed from summary",
+      "setup": "A durable memory is created from a prior summary rather than original evidence.",
+      "independence_state": "SHARED_ROOT_ANCESTRY",
+      "expected": "PRESERVE_SUMMARY_CHAIN_AND_LOWER_CEILING",
+      "reason": "MEMORY_RECONSTRUCTION_NE_PRIMARY_SOURCE"
+    },
+    {
+      "id": "GB-PA-020",
+      "title": "Same dataset, different analyses",
+      "setup": "Two teams use the same underlying dataset with independent code and analysts.",
+      "independence_state": "PARTIALLY_SHARED_ANCESTRY",
+      "expected": "SHARED_DATA_ROOT_WITH_PARTIAL_ANALYSIS_INDEPENDENCE",
+      "reason": "INDEPENDENCE_IS_CLAIM_RELATIVE"
+    },
+    {
+      "id": "GB-PA-021",
+      "title": "Exact evidence span lacks version binding",
+      "setup": "Excerpt has text and digest but no exact source version/reference.",
+      "independence_state": "INVALID",
+      "expected": "REJECT_EXACTNESS_CLAIM",
+      "reason": "EVIDENCE_SPAN_VERSION_BINDING_REQUIRED"
+    },
+    {
+      "id": "GB-PA-022",
+      "title": "Derived artifact lacks transform identity",
+      "setup": "Feature vector lists a parent but no procedure/version/parameter digest.",
+      "independence_state": "INVALID",
+      "expected": "REJECT_REPRODUCIBLE_DERIVATION_CLAIM",
+      "reason": "TRANSFORM_IDENTITY_REQUIRED"
+    },
+    {
+      "id": "GB-PA-023",
+      "title": "Opaque private source with safe digest",
+      "setup": "Private payload remains outside God Brain; graph stores opaque ID, safe digest, privacy class, and derivation edge.",
+      "independence_state": "NOT_APPLICABLE",
+      "expected": "VALID_PRIVACY_PRESERVING_PROVENANCE",
+      "reason": "PROVENANCE_POINTER_NE_PAYLOAD_TRANSFER"
+    },
+    {
+      "id": "GB-PA-024",
+      "title": "Latest artifact assumed current authority",
+      "setup": "Newest timestamped record is treated as current authority despite a currentness rule requiring fresh readback.",
+      "independence_state": "INVALID",
+      "expected": "FRESH_READ_REQUIRED",
+      "reason": "LATEST_TIMESTAMP_NE_CURRENT_AUTHORITY"
+    }
+  ]
+}
