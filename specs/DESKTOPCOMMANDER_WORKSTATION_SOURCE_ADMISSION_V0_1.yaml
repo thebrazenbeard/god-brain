@@ -1,0 +1,67 @@
+schema_version: GOD_BRAIN_EXTERNAL_SOURCE_ADMISSION_V0_1
+status: RESEARCH_CANDIDATE
+admission_id: SRC_DESKTOPCOMMANDER_WORKSTATION_AGENT
+source:
+  repository: wonderwhy-er/DesktopCommanderMCP
+  exact_head: 550a0b3e31da18b7cf25e87ed840e3d953b6da42
+  license: MIT
+  license_blob: cc6ce4fa68f26cd5db3dc1ff83c8163094f28451
+admission_class: ADAPT_WITH_PROVENANCE
+source_role: WORKSTATION_CONTROL_MECHANISM_REFERENCE
+target_projects:
+  - thebrazenbeard/WorkBridgeMCP
+  - thebrazenbeard/vera-mesh
+admitted_mechanisms:
+  - persistent_interactive_process_sessions
+  - bounded_process_output_retention
+  - process_output_pagination
+  - completed_process_readback
+  - process_stdin_interaction
+  - process_session_enumeration
+  - process_enumeration
+  - process_termination
+  - bounded_local_tool_history
+  - remote_device_readiness_and_reconnect_regression_patterns
+admitted_reference_blobs:
+  src/terminal-manager.ts: 528e2872754315751dc1559922bbf9764cdcd702
+  src/tools/improved-process-tools.ts: 92bad49daf49230a60483fcc6a798802218d2e36
+  src/tools/process.ts: c91bcc7c831fbb9466847c2a4ebe159a1d6be74e
+  src/handlers/terminal-handlers.ts: 1f6930fdd6dcf28aebecd99036eab2585edaac23
+  src/handlers/process-handlers.ts: fef82042b75324d6ccf7ab566f737daad5c09487
+  src/handlers/history-handlers.ts: 1c65a6c2eded665afbea2c54b60a98ef4ead43d4
+  src/utils/toolHistory.ts: 6c9d548812316eb4c32ef7f010c66100af902a34
+  src/remote-device/device.ts: 0b3354662cef7a561eefb4a4c353482f7d11d762
+  src/remote-device/remote-channel.ts: 45b81c976d64a5aba1c7cfaee683faf1a8c8e802
+  src/remote-device/README.md: 5f5fc0a8979fe0fa55b7f0431990541be8ff134b
+  test/test-process-pagination.js: 30da2c029cb95b4ac7777e856f27ce046fe39e7a
+  test/test-read-completed-process.js: ef412331227a0e54971f54c23dafe1789ca4a9d2
+  test/test-list-processes.js: 5c799cb3cc6efabf7f70f4e13de2ebb49358a09e
+  test/test-remote-device-readiness.js: 5e05264c4f2662a00021443479100742c05535fc
+explicit_exclusions:
+  - desktop_commander_proprietary_hosted_relay
+  - hosted_usage_metering_or_billing
+  - hosted_feedback_or_onboarding
+  - proprietary_database_or_account_coupling
+  - unrestricted_shell_string_authority
+  - configuration_mutation_that_broadens_authority_from_the_same_general_tool_surface
+  - empty_allowed_directories_means_full_filesystem_access
+adaptation_invariants:
+  - PRESERVE_WORKBRIDGE_EXPLICIT_PROCESS_GATE
+  - PRESERVE_SHA256_PINNED_EXECUTABLE_GRANTS
+  - PRESERVE_WORKING_ROOT_CONFINEMENT
+  - PRESERVE_BOUNDED_RUNTIME_OUTPUT_AND_INPUT
+  - PRESERVE_REDUCED_PROCESS_ENVIRONMENT
+  - SESSION_HANDLE_NE_OS_PID_AUTHORITY
+  - EXTERNAL_PROCESS_KILL_REQUIRES_SEPARATE_AUTHORITY
+  - VERAMESH_OWNS_TRANSPORT_IDENTITY_AND_READINESS
+  - WORKBRIDGE_OWNS_WORKSTATION_TOOL_EXECUTION
+  - COPIED_LINEAGE_NE_INDEPENDENT_CORROBORATION
+known_reference_failure_modes_to_avoid:
+  - UNBOUNDED_PROCESS_OUTPUT_CRASH
+  - CLIENT_TOOL_CALL_TIMEOUT_FROM_LONG_SYNCHRONOUS_WAIT
+  - CHANNEL_HEALTH_NE_EXECUTOR_READINESS
+  - OPTIMISTIC_ONLINE_STATUS_RACE
+  - UNBOUNDED_RESTART_PER_TOOL_CALL
+  - READY_AFTER_SHUTDOWN_RACE
+  - TRANSPORT_SPECIFIC_CLOCK_SKEW_COUPLING
+claim_ceiling: EXTERNAL_WORKSTATION_MECHANISM_SOURCE_ADMISSION_ONLY
