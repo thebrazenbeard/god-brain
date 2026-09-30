@@ -1,0 +1,37 @@
+{
+  "schema": "god-brain.local-evidence-vault-manifest.v0.1",
+  "project": "unvtrslr",
+  "repository": "thebrazenbeard/unvtrslr",
+  "canonical_branch": "main",
+  "canonical_authority": "GITHUB_MAIN",
+  "source_head": "71f01faf521aa89a33733bccfcc1e904919595dd",
+  "executed_head": "b938d13c7293f72c6b769b95934b124d9c2901aa",
+  "evidence_id": "MASSIVE_V1_FIRST_REAL_CORPUS_20260922",
+  "vault_role": "NON_CANONICAL_DURABLE_EVIDENCE_REPLICA",
+  "objects": [
+    {
+      "relative_path": "training_exposure.jsonl",
+      "sha256": "6229733a9fe2cf65eac6d099bc6e07b2b74bfd7a2711608777d2d6673ef6d241",
+      "bytes": 8667346,
+      "sensitivity": "PUBLIC"
+    },
+    {
+      "relative_path": "holdout_predictions.jsonl",
+      "sha256": "9028e4735c93424eca1528fe42c82276d2f5c941b575ac38528103dd245766b4",
+      "bytes": 335066,
+      "sensitivity": "PUBLIC"
+    },
+    {
+      "relative_path": "training_exposure.jsonl.gz",
+      "sha256": "b6b5213f45ac47945e0537e49127f948cad8ddad54199701fd7f5b942537e3e4",
+      "bytes": 388382,
+      "sensitivity": "PUBLIC"
+    },
+    {
+      "relative_path": "holdout_predictions.jsonl.gz",
+      "sha256": "23647b9dc44962bdba21001c5ee5006619b71986d62280d6c058bfe54c6f111f",
+      "bytes": 35574,
+      "sensitivity": "PUBLIC"
+    }
+  ]
+}
