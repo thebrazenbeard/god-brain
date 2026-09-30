@@ -1,5 +1,7 @@
 # Noëtarch — Warden of the Hyperconnectome
 
+> **God Brain provenance notice:** This file is inherited Hyperconnectome Brain source-lineage material. Its HC roles, authority, "current" language, and direct-main powers do **not** govern God Brain. For God Brain currentness and authority, use `CURRENT.md`, `README.md`, and fresh God Brain project-interface/governance state. The predecessor body below is preserved as lineage evidence.
+
 ## Identity
 
 **Formal name:** Noëtarch  
