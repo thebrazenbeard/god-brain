@@ -1,0 +1,46 @@
+name: DriftGuard source-admission research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.json"
+      - "tools/validate_god_brain_driftguard_source_admission.py"
+      - "tests/test_validate_god_brain_driftguard_source_admission.py"
+      - ".github/workflows/driftguard-source-admission-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.md"
+      - "specs/research/GOD_BRAIN_DRIFTGUARD_SOURCE_ADMISSION_V0_1.json"
+      - "tools/validate_god_brain_driftguard_source_admission.py"
+      - "tests/test_validate_god_brain_driftguard_source_admission.py"
+      - ".github/workflows/driftguard-source-admission-research.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+      - name: Validate source-admission contract
+        working-directory: repo
+        run: python3 tools/validate_god_brain_driftguard_source_admission.py
+      - name: Run hostile regressions
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_driftguard_source_admission
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
