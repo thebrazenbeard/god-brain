@@ -44,6 +44,30 @@ class CausalRivalFalsificationTests(unittest.TestCase):
         errors = _mutated(lambda s: s["hypothesis_identity_rules"].remove("NEW_ID_DOES_NOT_ERASE_PARENT_ID"))
         self.assertTrue(any("identity rules" in e for e in errors))
 
+    def test_proposition_cannot_disappear_from_machine_identity(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_fields"].remove("PROPOSITION"))
+        self.assertTrue(any("hypothesis identity fields" in e for e in errors))
+
+    def test_hypothesis_class_cannot_disappear_from_machine_identity(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_fields"].remove("HYPOTHESIS_CLASS"))
+        self.assertTrue(any("hypothesis identity fields" in e for e in errors))
+
+    def test_display_label_cannot_be_laundered_into_identity(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_fields"].append("DISPLAY_LABEL"))
+        self.assertTrue(any("hypothesis identity fields" in e for e in errors))
+
+    def test_revision_record_must_bind_changed_fields_and_evidence_timing(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_revision_required_fields"].remove("REVISION_TIME_RELATIVE_TO_TARGET_EVIDENCE"))
+        self.assertTrue(any("hypothesis identity revision fields" in e for e in errors))
+
+    def test_revision_successor_must_be_distinct_from_predecessor(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_rules"].remove("REVISION_SUCCESSOR_ID_DIFFERS_FROM_PREDECESSOR_ID"))
+        self.assertTrue(any("hypothesis identity rules" in e for e in errors))
+
+    def test_identity_field_rule_must_cover_every_machine_field(self) -> None:
+        errors = _mutated(lambda s: s["hypothesis_identity_rules"].remove("MATERIAL_CHANGE_TO_ANY_IDENTITY_FIELD_REQUIRES_NEW_ID_OR_EXPLICIT_REVISION_RECORD"))
+        self.assertTrue(any("hypothesis identity rules" in e for e in errors))
+
     def test_earliest_exposure_is_required_on_hypothesis(self) -> None:
         errors = _mutated(lambda s: s["hypothesis_required_fields"].remove("EARLIEST_TARGET_EVIDENCE_EXPOSURE"))
         self.assertTrue(any("hypothesis fields" in e for e in errors))

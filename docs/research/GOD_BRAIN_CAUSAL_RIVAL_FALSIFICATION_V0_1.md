@@ -104,6 +104,20 @@ A display label is non-identity metadata. Keeping the same label does not preser
 
 `HYPOTHESIS_LABEL != HYPOTHESIS_IDENTITY`
 
+The V0.1 machine contract now binds `hypothesis_identity_fields` as the **exact**
+closed set matching the eleven identity-bearing fields above; neither
+`HYPOTHESIS_ID` nor `DISPLAY_LABEL` belongs to that field set. Material changes
+to **any** member, including `PROPOSITION`, `HYPOTHESIS_CLASS`,
+`TENSION_OR_NONPREDICTED_OBSERVATIONS`, `CONFOUNDERS_AND_COMMON_CAUSES`, and
+`SELECTION_MECHANISMS`, cannot silently retain the same hypothesis identity.
+A replacement identity must differ from its predecessor. An explicit revision
+record must bind `PREDECESSOR_HYPOTHESIS_ID`, `SUCCESSOR_HYPOTHESIS_ID`,
+`CHANGED_IDENTITY_FIELDS` (a nonempty subset of the declared identity fields),
+and `REVISION_TIME_RELATIVE_TO_TARGET_EVIDENCE`. The successor must preserve
+parent and earliest-exposure lineage. Label-only edits do not create a new
+causal identity. These are declared contract obligations, not evidence that
+a downstream runtime validator or provenance ledger is installed.
+
 Material changes to predictions, causal assumptions, falsifiers, counterfactual predictions, or claim ceiling must preserve revision lineage. A new ID cannot erase its parent or the earliest point at which the hypothesis lineage saw target evidence. This prevents a post-evidence rewrite from being laundered into a fresh precommitted hypothesis.
 
 `NEW_HYPOTHESIS_ID != ERASED_REVISION_TIMING`
