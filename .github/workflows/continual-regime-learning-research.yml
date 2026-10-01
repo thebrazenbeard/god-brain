@@ -1,0 +1,29 @@
+name: God Brain continual regime learning research
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_V0_1.md"
+      - "specs/research/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_continual_regime_learning.py"
+      - "tests/test_validate_god_brain_continual_regime_learning.py"
+      - ".github/workflows/continual-regime-learning-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_V0_1.md"
+      - "specs/research/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_CONTINUAL_REGIME_LEARNING_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_continual_regime_learning.py"
+      - "tests/test_validate_god_brain_continual_regime_learning.py"
+      - ".github/workflows/continual-regime-learning-research.yml"
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact subject
+        uses: actions/checkout@v4
+        with: {ref: "${{ github.event.pull_request.head.sha || github.sha }}"}
+      - run: python3 tools/validate_god_brain_continual_regime_learning.py
+      - run: python3 -m unittest -v tests.test_validate_god_brain_continual_regime_learning
+      - run: python3 -m compileall -q tools tests
