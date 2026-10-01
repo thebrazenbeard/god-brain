@@ -1,0 +1,173 @@
+{
+  "schema_version": "GOD_BRAIN_INTAKE_AND_EVIDENCE_ADMISSION_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "assessment_date": "2026-10-01",
+  "parent_source_universe_head": "f56f52b3606839147a12e68375612336fb9bbfdd",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/ingest",
+      "ref": "main",
+      "exact_head": "27764c9fb97c84d178a3f66e0da2d669df645ed6",
+      "role": "RAW_ACQUISITION_NORMALIZATION_PROVENANCE"
+    },
+    {
+      "repository": "thebrazenbeard/semiotics",
+      "ref": "main",
+      "exact_head": "37117a2097f7f2aa35968fc9db24eacf7240826e",
+      "role": "SOURCE_CONTEXT_BOUND_INTERPRETATION"
+    },
+    {
+      "repository": "thebrazenbeard/semanticatlas",
+      "ref": "main",
+      "exact_head": "895677a64af5d29b580306ca52ecc0e0607a9ccc",
+      "role": "SEMANTIC_PROVENANCE_AND_LIFECYCLE"
+    },
+    {
+      "repository": "thebrazenbeard/god-brain",
+      "ref": "main",
+      "exact_head": "495c2b42932153cba0926744d04a69bc34557f81",
+      "role": "TARGET_EPISTEMIC_MEMORY_AND_IO_CONTRACTS"
+    }
+  ],
+  "invariants": [
+    "ACQUIRED_NE_TRUSTED",
+    "RAW_NE_NORMALIZED",
+    "NORMALIZED_NE_INTERPRETED",
+    "INTERPRETED_NE_VERIFIED",
+    "RETRIEVED_NE_ADMITTED",
+    "STORED_NE_CURRENT",
+    "CURRENT_NE_TRUE",
+    "SOURCE_LABEL_NE_SEMANTIC_IDENTITY",
+    "SEMANTIC_SIMILARITY_NE_SAME_PROVENANCE",
+    "MULTIPLE_DERIVATIVES_NE_INDEPENDENT_EVIDENCE",
+    "USER_STATED_NE_INDEPENDENTLY_VERIFIED",
+    "TOOL_OUTPUT_NE_AUTHORITY",
+    "INGESTION_NE_MEMORY_ADMISSION",
+    "MEMORY_ADMISSION_NE_CURRENTNESS_PROMOTION",
+    "CURRENTNESS_PROMOTION_NE_ACTION_AUTHORITY"
+  ],
+  "objects": {
+    "AcquisitionRecord": {
+      "required": [
+        "acquisition_id",
+        "source_kind",
+        "source_locator",
+        "observed_at",
+        "raw_sha256",
+        "raw_size",
+        "media_type",
+        "privacy_scope",
+        "source_revision_binding",
+        "transport_evidence"
+      ],
+      "purpose": "bind exact acquired material without truth promotion"
+    },
+    "NormalizationRecord": {
+      "required": [
+        "derivation_id",
+        "parent_raw_sha256",
+        "normalizer_id",
+        "normalizer_version",
+        "normalized_sha256",
+        "transformations",
+        "fidelity"
+      ],
+      "fidelity_values": [
+        "LOSSLESS_CANONICALIZATION",
+        "DECLARED_LOSSY",
+        "OPAQUE_NO_NORMALIZATION"
+      ],
+      "purpose": "make derivation explicit and reversible to provenance"
+    },
+    "InterpretationCandidate": {
+      "required": [
+        "interpretation_id",
+        "artifact_sha256",
+        "source_context",
+        "proposition_or_meaning",
+        "provenance_class",
+        "uncertainty",
+        "lifecycle"
+      ],
+      "provenance_values": [
+        "SOURCE_DIRECT",
+        "USER_DIRECT",
+        "MODEL_INFERENCE",
+        "TOOL_RESULT",
+        "DERIVED_INTERPRETATION",
+        "QUOTATION",
+        "UNKNOWN"
+      ],
+      "lifecycle_values": [
+        "PROPOSED",
+        "ACTIVE",
+        "SUPERSEDED",
+        "RETRACTED",
+        "UNRESOLVED"
+      ],
+      "purpose": "represent meaning as candidate interpretation, not evidence identity"
+    },
+    "EvidenceAdmissionDecision": {
+      "required": [
+        "decision_id",
+        "subject_id",
+        "evidence_class",
+        "claim_ceiling",
+        "independence_family",
+        "currentness_scope",
+        "privacy_scope",
+        "disposition",
+        "rationale_refs"
+      ],
+      "evidence_classes": [
+        "OBSERVATION",
+        "DOCUMENTED_SOURCE",
+        "USER_STATED",
+        "INFERENCE_INPUT",
+        "HYPOTHESIS_INPUT",
+        "UNKNOWN"
+      ],
+      "dispositions": [
+        "ADMIT_BOUNDED",
+        "QUARANTINE",
+        "REJECT",
+        "DEFER_CONFLICT",
+        "DEFER_MISSING_PROVENANCE"
+      ],
+      "purpose": "admit bounded evidence without deciding global truth/currentness/authority"
+    }
+  },
+  "pipeline": [
+    "ACQUIRE_RAW",
+    "VERIFY_RAW_IDENTITY",
+    "OPTIONAL_NORMALIZE",
+    "BUILD_INTERPRETATION_CANDIDATES",
+    "CLASSIFY_PROVENANCE_AND_INDEPENDENCE",
+    "APPLY_PRIVACY_AND_SCOPE",
+    "ADMIT_OR_QUARANTINE_EVIDENCE",
+    "HAND_OFF_TO_CURRENTNESS_RESOLUTION"
+  ],
+  "admission_rules": [
+    "MUTABLE_SOURCE_REQUIRES_EXACT_REVISION_OR_LIMITED_CLAIM_CEILING",
+    "RAW_BYTES_OR_PROVIDER_VERIFIABLE_OBJECT_IDENTITY_REQUIRED_FOR_EXACT_ARTIFACT_CLAIM",
+    "NORMALIZATION_MUST_BIND_PARENT_AND_TRANSFORMATION",
+    "INTERPRETATION_MUST_BIND_SOURCE_CONTEXT_AND_PROVENANCE",
+    "PRIVATE_SCOPE_MUST_NOT_BROADEN_DURING_ADMISSION",
+    "SHARED_ANCESTRY_MUST_SHARE_INDEPENDENCE_FAMILY",
+    "CONFLICTING_UNSUPERSEDED_EVIDENCE_MUST_NOT_AUTO_RESOLVE_BY_RECENCY",
+    "MODEL_OR_TOOL_OUTPUT_MUST_NOT_SELF_PROMOTE_TO_VERIFIED_FACT",
+    "ADMISSION_MUST_NOT_GRANT_EFFECT_AUTHORITY",
+    "CURRENTNESS_IS_DOWNSTREAM_OF_EVIDENCE_ADMISSION"
+  ],
+  "claim_ceiling": [
+    "NO_RUNTIME_IMPLEMENTATION",
+    "NO_MEMORY_MIGRATION",
+    "NO_PROVIDER_COUPLING",
+    "NO_PRIVATE_PAYLOAD_TRANSFER",
+    "NO_CURRENTNESS_PROMOTION",
+    "NO_EFFECT_AUTHORITY",
+    "NO_SCIENTIFIC_VALIDATION",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_EXTERNAL_CONTACT_CLAIM"
+  ]
+}
