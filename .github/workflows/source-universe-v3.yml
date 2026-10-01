@@ -1,0 +1,52 @@
+name: God Brain source universe V3
+
+on:
+  push:
+    paths:
+      - "docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V3_2026-10-01.md"
+      - "docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V3_2026-10-01.md"
+      - "docs/architecture/EXTERNAL_TOOL_AND_PLUGIN_FABRIC_V1.md"
+      - "specs/research/GOD_BRAIN_SOURCE_UNIVERSE_V3.json"
+      - "specs/research/GOD_BRAIN_TOOL_CAPABILITY_REGISTRY_V1.json"
+      - "tools/validate_god_brain_source_universe_v3.py"
+      - "tests/test_validate_god_brain_source_universe_v3.py"
+      - ".github/workflows/source-universe-v3.yml"
+  pull_request:
+    paths:
+      - "docs/research/cross-repo-synthesis/SOURCE_UNIVERSE_V3_2026-10-01.md"
+      - "docs/research/cross-repo-synthesis/TRANSFER_GAP_ANALYSIS_V3_2026-10-01.md"
+      - "docs/architecture/EXTERNAL_TOOL_AND_PLUGIN_FABRIC_V1.md"
+      - "specs/research/GOD_BRAIN_SOURCE_UNIVERSE_V3.json"
+      - "specs/research/GOD_BRAIN_TOOL_CAPABILITY_REGISTRY_V1.json"
+      - "tools/validate_god_brain_source_universe_v3.py"
+      - "tests/test_validate_god_brain_source_universe_v3.py"
+      - ".github/workflows/source-universe-v3.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone exact workflow subject
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
+          cd repo
+          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
+          git checkout --detach "${HEAD_SHA}"
+          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+      - name: Validate source universe and tool fabric
+        working-directory: repo
+        run: python3 tools/validate_god_brain_source_universe_v3.py
+      - name: Run hostile regressions
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_source_universe_v3
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
