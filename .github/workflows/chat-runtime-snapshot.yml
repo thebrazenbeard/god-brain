@@ -1,0 +1,29 @@
+name: chat-runtime-snapshot
+
+on:
+  push:
+    branches:
+      - chat-install-god-brain-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Archive exact canonical main
+        run: |
+          git cat-file -e 495c2b42932153cba0926744d04a69bc34557f81^{commit}
+          git archive --format=tar.gz --output=god-brain-main-495c2b42932153cba0926744d04a69bc34557f81.tar.gz 495c2b42932153cba0926744d04a69bc34557f81
+          sha256sum god-brain-main-495c2b42932153cba0926744d04a69bc34557f81.tar.gz > god-brain-main-495c2b42932153cba0926744d04a69bc34557f81.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: god-brain-main-495c2b42932153cba0926744d04a69bc34557f81
+          path: |
+            god-brain-main-495c2b42932153cba0926744d04a69bc34557f81.tar.gz
+            god-brain-main-495c2b42932153cba0926744d04a69bc34557f81.sha256
+          if-no-files-found: error
