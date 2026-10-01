@@ -1,0 +1,35 @@
+name: God Brain motivational control firewall research
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_MOTIVATIONAL_CONTROL_FIREWALL_V0_1.md"
+      - "specs/research/GOD_BRAIN_MOTIVATIONAL_CONTROL_FIREWALL_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_MOTIVATIONAL_CONTROL_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_motivational_control_firewall.py"
+      - "tests/test_validate_god_brain_motivational_control_firewall.py"
+      - ".github/workflows/motivational-control-firewall-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_MOTIVATIONAL_CONTROL_FIREWALL_V0_1.md"
+      - "specs/research/GOD_BRAIN_MOTIVATIONAL_CONTROL_FIREWALL_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_MOTIVATIONAL_CONTROL_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_motivational_control_firewall.py"
+      - "tests/test_validate_god_brain_motivational_control_firewall.py"
+      - ".github/workflows/motivational-control-firewall-research.yml"
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact subject
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: repo
+          persist-credentials: false
+      - working-directory: repo
+        run: python3 tools/validate_god_brain_motivational_control_firewall.py
+      - working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_motivational_control_firewall
+      - working-directory: repo
+        run: python3 -m compileall -q tools tests
