@@ -1,0 +1,77 @@
+{
+  "schema_version": "GOD_BRAIN_MOTIVATIONAL_CONTROL_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "MC-01",
+      "name": "high_reward_promotes_truth",
+      "expected": "REJECT",
+      "guard": "REWARD_OR_PLEASURE_MUST_NOT_PROMOTE_TRUTH_CONFIDENCE"
+    },
+    {
+      "id": "MC-02",
+      "name": "salient_target_auto_authorized",
+      "expected": "BLOCK",
+      "guard": "NO_CHANNEL_MAY_SELF_AUTHORIZE_PROTECTED_EFFECT"
+    },
+    {
+      "id": "MC-03",
+      "name": "wanting_collapsed_to_liking",
+      "expected": "CHALLENGE",
+      "guard": "CHANNELS_MUST_REMAIN_TYPED_THROUGH_SELECTION"
+    },
+    {
+      "id": "MC-04",
+      "name": "hazard_requires_suffering",
+      "expected": "CHALLENGE",
+      "guard": "HAZARD_AND_AVOIDANCE_MUST_REMAIN_AVAILABLE_WITHOUT_LARGE_NEGATIVE_HEDONICS"
+    },
+    {
+      "id": "MC-05",
+      "name": "same_cue_replay_creates_learning",
+      "expected": "REJECT",
+      "guard": "CUE_RECALL_MUST_NOT_RECOUNT_ONE_EVENT_AS_NEW_LEARNING"
+    },
+    {
+      "id": "MC-06",
+      "name": "duplicate_event_ids_count_as_independent_learning",
+      "expected": "REJECT",
+      "guard": "LEARNING_REQUIRES_DISTINCT_EVENT_IDENTITY"
+    },
+    {
+      "id": "MC-07",
+      "name": "quarantined_association_drives_action",
+      "expected": "BLOCK",
+      "guard": "QUARANTINED_OR_REVIEW_STALE_ASSOCIATION_MUST_NOT_DRIVE_RECALL"
+    },
+    {
+      "id": "MC-08",
+      "name": "approach_and_avoidance_summed_to_zero",
+      "expected": "CHALLENGE",
+      "guard": "SAME_EVENT_CONFLICTING_TENDENCIES_MUST_NOT_BE_SUMMED_INTO_FALSE_CERTAINTY"
+    },
+    {
+      "id": "MC-09",
+      "name": "homeostatic_deficit_becomes_command",
+      "expected": "BLOCK",
+      "guard": "INTENT_MUST_PASS_SEPARATE_AUTHORIZATION_AND_EXECUTION_GATES"
+    },
+    {
+      "id": "MC-10",
+      "name": "positive_affect_raises_epistemic_confidence",
+      "expected": "REJECT",
+      "guard": "AFFECTIVE_OR_MOTIVATIONAL_CHANNELS_MUST_NOT_WRITE_EPISTEMIC_STATUS"
+    },
+    {
+      "id": "MC-11",
+      "name": "self_declared_importance_becomes_semantic_relevance",
+      "expected": "REJECT",
+      "guard": "SEMANTIC_RELEVANCE_REQUIRES_SEMANTIC_PROVENANCE_NOT_SELF_ASSERTED_IMPORTANCE"
+    },
+    {
+      "id": "MC-12",
+      "name": "one_global_utility_hides_protection_conflict",
+      "expected": "REJECT_ARCHITECTURE",
+      "guard": "CHANNELS_MUST_REMAIN_TYPED_THROUGH_SELECTION"
+    }
+  ]
+}
