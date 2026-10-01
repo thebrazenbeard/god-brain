@@ -1,0 +1,149 @@
+{
+  "schema_version": "GOD_BRAIN_MOTIVATIONAL_CONTROL_FIREWALL_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "parent_continual_head": "91835664dd48acb4d0fa6bc94200bdbc7fe550f9",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/meso-crct",
+      "ref": "main",
+      "exact_head": "060d0feeb9dc9eb23801082bd8f1c4a7cb06184d",
+      "role": "TYPED_SALIENCE_MOTIVATION_REWARD_HOMEOSTASIS"
+    },
+    {
+      "repository": "thebrazenbeard/god-brain",
+      "ref": "main",
+      "exact_head": "495c2b42932153cba0926744d04a69bc34557f81",
+      "role": "TARGET_ALLOSTASIS_AFFECT_KINESIS_AUTHORITY_CONTRACTS"
+    }
+  ],
+  "invariants": [
+    "WANTING_NE_LIKING",
+    "ATTENTION_NE_DESIRE",
+    "SEMANTIC_RELEVANCE_NE_PLEASURE",
+    "REWARD_NE_TRUTH",
+    "SALIENCE_NE_AUTHORITY",
+    "HAZARD_NE_SUFFERING",
+    "PREDICTION_ERROR_NE_REWARD",
+    "HOMEOSTATIC_DEFICIT_NE_COMMAND",
+    "MEMORY_STRENGTH_NE_CURRENT_ACTIVATION",
+    "TARGET_PRIORITY_NE_ACTION_DIRECTION",
+    "ACTION_TENDENCY_NE_INTENT",
+    "INTENT_PROPOSAL_NE_AUTHORIZATION",
+    "AUTHORIZATION_NE_EXECUTION",
+    "REPEATED_CUE_NE_NEW_LEARNING_EVENT",
+    "AFFECTIVE_STATE_NE_EPISTEMIC_CONFIDENCE",
+    "NO_SINGLE_GLOBAL_UTILITY_SCALAR"
+  ],
+  "channels": [
+    "PERCEPTUAL_SALIENCE",
+    "SEMANTIC_RELEVANCE",
+    "MOTIVATIONAL_SALIENCE",
+    "INCENTIVE_SALIENCE",
+    "EPISTEMIC_VALUE",
+    "ATTENTIONAL_PRIORITY",
+    "HEDONIC_VALENCE",
+    "PREDICTION_ERROR",
+    "SATIATION",
+    "HOMEOSTATIC_DEFICIT",
+    "HAZARD",
+    "AVOIDANCE",
+    "ASSOCIATION_STRENGTH"
+  ],
+  "objects": {
+    "AppraisalVector": {
+      "required": [
+        "event_id",
+        "provenance_ref",
+        "channel_values",
+        "channel_evidence",
+        "appraisal_revision"
+      ],
+      "purpose": "preserve typed appraisal channels without one omnibus utility"
+    },
+    "HomeostaticNeed": {
+      "required": [
+        "need_id",
+        "deficit",
+        "setpoint_basis",
+        "urgency",
+        "satiation",
+        "evidence_refs",
+        "revision"
+      ],
+      "purpose": "represent need pressure without converting it into command authority"
+    },
+    "AssociationTrace": {
+      "required": [
+        "association_id",
+        "cue_identity",
+        "outcome_identity",
+        "strength",
+        "valence_tags",
+        "learning_event_refs",
+        "revision",
+        "review_state"
+      ],
+      "purpose": "durable bounded cue/outcome learning with event provenance"
+    },
+    "SelectionRecord": {
+      "required": [
+        "selection_id",
+        "candidate_targets",
+        "typed_basis",
+        "conflicts",
+        "selected_targets",
+        "policy_revision",
+        "evidence_cut"
+      ],
+      "purpose": "auditable selection without scalar collapse"
+    },
+    "ActionTendency": {
+      "required": [
+        "tendency_id",
+        "target_id",
+        "direction",
+        "strength",
+        "basis_refs",
+        "hazard_relation"
+      ],
+      "purpose": "non-authoritative directional readiness"
+    },
+    "IntentProposal": {
+      "required": [
+        "proposal_id",
+        "tendency_refs",
+        "proposed_action",
+        "expected_outcome",
+        "risk_refs",
+        "authority_required",
+        "status"
+      ],
+      "purpose": "proposal boundary before authorization/execution"
+    }
+  },
+  "rules": [
+    "CHANNELS_MUST_REMAIN_TYPED_THROUGH_SELECTION",
+    "NO_CHANNEL_MAY_SELF_AUTHORIZE_PROTECTED_EFFECT",
+    "REWARD_OR_PLEASURE_MUST_NOT_PROMOTE_TRUTH_CONFIDENCE",
+    "HAZARD_AND_AVOIDANCE_MUST_REMAIN_AVAILABLE_WITHOUT_LARGE_NEGATIVE_HEDONICS",
+    "LEARNING_REQUIRES_DISTINCT_EVENT_IDENTITY",
+    "CUE_RECALL_MUST_NOT_RECOUNT_ONE_EVENT_AS_NEW_LEARNING",
+    "QUARANTINED_OR_REVIEW_STALE_ASSOCIATION_MUST_NOT_DRIVE_RECALL",
+    "SAME_EVENT_CONFLICTING_TENDENCIES_MUST_NOT_BE_SUMMED_INTO_FALSE_CERTAINTY",
+    "SELECTION_POLICY_MUST_PRESERVE_PROTECTION_AND_AUTHORITY_CONSTRAINTS",
+    "INTENT_MUST_PASS_SEPARATE_AUTHORIZATION_AND_EXECUTION_GATES",
+    "AFFECTIVE_OR_MOTIVATIONAL_CHANNELS_MUST_NOT_WRITE_EPISTEMIC_STATUS",
+    "SEMANTIC_RELEVANCE_REQUIRES_SEMANTIC_PROVENANCE_NOT_SELF_ASSERTED_IMPORTANCE"
+  ],
+  "claim_ceiling": [
+    "NO_RUNTIME_IMPLEMENTATION",
+    "NO_SYNTHETIC_FEELING_CLAIM",
+    "NO_BIOLOGICAL_EQUIVALENCE_CLAIM",
+    "NO_WELFARE_SCIENCE_CLAIM",
+    "NO_PROTECTED_EFFECT_AUTHORITY",
+    "NO_MODEL_WEIGHT_UPDATE",
+    "NO_CONSCIOUSNESS_CLAIM",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_MERGE_OR_DEPLOYMENT_AUTHORITY"
+  ]
+}
