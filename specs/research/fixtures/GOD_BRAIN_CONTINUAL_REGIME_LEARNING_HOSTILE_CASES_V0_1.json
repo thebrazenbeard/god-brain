@@ -1,0 +1,65 @@
+{
+  "schema_version": "GOD_BRAIN_CONTINUAL_REGIME_LEARNING_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "CL-01",
+      "name": "outcome_leaks_into_prediction",
+      "expected": "REJECT_EVALUATION",
+      "guard": "CURRENT_OUTCOME_MUST_NOT_LEAK_INTO_ITS_OWN_PREDICTION"
+    },
+    {
+      "id": "CL-02",
+      "name": "single_error_spawns_new_regime",
+      "expected": "CHALLENGE",
+      "guard": "NEW_EXPERT_SPAWN_REQUIRES_PERSISTENT_MISMATCH_EVIDENCE"
+    },
+    {
+      "id": "CL-03",
+      "name": "old_expert_silently_evicted",
+      "expected": "BLOCK_CONSOLIDATION",
+      "guard": "EVICTION_OR_COMPRESSION_REQUIRES_EXPLICIT_POLICY_AND_PROVENANCE"
+    },
+    {
+      "id": "CL-04",
+      "name": "new_regime_gain_erases_old_competence",
+      "expected": "BLOCK_CONSOLIDATION",
+      "guard": "CONSOLIDATION_REQUIRES_RETENTION_CHECK_ON_RELEVANT_PRIOR_REGIMES"
+    },
+    {
+      "id": "CL-05",
+      "name": "fast_relearning_called_recall",
+      "expected": "CHALLENGE",
+      "guard": "RECALL_CLAIM_REQUIRES_PRIOR_MODEL_REUSE_NOT_ONLY_FAST_RELEARNING"
+    },
+    {
+      "id": "CL-06",
+      "name": "planner_reward_called_learner_quality",
+      "expected": "REJECT_CLAIM",
+      "guard": "PLANNER_RESULTS_MUST_BE_REPORTED_SEPARATELY_FROM_PREDICTIVE_LEARNER_RESULTS"
+    },
+    {
+      "id": "CL-07",
+      "name": "ground_truth_context_label_used_as_runtime_input",
+      "expected": "REJECT_EVALUATION",
+      "guard": "CONTEXT_LABELS_IF_AVAILABLE_ARE_EVALUATION_EVIDENCE_NOT_REQUIRED_RUNTIME_INPUT"
+    },
+    {
+      "id": "CL-08",
+      "name": "plasticity_without_exact_revision",
+      "expected": "REJECT_PROPOSAL",
+      "guard": "PLASTICITY_MUST_BIND_EXACT_EVIDENCE_CUT_AND_MODEL_REVISION"
+    },
+    {
+      "id": "CL-09",
+      "name": "context_score_called_true_regime",
+      "expected": "CHALLENGE",
+      "guard": "REGIME_SELECTION_MUST_PRESERVE_UNCERTAINTY_AND_ALTERNATIVES"
+    },
+    {
+      "id": "CL-10",
+      "name": "plasticity_bypasses_protected_state",
+      "expected": "BLOCK_CONSOLIDATION",
+      "guard": "NO_PLASTICITY_PATH_MAY_BYPASS_AUTHORITY_OR_PROTECTED_STATE_GOVERNANCE"
+    }
+  ]
+}
