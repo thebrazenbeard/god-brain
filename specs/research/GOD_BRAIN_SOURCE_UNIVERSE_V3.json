@@ -139,8 +139,8 @@
       "repository": "thebrazenbeard/chat-communication-bus",
       "visibility": "private",
       "archived": false,
-      "class": "UNCLASSIFIED",
-      "disposition": "RESEARCH_REQUIRED",
+      "class": "PRIVATE_OPERATIONAL_OVERLAY_AND_COORDINATION_HUB",
+      "disposition": "CASE_STUDY_AND_LIVE_COORDINATION_ONLY",
       "evidence_cut": {
         "ref": "main",
         "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
