@@ -1,0 +1,284 @@
+{
+  "schema_version": "GOD_BRAIN_TOOL_CAPABILITY_REGISTRY_V1",
+  "status": "SESSION_OBSERVED_CAPABILITY_FABRIC_NO_RUNTIME_COUPLING",
+  "assessment_date": "2026-10-01",
+  "live_namespace_count": 39,
+  "user_inventory_claimed_count": 38,
+  "user_inventory_named_rows": 35,
+  "invariants": [
+    "TOOL_AVAILABILITY_NE_ARCHITECTURAL_ADMISSION",
+    "TOOL_AVAILABILITY_NE_AUTHORITY",
+    "CONNECTED_ACCOUNT_NE_PERMISSION",
+    "TOOL_OUTPUT_NE_VERIFICATION",
+    "PLUGIN_INSTALLATION_NE_ALWAYS_ON_EXECUTION",
+    "EXTERNAL_SERVICE_NE_SEAT_OF_COGNITION",
+    "RESEARCH_CONNECTOR_NE_PRIMARY_SOURCE_AUTHORITY",
+    "WORKSTATION_ACCESS_NE_EFFECT_AUTHORITY",
+    "DEPLOYMENT_CAPABILITY_NE_DEPLOYMENT_AUTHORITY",
+    "PRIVATE_TOOL_DATA_NE_PORTABLE_TRAINING_DATA"
+  ],
+  "inventory_discrepancies": [
+    "USER_HEADING_SAID_38_PLUGIN_TOOL_NAMESPACES_BUT_VISIBLE_TABLE_NAMED_35",
+    "LIVE_TOOL_RUNTIME_EXPOSED_39_NAMESPACES_ON_2026_10_01"
+  ],
+  "namespaces": [
+    {
+      "name": "Aiven",
+      "class": "EXTERNAL_DATA_RUNTIME",
+      "disposition": "ADMIT_OPTIONAL_EXPERIMENTAL_INFRASTRUCTURE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "CData_Connect_AI",
+      "class": "EXTERNAL_DATA_RUNTIME",
+      "disposition": "ADMIT_OPTIONAL_EXPERIMENTAL_INFRASTRUCTURE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Canva",
+      "class": "DESIGN_ARTIFACT_CONNECTOR",
+      "disposition": "AVAILABLE_FOR_ARTIFACT_WORK_ONLY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Figma",
+      "class": "DESIGN_ARTIFACT_CONNECTOR",
+      "disposition": "AVAILABLE_FOR_ARTIFACT_WORK_ONLY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Finances",
+      "class": "DOMAIN_SPECIFIC_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_GOD_BRAIN_DEFAULT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "GitHub",
+      "class": "CANONICAL_PROJECT_STATE_CONNECTOR",
+      "disposition": "ADMIT_FOR_PROJECT_STATE_WITH_FRESH_READ",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Gmail",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Google_Calendar",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Google_Contacts",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Google_Drive",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Hugging_Face",
+      "class": "RESEARCH_EVIDENCE_CONNECTOR",
+      "disposition": "ADMIT_OPTIONAL_RESEARCH_TOOL",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Lappy_Desktop_Commander",
+      "class": "WORKSTATION_EXECUTION_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_EXACT_EFFECT_AUTHORITY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Lappy_Desktop_Commander_V2",
+      "class": "WORKSTATION_EXECUTION_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_EXACT_EFFECT_AUTHORITY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Linear",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Lovable",
+      "class": "BUILD_PROVIDER_OR_DEPLOYMENT_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_SCOPE_AND_PROTECTED_EFFECT_GATES",
+      "runtime_dependency": false
+    },
+    {
+      "name": "MCP_Conduct_Register",
+      "class": "GOVERNANCE_OR_CONFORMANCE_CONNECTOR",
+      "disposition": "OPTIONAL_GOVERNANCE_SUPPORT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Metricool",
+      "class": "DOMAIN_SPECIFIC_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_GOD_BRAIN_DEFAULT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Microsoft_SharePoint",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Neura_Relay_MCP",
+      "class": "GOVERNANCE_OR_CONFORMANCE_CONNECTOR",
+      "disposition": "OPTIONAL_GOVERNANCE_SUPPORT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "OpenAI_Platform",
+      "class": "BUILD_PROVIDER_OR_DEPLOYMENT_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_SCOPE_AND_PROTECTED_EFFECT_GATES",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Parallel_Search",
+      "class": "RESEARCH_EVIDENCE_CONNECTOR",
+      "disposition": "ADMIT_OPTIONAL_RESEARCH_TOOL",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Plugin_Creator",
+      "class": "CHATGPT_CONFIGURATION_INFRASTRUCTURE",
+      "disposition": "OPTIONAL_CONFIGURATION_SURFACE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Plugin_Management",
+      "class": "CHATGPT_CONFIGURATION_INFRASTRUCTURE",
+      "disposition": "OPTIONAL_CONFIGURATION_SURFACE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Remote_Desktop_Commander",
+      "class": "WORKSTATION_EXECUTION_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_EXACT_EFFECT_AUTHORITY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Replit",
+      "class": "BUILD_PROVIDER_OR_DEPLOYMENT_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_SCOPE_AND_PROTECTED_EFFECT_GATES",
+      "runtime_dependency": false
+    },
+    {
+      "name": "SciSpace",
+      "class": "RESEARCH_EVIDENCE_CONNECTOR",
+      "disposition": "ADMIT_OPTIONAL_RESEARCH_TOOL",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Slack",
+      "class": "WORKSPACE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_DEFAULT_GOD_BRAIN_RUNTIME",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Soluvery",
+      "class": "DOMAIN_SPECIFIC_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_GOD_BRAIN_DEFAULT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Spotify",
+      "class": "DOMAIN_SPECIFIC_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_GOD_BRAIN_DEFAULT",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Supabase",
+      "class": "EXTERNAL_DATA_RUNTIME",
+      "disposition": "ADMIT_OPTIONAL_EXPERIMENTAL_INFRASTRUCTURE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "TinyFish",
+      "class": "RESEARCH_EVIDENCE_CONNECTOR",
+      "disposition": "ADMIT_OPTIONAL_RESEARCH_TOOL",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Vercel",
+      "class": "BUILD_PROVIDER_OR_DEPLOYMENT_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_SCOPE_AND_PROTECTED_EFFECT_GATES",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Wolfram",
+      "class": "RESEARCH_EVIDENCE_CONNECTOR",
+      "disposition": "ADMIT_OPTIONAL_RESEARCH_TOOL",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Workbridge_Commander_MCP",
+      "class": "WORKSTATION_EXECUTION_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_EXACT_EFFECT_AUTHORITY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Workbridge_Relay",
+      "class": "WORKSTATION_EXECUTION_SURFACE",
+      "disposition": "ADMIT_ONLY_WITH_EXACT_EFFECT_AUTHORITY",
+      "runtime_dependency": false
+    },
+    {
+      "name": "Writing_Style",
+      "class": "USER_STYLE_CONNECTOR",
+      "disposition": "AVAILABLE_NOT_ARCHITECTURE",
+      "runtime_dependency": false
+    },
+    {
+      "name": "files",
+      "class": "CHATGPT_CONTEXT_INFRASTRUCTURE",
+      "disposition": "ADMIT_FOR_CONTEXT_AND_SKILL_LOADING",
+      "runtime_dependency": false
+    },
+    {
+      "name": "skills",
+      "class": "CHATGPT_CONTEXT_INFRASTRUCTURE",
+      "disposition": "ADMIT_FOR_CONTEXT_AND_SKILL_LOADING",
+      "runtime_dependency": false
+    },
+    {
+      "name": "user_settings",
+      "class": "CHATGPT_CONFIGURATION_INFRASTRUCTURE",
+      "disposition": "OPTIONAL_CONFIGURATION_SURFACE",
+      "runtime_dependency": false
+    }
+  ],
+  "installed_skill_overlays": [
+    {
+      "name": "cricket-conscience",
+      "role": "ORDINARY_CHAT_REVIEW_DISCIPLINE",
+      "disposition": "ADMIT_AS_REVIEW_OVERLAY_NOT_AUTHORITY",
+      "runtime_dependency": false,
+      "guarantee_ceiling": "INSTRUCTION_LAYER_NOT_PLATFORM_ENFORCED_ORDINARY_CHAT_HOOK"
+    }
+  ],
+  "native_capabilities_outside_namespace_count": [
+    "web_search",
+    "image_generation",
+    "automations",
+    "python",
+    "artifact_generation"
+  ],
+  "claim_ceiling": [
+    "NO_TOOL_BECOMES_COGNITIVE_SUBSYSTEM_BY_AVAILABILITY",
+    "NO_TOOL_GRANTS_PROTECTED_EFFECT_AUTHORITY",
+    "NO_EXTERNAL_ACCOUNT_BECOMES_CANONICAL_MEMORY_BY_CONNECTION",
+    "NO_PROVIDER_INSTALL_OR_DEPLOYMENT",
+    "NO_CREDENTIAL_OR_PERMISSION_CHANGE",
+    "NO_PRIVATE_DATA_PUBLICATION"
+  ]
+}
