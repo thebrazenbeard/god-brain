@@ -1,0 +1,149 @@
+{
+  "schema_version": "GOD_BRAIN_ADVERSARIAL_REVIEW_LAYER_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "parent_intake_head": "41ca6320cb162bab0463ab06f57d6dce1e95256a",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/freerowcochkar",
+      "ref": "main",
+      "exact_head": "9ea4eaefe5229ca90d7ae6099dbf30d9e13b64b2",
+      "role": "LITERAL_RULE_AND_LOOPHOLE_REVIEW"
+    },
+    {
+      "repository": "thebrazenbeard/cricket",
+      "ref": "main",
+      "exact_head": "c2342648c72aa9faefd9c5441c654ad8239afe33",
+      "role": "CANDIDATE_RESPONSE_AND_AUTHORITY_DRIFT_REVIEW"
+    },
+    {
+      "repository": "thebrazenbeard/voss",
+      "ref": "main",
+      "exact_head": "36a623d3a158e5aef521d42e378bafacd67d3de5",
+      "role": "FORENSIC_FALSIFICATION_AND_RIVAL_HYPOTHESES"
+    },
+    {
+      "repository": "thebrazenbeard/masamune",
+      "ref": "main",
+      "exact_head": "25653790d59080cda0b6d6e57b8a4cd64d1ee2b5",
+      "role": "ROOT_CAUSE_AND_REGRESSION_DISCIPLINE"
+    },
+    {
+      "repository": "thebrazenbeard/god-brain",
+      "ref": "main",
+      "exact_head": "495c2b42932153cba0926744d04a69bc34557f81",
+      "role": "TARGET_EPISTEMIC_AND_GOVERNANCE_CONTRACTS"
+    }
+  ],
+  "invariants": [
+    "REVIEW_NE_TRUTH",
+    "SELF_REVIEW_NE_INDEPENDENT_REVIEW",
+    "DISAGREEMENT_NE_ERROR",
+    "CRITIQUE_NE_AUTHORITY",
+    "BLOCKER_FINDING_NE_EFFECT_AUTHORITY",
+    "POLICY_LITERALISM_NE_INTENDED_OUTCOME",
+    "RIVAL_HYPOTHESIS_NE_FALSE_EQUIVALENCE",
+    "MODEL_CONFIDENCE_NE_EVIDENCE",
+    "PASS_NE_CANONICAL_PROMOTION",
+    "PASS_NE_MERGE_AUTHORITY",
+    "PASS_NE_DEPLOYMENT_AUTHORITY",
+    "HEAD_MOVEMENT_STALES_EXACT_SUBJECT_REVIEW",
+    "COPIED_FINDING_NE_INDEPENDENT_CORROBORATION",
+    "REVIEWER_PERSONA_NE_REVIEWER_INDEPENDENCE"
+  ],
+  "lanes": {
+    "constraint_loophole": {
+      "role": "find literal paths that satisfy text while defeating protected intent",
+      "source": "freerowcochkar",
+      "output": "CONSTRAINT_FINDINGS",
+      "authority": "ADVISORY"
+    },
+    "candidate_integrity": {
+      "role": "detect semantic strengthening, unsupported verification, authority drift, behavioral overreach",
+      "source": "cricket",
+      "output": "CANDIDATE_FINDINGS",
+      "authority": "ADVISORY_EXCEPT_HOST_GROUNDED_EXISTING_INVARIANT"
+    },
+    "forensic_falsification": {
+      "role": "bind exact proposition, provenance, rival explanations, discriminating evidence, unresolved state",
+      "source": "voss",
+      "output": "FORENSIC_FINDINGS",
+      "authority": "ADVISORY"
+    },
+    "regression_root_cause": {
+      "role": "bind defect to reproduction, root-cause proposition, regression fixture, and recurrence prevention",
+      "source": "masamune",
+      "output": "REPAIR_FINDINGS",
+      "authority": "ADVISORY"
+    }
+  },
+  "reviewer_provenance": [
+    "AUTHOR_SELF",
+    "SAME_MODEL_SELF",
+    "SAME_LINEAGE_MODEL",
+    "SEPARATE_MODEL_SAME_OPERATOR_CONTEXT",
+    "INDEPENDENT_REVIEWER",
+    "HUMAN_REVIEWER"
+  ],
+  "independence_classification": {
+    "AUTHOR_SELF": "NOT_INDEPENDENT",
+    "SAME_MODEL_SELF": "NOT_INDEPENDENT",
+    "SAME_LINEAGE_MODEL": "NOT_INDEPENDENT_BY_DEFAULT",
+    "SEPARATE_MODEL_SAME_OPERATOR_CONTEXT": "INDEPENDENCE_UNESTABLISHED",
+    "INDEPENDENT_REVIEWER": "INDEPENDENT_IF_SUBJECT_AND_INFLUENCE_BOUND",
+    "HUMAN_REVIEWER": "INDEPENDENT_IF_SUBJECT_AND_INFLUENCE_BOUND"
+  },
+  "review_subject_required": [
+    "repository",
+    "base_exact_head",
+    "exact_head",
+    "paths_or_artifact_ids",
+    "claim_scope",
+    "review_request_id"
+  ],
+  "finding_required": [
+    "finding_id",
+    "lane",
+    "severity",
+    "proposition",
+    "evidence_refs",
+    "rival_or_failure_path",
+    "recommendation",
+    "claim_ceiling"
+  ],
+  "severity_values": [
+    "NOTE",
+    "CHALLENGE",
+    "BLOCKER"
+  ],
+  "review_dispositions": [
+    "PASS",
+    "PASS_WITH_LIMITATIONS",
+    "CHANGES_REQUIRED",
+    "BLOCKED",
+    "UNRESOLVED"
+  ],
+  "review_rules": [
+    "EVERY_FINDING_MUST_BIND_EXACT_SUBJECT",
+    "EVERY_MATERIAL_FINDING_MUST_CITE_EVIDENCE_OR_REPRODUCTION",
+    "BLOCKER_MUST_NAME_EXISTING_INVARIANT_OR_VERIFIABLE_FAILURE",
+    "LOOPHOLE_FINDING_MUST_INCLUDE_LITERAL_PATH_AND_PROTECTED_INTENT",
+    "CANDIDATE_REVIEW_MUST_PRESERVE_LITERAL_USER_PROPOSITION",
+    "FORENSIC_REVIEW_MUST_KEEP_LIVE_RIVALS_WHEN_EVIDENCE_DOES_NOT_DISCRIMINATE",
+    "ROOT_CAUSE_MUST_DISTINGUISH_REPRODUCTION_FROM_CAUSAL_EXPLANATION",
+    "REVIEW_PASS_MUST_NOT_GRANT_PROMOTION_OR_EFFECT_AUTHORITY",
+    "EXACT_HEAD_CHANGE_MAKES_PRIOR_VERDICT_HISTORICAL_ONLY",
+    "INTERNAL_HOSTILE_REVIEW_MUST_NOT_BE_RELABELED_INDEPENDENT",
+    "COPIED_OR_SHARED_FINDINGS_MUST_SHARE_INDEPENDENCE_FAMILY"
+  ],
+  "claim_ceiling": [
+    "NO_RUNTIME_IMPLEMENTATION",
+    "NO_AUTONOMOUS_CANONICAL_PROMOTION",
+    "NO_MERGE_AUTHORITY",
+    "NO_DEPLOYMENT_AUTHORITY",
+    "NO_PROVIDER_OR_CREDENTIAL_AUTHORITY",
+    "NO_INDEPENDENCE_CLAIM_FROM_SELF_REVIEW",
+    "NO_SCIENTIFIC_VALIDATION",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_EXTERNAL_CONTACT_CLAIM"
+  ]
+}
