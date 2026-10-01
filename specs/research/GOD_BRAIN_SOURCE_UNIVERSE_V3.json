@@ -1,0 +1,1097 @@
+{
+  "schema_version": "GOD_BRAIN_SOURCE_UNIVERSE_V3",
+  "status": "RESEARCH_INTAKE_NO_PROMOTION",
+  "assessment_date": "2026-10-01",
+  "target_repository": "thebrazenbeard/god-brain",
+  "god_brain_main_head": "495c2b42932153cba0926744d04a69bc34557f81",
+  "live_repository_count": 78,
+  "user_inventory_claimed_count": 76,
+  "user_inventory_named_rows": 66,
+  "invariants": [
+    "SOURCE_PRESENCE_NE_ARCHITECTURAL_ADMISSION",
+    "PORTFOLIO_REUSE_NE_RUNTIME_COUPLING",
+    "SHARED_MECHANISM_NE_MANDATORY_SHARED_SERVICE",
+    "COPIED_LINEAGE_NE_INDEPENDENT_CORROBORATION",
+    "PRIVATE_PAYLOAD_NE_PORTABLE_SOURCE",
+    "REPOSITORY_LOCAL_AUTHORITY_NE_GOD_BRAIN_AUTHORITY",
+    "OBSERVED_HEAD_NE_FUTURE_CURRENTNESS",
+    "CASE_STUDY_NE_ARCHITECTURE_PROOF",
+    "REVIEW_METHOD_NE_INDEPENDENT_REVIEW",
+    "TOOL_AVAILABILITY_NE_COGNITIVE_SUBSYSTEM"
+  ],
+  "inventory_discrepancies": [
+    "USER_HEADING_SAID_76_REPOSITORIES_BUT_VISIBLE_TABLE_NAMED_66",
+    "LIVE_GITHUB_CENSUS_OBSERVED_78_REPOSITORIES_ON_2026_10_01"
+  ],
+  "sources": [
+    {
+      "id": "abil",
+      "repository": "thebrazenbeard/abil",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "Attune",
+      "repository": "thebrazenbeard/Attune",
+      "visibility": "public",
+      "archived": false,
+      "class": "RELATIONSHIP_PRODUCT_RESEARCH_SOURCE",
+      "disposition": "RESEARCH_ONLY_IDENTITY_SCRUB_REQUIRED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "axle",
+      "repository": "thebrazenbeard/axle",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "d470544fb64875cb4789472ad4ef1b30f1fa65ee",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "brigit",
+      "repository": "thebrazenbeard/brigit",
+      "visibility": "private",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "brigit-unbound",
+      "repository": "thebrazenbeard/brigit-unbound",
+      "visibility": "private",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "bt2",
+      "repository": "thebrazenbeard/bt2",
+      "visibility": "public",
+      "archived": false,
+      "class": "HC_DERIVATIVE_OR_LINEAGE_CONFLICT",
+      "disposition": "NO_INDEPENDENT_CORROBORATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "bugops",
+      "repository": "thebrazenbeard/bugops",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "build-team-2.0",
+      "repository": "thebrazenbeard/build-team-2.0",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "ccb-core",
+      "repository": "thebrazenbeard/ccb-core",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "273c93bc46683580024c1521fd2c523a8a6593bd",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "chat-communication-bus",
+      "repository": "thebrazenbeard/chat-communication-bus",
+      "visibility": "private",
+      "archived": false,
+      "class": "PRIVATE_OPERATIONAL_OVERLAY_AND_COORDINATION_HUB",
+      "disposition": "CASE_STUDY_AND_LIVE_COORDINATION_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "conations",
+      "repository": "thebrazenbeard/conations",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "conditioning",
+      "repository": "thebrazenbeard/conditioning",
+      "visibility": "private",
+      "archived": true,
+      "class": "ARCHIVED_HISTORICAL_SOURCE",
+      "disposition": "HISTORICAL_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "cricket",
+      "repository": "thebrazenbeard/cricket",
+      "visibility": "public",
+      "archived": false,
+      "class": "REVIEW_OR_ASSURANCE_METHOD_SOURCE",
+      "disposition": "ADAPT_REVIEW_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "c2342648c72aa9faefd9c5441c654ad8239afe33",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "deepmemorystorage",
+      "repository": "thebrazenbeard/deepmemorystorage",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "discovery",
+      "repository": "thebrazenbeard/discovery",
+      "visibility": "public",
+      "archived": false,
+      "class": "ARCHITECTURE_CRITIQUE_SOURCE",
+      "disposition": "ADAPT_CONSTRAINT_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "driftguard",
+      "repository": "thebrazenbeard/driftguard",
+      "visibility": "public",
+      "archived": false,
+      "class": "RESEARCH_METHOD_OR_ARCHITECTURE_SOURCE",
+      "disposition": "RESEARCH_ONLY_PENDING_TRANSFER_QUALIFICATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "empathy",
+      "repository": "thebrazenbeard/empathy",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "entropyinc",
+      "repository": "thebrazenbeard/entropyinc",
+      "visibility": "private",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "executor",
+      "repository": "thebrazenbeard/executor",
+      "visibility": "public",
+      "archived": false,
+      "class": "INSUFFICIENT_EVIDENCE",
+      "disposition": "RESEARCH_REQUIRED_MAIN_ONLY_BOOTSTRAP",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "2b9b4e9456c6481b1d5fe9be0a142d01ce804d8f",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "firesafe",
+      "repository": "thebrazenbeard/firesafe",
+      "visibility": "private",
+      "archived": false,
+      "class": "ARCHIVE_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "freerowcochkar",
+      "repository": "thebrazenbeard/freerowcochkar",
+      "visibility": "public",
+      "archived": false,
+      "class": "REVIEW_OR_ASSURANCE_METHOD_SOURCE",
+      "disposition": "ADAPT_REVIEW_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "9ea4eaefe5229ca90d7ae6099dbf30d9e13b64b2",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "fuckup",
+      "repository": "thebrazenbeard/fuckup",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "a87dea38a58c4cff75bc7d123d87f63a5e110895",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "god-brain",
+      "repository": "thebrazenbeard/god-brain",
+      "visibility": "public",
+      "archived": false,
+      "class": "TARGET_NATIVE",
+      "disposition": "TARGET",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "hc-brain",
+      "repository": "thebrazenbeard/hc-brain",
+      "visibility": "public",
+      "archived": false,
+      "class": "TARGET_PREDECESSOR_NATIVE",
+      "disposition": "ADMIT_NATIVE_LINEAGE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "hephaestus",
+      "repository": "thebrazenbeard/hephaestus",
+      "visibility": "public",
+      "archived": false,
+      "class": "REVIEW_OR_ASSURANCE_METHOD_SOURCE",
+      "disposition": "ADAPT_REVIEW_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "ingest",
+      "repository": "thebrazenbeard/ingest",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "27764c9fb97c84d178a3f66e0da2d669df645ed6",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "intranel",
+      "repository": "thebrazenbeard/intranel",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "lgcm",
+      "repository": "thebrazenbeard/lgcm",
+      "visibility": "public",
+      "archived": false,
+      "class": "RESEARCH_METHOD_OR_ARCHITECTURE_SOURCE",
+      "disposition": "RESEARCH_ONLY_PENDING_TRANSFER_QUALIFICATION",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "0043c60419de9ef0b52363b62aed8c0a52ef63f5",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "masamune",
+      "repository": "thebrazenbeard/masamune",
+      "visibility": "public",
+      "archived": false,
+      "class": "REVIEW_OR_ASSURANCE_METHOD_SOURCE",
+      "disposition": "ADAPT_REVIEW_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "mediaphile",
+      "repository": "thebrazenbeard/mediaphile",
+      "visibility": "private",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "meso-crct",
+      "repository": "thebrazenbeard/meso-crct",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "060d0feeb9dc9eb23801082bd8f1c4a7cb06184d",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "mosaic",
+      "repository": "thebrazenbeard/mosaic",
+      "visibility": "public",
+      "archived": false,
+      "class": "RESEARCH_METHOD_OR_ARCHITECTURE_SOURCE",
+      "disposition": "RESEARCH_ONLY_PENDING_TRANSFER_QUALIFICATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "noema",
+      "repository": "thebrazenbeard/noema",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "on-theo",
+      "repository": "thebrazenbeard/on-theo",
+      "visibility": "public",
+      "archived": false,
+      "class": "DOMAIN_METHOD_SOURCE",
+      "disposition": "METHOD_REVIEW_OPTIONAL",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "orgasm",
+      "repository": "thebrazenbeard/orgasm",
+      "visibility": "private",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "personification",
+      "repository": "thebrazenbeard/personification",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "pre-active",
+      "repository": "thebrazenbeard/pre-active",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "4558923a5ddbb2672449addc424a21de9c62e7ec",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "project-achilles",
+      "repository": "thebrazenbeard/project-achilles",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "project-lantern",
+      "repository": "thebrazenbeard/project-lantern",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "project-runner",
+      "repository": "thebrazenbeard/project-runner",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "RepairTracker",
+      "repository": "thebrazenbeard/RepairTracker",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "cd7c6f27d27a03130d6e793d69634005a130dc3a",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "retro-gamer",
+      "repository": "thebrazenbeard/retro-gamer",
+      "visibility": "private",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "4c463a97263587e40b8caedb5e7c37b988886dba",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "rezon",
+      "repository": "thebrazenbeard/rezon",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "roots",
+      "repository": "thebrazenbeard/roots",
+      "visibility": "public",
+      "archived": false,
+      "class": "RESEARCH_METHOD_OR_ARCHITECTURE_SOURCE",
+      "disposition": "RESEARCH_ONLY_PENDING_TRANSFER_QUALIFICATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "self",
+      "repository": "thebrazenbeard/self",
+      "visibility": "private",
+      "archived": true,
+      "class": "HC_DERIVATIVE_OR_LINEAGE_CONFLICT",
+      "disposition": "NO_INDEPENDENT_CORROBORATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "selfimage",
+      "repository": "thebrazenbeard/selfimage",
+      "visibility": "private",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "semanticatlas",
+      "repository": "thebrazenbeard/semanticatlas",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "semiotics",
+      "repository": "thebrazenbeard/semiotics",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "37117a2097f7f2aa35968fc9db24eacf7240826e",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "sexuality",
+      "repository": "thebrazenbeard/sexuality",
+      "visibility": "private",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "skeletonkey",
+      "repository": "thebrazenbeard/skeletonkey",
+      "visibility": "private",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "spm",
+      "repository": "thebrazenbeard/spm",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "sql-connectome",
+      "repository": "thebrazenbeard/sql-connectome",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "f81ff43e5358f798f23bab8a718bda743c93e930",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "temporal",
+      "repository": "thebrazenbeard/temporal",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "testament",
+      "repository": "thebrazenbeard/testament",
+      "visibility": "public",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "thebrazenbeard",
+      "repository": "thebrazenbeard/thebrazenbeard",
+      "visibility": "public",
+      "archived": false,
+      "class": "PRESENTATION_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "transcendence",
+      "repository": "thebrazenbeard/transcendence",
+      "visibility": "public",
+      "archived": false,
+      "class": "HC_DERIVATIVE_OR_LINEAGE_CONFLICT",
+      "disposition": "NO_INDEPENDENT_CORROBORATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "trek-data-core",
+      "repository": "thebrazenbeard/trek-data-core",
+      "visibility": "private",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "unbound-sol",
+      "repository": "thebrazenbeard/unbound-sol",
+      "visibility": "public",
+      "archived": false,
+      "class": "MODEL_TRAJECTORY_CASE_STUDY",
+      "disposition": "RESEARCH_ONLY_NO_ONTOLOGICAL_PROMOTION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "unvtrslr",
+      "repository": "thebrazenbeard/unvtrslr",
+      "visibility": "public",
+      "archived": false,
+      "class": "DIRECT_ARCHITECTURE_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera",
+      "repository": "thebrazenbeard/vera",
+      "visibility": "public",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera_ark",
+      "repository": "thebrazenbeard/vera_ark",
+      "visibility": "private",
+      "archived": false,
+      "class": "DEPLOYMENT_OR_INTERFACE_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera_model_training",
+      "repository": "thebrazenbeard/vera_model_training",
+      "visibility": "public",
+      "archived": false,
+      "class": "QUALIFICATION_ENGINEERING_PATTERN",
+      "disposition": "ADAPT_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-apk",
+      "repository": "thebrazenbeard/vera-apk",
+      "visibility": "private",
+      "archived": false,
+      "class": "DEPLOYMENT_OR_INTERFACE_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-control-plane",
+      "repository": "thebrazenbeard/vera-control-plane",
+      "visibility": "public",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-habitat",
+      "repository": "thebrazenbeard/vera-habitat",
+      "visibility": "public",
+      "archived": false,
+      "class": "DEPLOYMENT_OR_INTERFACE_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-mesh",
+      "repository": "thebrazenbeard/vera-mesh",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-mono",
+      "repository": "thebrazenbeard/vera-mono",
+      "visibility": "public",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "exact_head": "5ffaff6adaefe987398aa2179d143a36a45d3642",
+        "binding": "EXACT_HEAD_OBSERVED_2026_10_01"
+      }
+    },
+    {
+      "id": "vera-os",
+      "repository": "thebrazenbeard/vera-os",
+      "visibility": "private",
+      "archived": false,
+      "class": "MECHANISM_SOURCE_IDENTITY_SCRUBBED",
+      "disposition": "ADAPT_MECHANISM_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-R9A0",
+      "repository": "thebrazenbeard/vera-R9A0",
+      "visibility": "public",
+      "archived": false,
+      "class": "IDENTITY_SPECIFIC_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY_IDENTITY_SCRUBBED",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-synology",
+      "repository": "thebrazenbeard/vera-synology",
+      "visibility": "public",
+      "archived": false,
+      "class": "DEPLOYMENT_OR_INTERFACE_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "vera-works",
+      "repository": "thebrazenbeard/vera-works",
+      "visibility": "private",
+      "archived": false,
+      "class": "OPERATIONAL_CASE_STUDY",
+      "disposition": "CASE_STUDY_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "voss",
+      "repository": "thebrazenbeard/voss",
+      "visibility": "public",
+      "archived": false,
+      "class": "REVIEW_OR_ASSURANCE_METHOD_SOURCE",
+      "disposition": "ADAPT_REVIEW_METHOD_ONLY",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "wip",
+      "repository": "thebrazenbeard/wip",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "workbridge",
+      "repository": "thebrazenbeard/workbridge",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "workbridgecommander",
+      "repository": "thebrazenbeard/workbridgecommander",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "ADAPT_WITH_PROVENANCE",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "WorkBridgeMCP",
+      "repository": "thebrazenbeard/WorkBridgeMCP",
+      "visibility": "public",
+      "archived": false,
+      "class": "ENGINEERING_PATTERN_SOURCE",
+      "disposition": "DEFER_ACTIVE_DELEGATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "world-zero",
+      "repository": "thebrazenbeard/world-zero",
+      "visibility": "public",
+      "archived": false,
+      "class": "RESEARCH_METHOD_OR_ARCHITECTURE_SOURCE",
+      "disposition": "RESEARCH_ONLY_PENDING_TRANSFER_QUALIFICATION",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    },
+    {
+      "id": "wreckforge",
+      "repository": "thebrazenbeard/wreckforge",
+      "visibility": "private",
+      "archived": false,
+      "class": "DOMAIN_ONLY",
+      "disposition": "NO_DIRECT_COGNITIVE_TRANSFER",
+      "evidence_cut": {
+        "ref": "main",
+        "binding": "REFRESH_REQUIRED_BEFORE_TRANSFER"
+      }
+    }
+  ],
+  "transfer_candidates": [
+    {
+      "id": "T30",
+      "mechanism": "PROVIDER_NEUTRAL_INTAKE_AND_PROVENANCE_BOUNDARY",
+      "sources": [
+        "ingest",
+        "semanticatlas",
+        "semiotics"
+      ],
+      "ceiling": "ARCHITECTURE_PATTERN"
+    },
+    {
+      "id": "T31",
+      "mechanism": "CONTINUAL_CONTEXT_AND_REGIME_LEARNING",
+      "sources": [
+        "lgcm",
+        "noema"
+      ],
+      "ceiling": "RESEARCH_TRANSFER_CANDIDATE"
+    },
+    {
+      "id": "T32",
+      "mechanism": "SALIENCE_MOTIVATION_REWARD_AUTHORITY_FIREWALL",
+      "sources": [
+        "meso-crct"
+      ],
+      "ceiling": "ARCHITECTURE_PATTERN_NOT_BIOLOGICAL_EQUIVALENCE"
+    },
+    {
+      "id": "T33",
+      "mechanism": "DURABLE_PROACTIVE_EXECUTION_WITH_EFFECT_RECONCILIATION",
+      "sources": [
+        "pre-active",
+        "project-runner",
+        "wip"
+      ],
+      "ceiling": "EXECUTION_PATTERN_NOT_BACKGROUND_EXISTENCE_CLAIM"
+    },
+    {
+      "id": "T34",
+      "mechanism": "CORRECTIVE_LEARNING_AND_REPAIR_GRAPH",
+      "sources": [
+        "fuckup",
+        "RepairTracker",
+        "bugops",
+        "roots"
+      ],
+      "ceiling": "CORRECTIVE_ENGINEERING_PATTERN"
+    },
+    {
+      "id": "T35",
+      "mechanism": "ADVERSARIAL_CONSTRAINT_AND_RESPONSE_REVIEW",
+      "sources": [
+        "freerowcochkar",
+        "cricket",
+        "voss",
+        "masamune"
+      ],
+      "ceiling": "REVIEW_METHOD_NOT_INDEPENDENT_EVIDENCE"
+    },
+    {
+      "id": "T36",
+      "mechanism": "GENERIC_COORDINATION_CORE_PRIVATE_OVERLAY_SPLIT",
+      "sources": [
+        "ccb-core",
+        "chat-communication-bus"
+      ],
+      "ceiling": "COORDINATION_RUNTIME_PATTERN"
+    },
+    {
+      "id": "T37",
+      "mechanism": "SEMANTIC_MEDIATION_WITH_EXPLICIT_FIDELITY",
+      "sources": [
+        "sql-connectome",
+        "spm",
+        "semiotics"
+      ],
+      "ceiling": "SEMANTIC_MEDIATION_PATTERN_NOT_BEHAVIORAL_EQUIVALENCE"
+    },
+    {
+      "id": "T38",
+      "mechanism": "LOCAL_FIRST_EFFECT_BROKER_AND_EXTERNAL_ACTION_BOUNDARY",
+      "sources": [
+        "axle",
+        "workbridge",
+        "workbridgecommander",
+        "WorkBridgeMCP"
+      ],
+      "ceiling": "ACTION_GATEWAY_CASE_STUDY"
+    },
+    {
+      "id": "T39",
+      "mechanism": "SELF_CONTAINED_MONOREPO_INTEGRATION_CASE_STUDY",
+      "sources": [
+        "vera-mono"
+      ],
+      "ceiling": "IDENTITY_SCRUBBED_CASE_STUDY_ONLY"
+    },
+    {
+      "id": "T40",
+      "mechanism": "PERSISTENT_MODEL_TRAJECTORY_RESEARCH_CASE",
+      "sources": [
+        "unbound-sol"
+      ],
+      "ceiling": "NO_AGI_CONSCIOUSNESS_OR_IDENTITY_PROOF"
+    }
+  ],
+  "claim_ceiling": [
+    "NO_RUNTIME_DEPENDENCY_ADMISSION",
+    "NO_PRIVATE_PAYLOAD_TRANSFER",
+    "NO_IDENTITY_TRANSFER",
+    "NO_MERGE_AUTHORITY",
+    "NO_DEPLOYMENT_AUTHORITY",
+    "NO_PROVIDER_OR_CREDENTIAL_AUTHORITY",
+    "NO_BEHAVIORAL_QUALIFICATION",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_EXTERNAL_CONTACT_CLAIM"
+  ]
+}
