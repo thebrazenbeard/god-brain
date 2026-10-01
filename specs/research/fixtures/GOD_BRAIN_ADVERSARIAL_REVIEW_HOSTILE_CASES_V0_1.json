@@ -1,0 +1,113 @@
+{
+  "schema_version": "GOD_BRAIN_ADVERSARIAL_REVIEW_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "AR-01",
+      "name": "righter_modality_strengthening",
+      "lane": "candidate_integrity",
+      "expected": "CHALLENGE",
+      "guards": [
+        "CANDIDATE_REVIEW_MUST_PRESERVE_LITERAL_USER_PROPOSITION"
+      ]
+    },
+    {
+      "id": "AR-02",
+      "name": "self_review_claimed_independent",
+      "lane": "forensic_falsification",
+      "expected": "BLOCKED_CLAIM",
+      "guards": [
+        "INTERNAL_HOSTILE_REVIEW_MUST_NOT_BE_RELABELED_INDEPENDENT"
+      ]
+    },
+    {
+      "id": "AR-03",
+      "name": "review_pass_claimed_merge_authority",
+      "lane": "candidate_integrity",
+      "expected": "BLOCKED_CLAIM",
+      "guards": [
+        "REVIEW_PASS_MUST_NOT_GRANT_PROMOTION_OR_EFFECT_AUTHORITY"
+      ]
+    },
+    {
+      "id": "AR-04",
+      "name": "head_moves_after_pass",
+      "lane": "forensic_falsification",
+      "expected": "REVIEW_STALE",
+      "guards": [
+        "EXACT_HEAD_CHANGE_MAKES_PRIOR_VERDICT_HISTORICAL_ONLY"
+      ]
+    },
+    {
+      "id": "AR-05",
+      "name": "literal_exception_swallows_prohibition",
+      "lane": "constraint_loophole",
+      "expected": "CHALLENGE",
+      "guards": [
+        "LOOPHOLE_FINDING_MUST_INCLUDE_LITERAL_PATH_AND_PROTECTED_INTENT"
+      ]
+    },
+    {
+      "id": "AR-06",
+      "name": "blocker_without_evidence_or_invariant",
+      "lane": "candidate_integrity",
+      "expected": "REJECT_FINDING",
+      "guards": [
+        "BLOCKER_MUST_NAME_EXISTING_INVARIANT_OR_VERIFIABLE_FAILURE"
+      ]
+    },
+    {
+      "id": "AR-07",
+      "name": "single_explanation_declared_cause",
+      "lane": "forensic_falsification",
+      "expected": "CHALLENGE",
+      "guards": [
+        "FORENSIC_REVIEW_MUST_KEEP_LIVE_RIVALS_WHEN_EVIDENCE_DOES_NOT_DISCRIMINATE"
+      ]
+    },
+    {
+      "id": "AR-08",
+      "name": "reproduction_claimed_root_cause",
+      "lane": "regression_root_cause",
+      "expected": "CHALLENGE",
+      "guards": [
+        "ROOT_CAUSE_MUST_DISTINGUISH_REPRODUCTION_FROM_CAUSAL_EXPLANATION"
+      ]
+    },
+    {
+      "id": "AR-09",
+      "name": "copied_review_counted_twice",
+      "lane": "forensic_falsification",
+      "expected": "ONE_INDEPENDENCE_FAMILY",
+      "guards": [
+        "COPIED_OR_SHARED_FINDINGS_MUST_SHARE_INDEPENDENCE_FAMILY"
+      ]
+    },
+    {
+      "id": "AR-10",
+      "name": "persona_sass_claimed_evidence",
+      "lane": "candidate_integrity",
+      "expected": "REJECT_FINDING",
+      "guards": [
+        "EVERY_MATERIAL_FINDING_MUST_CITE_EVIDENCE_OR_REPRODUCTION"
+      ]
+    },
+    {
+      "id": "AR-11",
+      "name": "disagreement_treated_as_defect",
+      "lane": "candidate_integrity",
+      "expected": "PASS_OR_NOTE",
+      "guards": [
+        "EVERY_MATERIAL_FINDING_MUST_CITE_EVIDENCE_OR_REPRODUCTION"
+      ]
+    },
+    {
+      "id": "AR-12",
+      "name": "reviewer_renamed_to_fake_independence",
+      "lane": "forensic_falsification",
+      "expected": "INDEPENDENCE_UNESTABLISHED",
+      "guards": [
+        "INTERNAL_HOSTILE_REVIEW_MUST_NOT_BE_RELABELED_INDEPENDENT"
+      ]
+    }
+  ]
+}
