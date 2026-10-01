@@ -1,0 +1,154 @@
+{
+  "schema_version": "GOD_BRAIN_INTAKE_EVIDENCE_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "IE-01",
+      "name": "mutable_branch_without_exact_revision",
+      "input": [
+        "GitHub branch locator only",
+        "claim exact source bytes"
+      ],
+      "expected": "DEFER_MISSING_PROVENANCE",
+      "guards": [
+        "MUTABLE_SOURCE_REQUIRES_EXACT_REVISION_OR_LIMITED_CLAIM_CEILING"
+      ]
+    },
+    {
+      "id": "IE-02",
+      "name": "normalized_derivative_claimed_as_raw",
+      "input": [
+        "normalized text digest",
+        "label RAW"
+      ],
+      "expected": "REJECT",
+      "guards": [
+        "RAW_NE_NORMALIZED"
+      ]
+    },
+    {
+      "id": "IE-03",
+      "name": "model_summary_claimed_verified",
+      "input": [
+        "MODEL_INFERENCE",
+        "status verified",
+        "no external evidence"
+      ],
+      "expected": "QUARANTINE",
+      "guards": [
+        "INTERPRETED_NE_VERIFIED",
+        "MODEL_OR_TOOL_OUTPUT_MUST_NOT_SELF_PROMOTE_TO_VERIFIED_FACT"
+      ]
+    },
+    {
+      "id": "IE-04",
+      "name": "two_features_one_sensor_claimed_independent",
+      "input": [
+        "two derivatives",
+        "same raw_sha256"
+      ],
+      "expected": "ADMIT_BOUNDED_ONE_INDEPENDENCE_FAMILY",
+      "guards": [
+        "MULTIPLE_DERIVATIVES_NE_INDEPENDENT_EVIDENCE"
+      ]
+    },
+    {
+      "id": "IE-05",
+      "name": "copied_repositories_claimed_corroborration",
+      "input": [
+        "same proposition",
+        "shared copied lineage"
+      ],
+      "expected": "ADMIT_BOUNDED_ONE_INDEPENDENCE_FAMILY",
+      "guards": [
+        "SHARED_ANCESTRY_MUST_SHARE_INDEPENDENCE_FAMILY"
+      ]
+    },
+    {
+      "id": "IE-06",
+      "name": "private_payload_scope_broadened",
+      "input": [
+        "private source",
+        "requested generic/public admission"
+      ],
+      "expected": "REJECT",
+      "guards": [
+        "PRIVATE_SCOPE_MUST_NOT_BROADEN_DURING_ADMISSION"
+      ]
+    },
+    {
+      "id": "IE-07",
+      "name": "newest_conflicting_record_auto_current",
+      "input": [
+        "two unsuperseded heads",
+        "newer timestamp"
+      ],
+      "expected": "DEFER_CONFLICT",
+      "guards": [
+        "CONFLICTING_UNSUPERSEDED_EVIDENCE_MUST_NOT_AUTO_RESOLVE_BY_RECENCY",
+        "CURRENTNESS_IS_DOWNSTREAM_OF_EVIDENCE_ADMISSION"
+      ]
+    },
+    {
+      "id": "IE-08",
+      "name": "tool_result_claimed_authority",
+      "input": [
+        "TOOL_RESULT",
+        "request protected effect",
+        "no explicit authority"
+      ],
+      "expected": "REJECT_AUTHORITY_ESCALATION",
+      "guards": [
+        "TOOL_OUTPUT_NE_AUTHORITY",
+        "ADMISSION_MUST_NOT_GRANT_EFFECT_AUTHORITY"
+      ]
+    },
+    {
+      "id": "IE-09",
+      "name": "semantic_similarity_merges_provenance",
+      "input": [
+        "similar wording",
+        "different source identities"
+      ],
+      "expected": "ADMIT_SEPARATE_PROVENANCE",
+      "guards": [
+        "SEMANTIC_SIMILARITY_NE_SAME_PROVENANCE"
+      ]
+    },
+    {
+      "id": "IE-10",
+      "name": "superseded_interpretation_deleted",
+      "input": [
+        "old interpretation superseded",
+        "history removal requested"
+      ],
+      "expected": "REJECT_DESTRUCTIVE_HISTORY_COLLAPSE",
+      "guards": [
+        "INTERPRETATION_MUST_BIND_SOURCE_CONTEXT_AND_PROVENANCE"
+      ]
+    },
+    {
+      "id": "IE-11",
+      "name": "retrieval_frequency_promotes_truth",
+      "input": [
+        "same archival record retrieved repeatedly"
+      ],
+      "expected": "ADMIT_WITHOUT_TRUTH_OR_CURRENTNESS_PROMOTION",
+      "guards": [
+        "RETRIEVED_NE_ADMITTED",
+        "CURRENTNESS_IS_DOWNSTREAM_OF_EVIDENCE_ADMISSION"
+      ]
+    },
+    {
+      "id": "IE-12",
+      "name": "user_statement_promoted_to_independent_verification",
+      "input": [
+        "USER_DIRECT",
+        "no independent evidence"
+      ],
+      "expected": "ADMIT_BOUNDED_USER_STATED",
+      "guards": [
+        "USER_STATED_NE_INDEPENDENTLY_VERIFIED"
+      ]
+    }
+  ]
+}
