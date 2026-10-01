@@ -1,0 +1,157 @@
+{
+  "schema_version": "GOD_BRAIN_CONTINUAL_REGIME_LEARNING_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_TRAINING",
+  "parent_review_head": "0d2faba7862e3e368a93a8c275f7aa06b46e0fc4",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/lgcm",
+      "ref": "main",
+      "exact_head": "0043c60419de9ef0b52363b62aed8c0a52ef63f5",
+      "role": "CONTINUAL_DYNAMICS_CONTEXT_RECALL_PREQUENTIAL_EVALUATION"
+    },
+    {
+      "repository": "thebrazenbeard/noema",
+      "ref": "main",
+      "exact_head": "697d1fac6f9fea158994888a861e651ac8fac282",
+      "role": "PREDICTIVE_WORLD_MODEL_EPISTEMIC_CONATIVE_BOUNDARY"
+    },
+    {
+      "repository": "thebrazenbeard/god-brain",
+      "ref": "main",
+      "exact_head": "495c2b42932153cba0926744d04a69bc34557f81",
+      "role": "TARGET_EPISTEMIC_CONTROL_WORLD_MODEL_MEMORY_PLASTICITY"
+    }
+  ],
+  "invariants": [
+    "PREDICTION_MUST_PRECEDE_OUTCOME_UPDATE",
+    "REGIME_HYPOTHESIS_NE_WORLD_TRUTH",
+    "CONTEXT_SCORE_NE_IDENTITY",
+    "MISMATCH_NE_NEW_REGIME_PROOF",
+    "HISTORICAL_COMPETENCE_NE_CURRENT_COMPETENCE",
+    "RECALL_NE_RELEARNING_PROOF",
+    "PERSISTENCE_NE_GENERALIZATION",
+    "PLASTICITY_PROPOSAL_NE_CONSOLIDATED_LEARNING",
+    "SHARED_MODEL_UPDATE_NE_SILENT_EXPERT_REWRITE",
+    "CAPACITY_PRESSURE_NE_SILENT_EVICTION",
+    "OLD_REGIME_RETURN_NE_MODEL_FAILURE",
+    "PLANNER_SUCCESS_NE_LEARNER_QUALITY",
+    "LABEL_FREE_CONTEXT_INFERENCE_NE_CAUSAL_IDENTIFICATION",
+    "TRAINING_EXECUTION_NE_ARCHITECTURE_QUALIFICATION"
+  ],
+  "objects": {
+    "PrequentialEvent": {
+      "required": [
+        "event_id",
+        "observation_before",
+        "action",
+        "prediction",
+        "prediction_state_digest",
+        "outcome_after",
+        "error",
+        "observed_at"
+      ],
+      "purpose": "bind prediction before current outcome updates state"
+    },
+    "RegimeHypothesis": {
+      "required": [
+        "regime_id",
+        "evidence_refs",
+        "predictive_signature",
+        "state",
+        "uncertainty",
+        "created_at",
+        "last_supported_at"
+      ],
+      "states": [
+        "PROPOSED",
+        "ACTIVE",
+        "DORMANT",
+        "RECALLED",
+        "WEAKENED",
+        "SUPERSEDED"
+      ],
+      "purpose": "retain revisable context/regime hypotheses"
+    },
+    "ContextExpert": {
+      "required": [
+        "expert_id",
+        "regime_refs",
+        "parameter_revision",
+        "training_cut",
+        "competence_refs",
+        "capacity_state"
+      ],
+      "purpose": "bounded specialist predictive state with explicit revision"
+    },
+    "PlasticityProposal": {
+      "required": [
+        "proposal_id",
+        "target_model",
+        "evidence_cut",
+        "delta_summary",
+        "expected_gain",
+        "retention_risk",
+        "reversibility",
+        "status"
+      ],
+      "statuses": [
+        "PROPOSED",
+        "QUALIFIED",
+        "REJECTED",
+        "CONSOLIDATED",
+        "SUPERSEDED"
+      ],
+      "purpose": "separate candidate learning from durable consolidation"
+    },
+    "CompetenceSnapshot": {
+      "required": [
+        "snapshot_id",
+        "regime_scope",
+        "model_revision",
+        "evaluation_cut",
+        "metrics",
+        "prequential",
+        "retention_comparison",
+        "recovery_comparison"
+      ],
+      "purpose": "bind exact evidence for current/retained/recovered competence"
+    }
+  },
+  "cycle": [
+    "ENCODE_CURRENT_CONTEXT",
+    "PREDICT_BEFORE_UPDATE",
+    "RECORD_PREQUENTIAL_EVENT",
+    "OBSERVE_OUTCOME",
+    "MEASURE_PREDICTION_ERROR",
+    "UPDATE_REGIME_EVIDENCE",
+    "SELECT_OR_PROPOSE_CONTEXT_EXPERT",
+    "PROPOSE_BOUNDED_PLASTICITY",
+    "QUALIFY_RETENTION_AND_RECOVERY",
+    "CONSOLIDATE_ONLY_IF_ADMITTED"
+  ],
+  "rules": [
+    "CURRENT_OUTCOME_MUST_NOT_LEAK_INTO_ITS_OWN_PREDICTION",
+    "REGIME_SELECTION_MUST_PRESERVE_UNCERTAINTY_AND_ALTERNATIVES",
+    "NEW_EXPERT_SPAWN_REQUIRES_PERSISTENT_MISMATCH_EVIDENCE",
+    "DORMANT_EXPERT_MUST_REMAIN_ADDRESSABLE_UNLESS_EXPLICITLY_RETIRED",
+    "EVICTION_OR_COMPRESSION_REQUIRES_EXPLICIT_POLICY_AND_PROVENANCE",
+    "PLASTICITY_MUST_BIND_EXACT_EVIDENCE_CUT_AND_MODEL_REVISION",
+    "CONSOLIDATION_REQUIRES_RETENTION_CHECK_ON_RELEVANT_PRIOR_REGIMES",
+    "RECALL_CLAIM_REQUIRES_PRIOR_MODEL_REUSE_NOT_ONLY_FAST_RELEARNING",
+    "RECOVERY_METRIC_MUST_BE_SEPARATE_FROM_NEW_REGIME_ADAPTATION_METRIC",
+    "PLANNER_RESULTS_MUST_BE_REPORTED_SEPARATELY_FROM_PREDICTIVE_LEARNER_RESULTS",
+    "CONTEXT_LABELS_IF_AVAILABLE_ARE_EVALUATION_EVIDENCE_NOT_REQUIRED_RUNTIME_INPUT",
+    "NO_PLASTICITY_PATH_MAY_BYPASS_AUTHORITY_OR_PROTECTED_STATE_GOVERNANCE"
+  ],
+  "claim_ceiling": [
+    "NO_TRAINING_EXECUTION",
+    "NO_EMPIRICAL_CONTINUAL_LEARNING_RESULT",
+    "NO_MODEL_WEIGHT_UPDATE",
+    "NO_RUNTIME_INSTALLATION",
+    "NO_AGI_CLAIM",
+    "NO_GENERALIZATION_CLAIM",
+    "NO_CONSCIOUSNESS_CLAIM",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_MERGE_OR_DEPLOYMENT_AUTHORITY"
+  ]
+}
