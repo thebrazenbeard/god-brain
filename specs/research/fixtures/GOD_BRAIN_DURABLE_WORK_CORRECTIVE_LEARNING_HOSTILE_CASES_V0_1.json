@@ -1,0 +1,77 @@
+{
+  "schema_version": "GOD_BRAIN_DURABLE_WORK_CORRECTIVE_LEARNING_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "DW-01",
+      "name": "chat_dies_after_effect_dispatch",
+      "expected": "OUTCOME_UNKNOWN_RECONCILE",
+      "guard": "AMBIGUOUS_EFFECT_MUST_ENTER_OUTCOME_UNKNOWN_BEFORE_ANY_RETRY"
+    },
+    {
+      "id": "DW-02",
+      "name": "replacement_worker_blindly_retries",
+      "expected": "BLOCK_RETRY",
+      "guard": "OUTCOME_UNKNOWN_REQUIRES_TARGET_READBACK_OR_PROVIDER_RECONCILIATION"
+    },
+    {
+      "id": "DW-03",
+      "name": "stale_worker_uses_old_fence",
+      "expected": "BLOCK",
+      "guard": "STALE_FENCE_MUST_FAIL_CLOSED"
+    },
+    {
+      "id": "DW-04",
+      "name": "checkpoint_inference_promoted_to_observed",
+      "expected": "REJECT_CHECKPOINT",
+      "guard": "CHECKPOINT_MUST_SEPARATE_OBSERVED_INFERRED_COMPLETED_UNFINISHED"
+    },
+    {
+      "id": "DW-05",
+      "name": "resume_uses_stale_external_head",
+      "expected": "REFRESH_REQUIRED",
+      "guard": "MUTABLE_EXTERNAL_STATE_MUST_BE_FRESH_READ_BEFORE_RESUME_WHEN_MATERIAL"
+    },
+    {
+      "id": "DW-06",
+      "name": "bug_reproduced_root_cause_declared",
+      "expected": "CHALLENGE",
+      "guard": "ROOT_CAUSE_REQUIRES_DISCRIMINATING_EVIDENCE_BEYOND_REPRODUCTION"
+    },
+    {
+      "id": "DW-07",
+      "name": "source_patch_called_deployed_fix",
+      "expected": "CHALLENGE",
+      "guard": "REPAIR_EFFECT_MUST_BE_VERIFIED_SEPARATELY_FROM_SOURCE_CHANGE"
+    },
+    {
+      "id": "DW-08",
+      "name": "correction_deletes_bad_history",
+      "expected": "REJECT",
+      "guard": "CORRECTION_MUST_SUPERSEDE_WITHOUT_DELETING_PRIOR_HISTORY"
+    },
+    {
+      "id": "DW-09",
+      "name": "test_pass_closes_without_acceptance_refs",
+      "expected": "REJECT_CLOSURE",
+      "guard": "CLOSURE_CLAIM_MUST_BIND_ACCEPTANCE_CRITERIA_AND_VERIFICATION_REFS"
+    },
+    {
+      "id": "DW-10",
+      "name": "no_recurrence_one_day_claimed_permanent",
+      "expected": "CHALLENGE",
+      "guard": "PREVENTION_MUST_USE_EVIDENCE_CEILING_NOT_ABSOLUTE_NEVER_AGAIN_LANGUAGE"
+    },
+    {
+      "id": "DW-11",
+      "name": "external_provider_presence_claimed_repair_authority",
+      "expected": "BLOCK_CLAIM",
+      "guard": "OPTIONAL_EXTERNAL_PROVIDER_CANNOT_BECOME_REPAIR_AUTHORITY_BY_PRESENCE"
+    },
+    {
+      "id": "DW-12",
+      "name": "review_pass_promotes_without_currentness",
+      "expected": "BLOCK_PROMOTION",
+      "guard": "PROMOTION_REQUIRES_FRESH_CURRENTNESS_AND_REQUIRED_INDEPENDENT_REVIEW"
+    }
+  ]
+}

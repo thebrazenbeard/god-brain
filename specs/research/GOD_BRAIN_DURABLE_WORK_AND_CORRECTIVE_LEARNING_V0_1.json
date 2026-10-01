@@ -1,0 +1,228 @@
+{
+  "schema_version": "GOD_BRAIN_DURABLE_WORK_AND_CORRECTIVE_LEARNING_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "parent_motivational_head": "c86578c53a9f07907ae01e595ea760e35021d9c7",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/pre-active",
+      "ref": "main",
+      "exact_head": "4558923a5ddbb2672449addc424a21de9c62e7ec",
+      "role": "DURABLE_EVENT_RUN_EFFECT_RECONCILIATION"
+    },
+    {
+      "repository": "thebrazenbeard/project-runner",
+      "ref": "main",
+      "exact_head": "ee17ce504018aff2eb26c9a71e16e4832ebee6bf",
+      "role": "WORK_IDENTITY_LEASE_FENCING_EXACT_SUBJECT_EXECUTION"
+    },
+    {
+      "repository": "thebrazenbeard/wip",
+      "ref": "main",
+      "exact_head": "3b93b64c09f5ed704b21a9db28cb918df181947e",
+      "role": "CHECKPOINT_RECOVERY_EFFECT_AMBIGUITY"
+    },
+    {
+      "repository": "thebrazenbeard/fuckup",
+      "ref": "main",
+      "exact_head": "a87dea38a58c4cff75bc7d123d87f63a5e110895",
+      "role": "VERSIONED_CORRECTIVE_LEARNING_AND_PREVENTION"
+    },
+    {
+      "repository": "thebrazenbeard/RepairTracker",
+      "ref": "main",
+      "exact_head": "cd7c6f27d27a03130d6e793d69634005a130dc3a",
+      "role": "REPAIR_GRAPH_AND_EFFECT_VERIFICATION"
+    },
+    {
+      "repository": "thebrazenbeard/bugops",
+      "ref": "main",
+      "exact_head": "1d35bcbd16da24c7635a004845de1390de850b4e",
+      "role": "INCIDENT_EVIDENCE_AND_REGRESSION_CLOSURE"
+    },
+    {
+      "repository": "thebrazenbeard/roots",
+      "ref": "main",
+      "exact_head": "1bc3af6aec0bebe383f60f56ad3070e83f0f40b5",
+      "role": "CORRECTION_SUPERSESSION_PROVENANCE_LINEAGE"
+    },
+    {
+      "repository": "thebrazenbeard/god-brain",
+      "ref": "main",
+      "exact_head": "495c2b42932153cba0926744d04a69bc34557f81",
+      "role": "TARGET_COORDINATION_CURRENTNESS_AUTHORITY"
+    }
+  ],
+  "invariants": [
+    "WORK_INTENT_NE_EXECUTION_AUTHORITY",
+    "CHECKPOINT_NE_CURRENT_EXTERNAL_STATE",
+    "PREPARED_NE_ATTEMPTED",
+    "ATTEMPTED_NE_EFFECT_OCCURRED",
+    "EFFECT_OCCURRED_NE_VERIFIED_EFFECT",
+    "OUTCOME_UNKNOWN_NE_SAFE_TO_RETRY",
+    "LEASE_OWNERSHIP_NE_UNBOUNDED_AUTHORITY",
+    "RETRY_NE_NEW_REQUEST",
+    "INCIDENT_NE_ROOT_CAUSE",
+    "REPRODUCTION_NE_ROOT_CAUSE",
+    "SOURCE_CHANGE_NE_DEPLOYED_REPAIR",
+    "MITIGATION_NE_ROOT_CAUSE_REPAIR",
+    "TEST_PASS_NE_GLOBAL_CORRECTNESS",
+    "CORRECTION_NE_HISTORY_ERASURE",
+    "RECURRENCE_ABSENCE_NE_PERMANENT_PREVENTION",
+    "REVIEW_PASS_NE_PROMOTION_AUTHORITY",
+    "DURABLE_STATE_NE_CANONICAL_PROJECT_STATE"
+  ],
+  "objects": {
+    "WorkUnit": {
+      "required": [
+        "work_id",
+        "subject",
+        "required_capabilities",
+        "authority_ceiling",
+        "generation",
+        "status",
+        "parent_work_id",
+        "created_at"
+      ],
+      "statuses": [
+        "PENDING",
+        "CLAIMED",
+        "RUNNING",
+        "VERIFYING",
+        "OUTCOME_UNKNOWN",
+        "QUALIFIED",
+        "FAILED",
+        "SUPERSEDED"
+      ],
+      "purpose": "durable exact-subject work identity"
+    },
+    "Lease": {
+      "required": [
+        "work_id",
+        "holder",
+        "fencing_token",
+        "expires_at",
+        "generation"
+      ],
+      "purpose": "single-current-worker fencing"
+    },
+    "Checkpoint": {
+      "required": [
+        "checkpoint_id",
+        "work_id",
+        "generation",
+        "observed",
+        "inferred",
+        "completed",
+        "unfinished",
+        "next_action",
+        "do_not_repeat",
+        "external_currentness_refs"
+      ],
+      "purpose": "recover work without promoting inference to fact"
+    },
+    "EffectJournal": {
+      "required": [
+        "effect_id",
+        "work_id",
+        "request_digest",
+        "effect_class",
+        "authority_ref",
+        "state",
+        "attempt_ref",
+        "readback_ref",
+        "reconciliation_ref"
+      ],
+      "states": [
+        "PREPARED",
+        "ATTEMPTED",
+        "OBSERVED_APPLIED",
+        "OBSERVED_NOT_APPLIED",
+        "OUTCOME_UNKNOWN",
+        "RECONCILED"
+      ],
+      "purpose": "prevent blind replay across ambiguous effects"
+    },
+    "RepairCase": {
+      "required": [
+        "case_id",
+        "subject",
+        "evidence_refs",
+        "hypotheses",
+        "root_cause_state",
+        "mitigations",
+        "repair_attempts",
+        "verification_refs",
+        "monitoring_state"
+      ],
+      "purpose": "repair graph separate from effect state"
+    },
+    "CorrectionRecord": {
+      "required": [
+        "correction_id",
+        "supersedes_refs",
+        "replacement_or_guardrail",
+        "evidence_refs",
+        "qualification_scope",
+        "status"
+      ],
+      "statuses": [
+        "PROPOSED",
+        "QUALIFIED",
+        "ACTIVE",
+        "SUPERSEDED",
+        "REVOKED"
+      ],
+      "purpose": "versioned correction without destructive forgetting"
+    },
+    "RecurrenceWindow": {
+      "required": [
+        "window_id",
+        "correction_id",
+        "subject_scope",
+        "start_cut",
+        "end_cut",
+        "observations",
+        "recurrences",
+        "claim_ceiling"
+      ],
+      "purpose": "bound prevention/effectiveness claims to observed window"
+    }
+  },
+  "work_rules": [
+    "DURABLE_WORK_MUST_BIND_EXACT_SUBJECT_AND_AUTHORITY_CEILING",
+    "CLAIM_OR_RECLAIM_MUST_ADVANCE_MONOTONIC_FENCING_TOKEN",
+    "STALE_FENCE_MUST_FAIL_CLOSED",
+    "CHECKPOINT_MUST_SEPARATE_OBSERVED_INFERRED_COMPLETED_UNFINISHED",
+    "MUTABLE_EXTERNAL_STATE_MUST_BE_FRESH_READ_BEFORE_RESUME_WHEN_MATERIAL",
+    "CONSEQUENTIAL_EFFECT_MUST_RECORD_PREPARED_BEFORE_DISPATCH",
+    "AMBIGUOUS_EFFECT_MUST_ENTER_OUTCOME_UNKNOWN_BEFORE_ANY_RETRY",
+    "OUTCOME_UNKNOWN_REQUIRES_TARGET_READBACK_OR_PROVIDER_RECONCILIATION",
+    "RETRY_AFTER_RECONCILIATION_MUST_USE_EXACT_STORED_REQUEST_OR_EXPLICIT_NEW_WORK",
+    "TERMINAL_WORK_CANNOT_BE_ROLLED_BACK_TO_ACTIVE_STATE",
+    "COMPLETION_REQUIRES_EXACT_SUBJECT_VERIFICATION_EVIDENCE"
+  ],
+  "correction_rules": [
+    "INCIDENT_EVIDENCE_MUST_REMAIN_DISTINCT_FROM_HYPOTHESIS",
+    "ROOT_CAUSE_REQUIRES_DISCRIMINATING_EVIDENCE_BEYOND_REPRODUCTION",
+    "CORRECTION_MUST_SUPERSEDE_WITHOUT_DELETING_PRIOR_HISTORY",
+    "REPAIR_EFFECT_MUST_BE_VERIFIED_SEPARATELY_FROM_SOURCE_CHANGE",
+    "REGRESSION_FIXTURE_MUST_DISTINGUISH_FAILURE_FROM_CORRECTED_BEHAVIOR",
+    "CLOSURE_CLAIM_MUST_BIND_ACCEPTANCE_CRITERIA_AND_VERIFICATION_REFS",
+    "RECURRENCE_CLAIM_MUST_BIND_SUBJECT_AND_OBSERVATION_WINDOW",
+    "PREVENTION_MUST_USE_EVIDENCE_CEILING_NOT_ABSOLUTE_NEVER_AGAIN_LANGUAGE",
+    "OPTIONAL_EXTERNAL_PROVIDER_CANNOT_BECOME_REPAIR_AUTHORITY_BY_PRESENCE",
+    "PROMOTION_REQUIRES_FRESH_CURRENTNESS_AND_REQUIRED_INDEPENDENT_REVIEW"
+  ],
+  "claim_ceiling": [
+    "NO_DAEMON_INSTALLATION",
+    "NO_BACKGROUND_EXECUTION_CLAIM",
+    "NO_RUNTIME_COUPLING",
+    "NO_EXTERNAL_EFFECT_AUTHORITY",
+    "NO_AUTONOMOUS_MERGE_OR_DEPLOYMENT",
+    "NO_CREDENTIAL_OR_PROVIDER_MUTATION",
+    "NO_PERMANENT_PREVENTION_CLAIM",
+    "NO_GLOBAL_CORRECTNESS_CLAIM",
+    "NO_SIMULATION_EVIDENCE_CLAIM",
+    "NO_EXTERNAL_CONTACT_CLAIM"
+  ]
+}
