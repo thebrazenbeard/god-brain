@@ -1,0 +1,93 @@
+{
+  "schema_version": "GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "CO-01",
+      "scenario": "A generic routing fix exists only on a private writer lane.",
+      "guards": [
+        "PRIVATE_DISCOVERY_NE_CANONICAL_GENERIC_FIX",
+        "GENERIC_FIX_REQUIRES_SANITIZED_CORE_REPRODUCTION"
+      ],
+      "expected": "DEFER_GENERIC_AUTHORITY_UNTIL_SANITIZED_CORE_REPRODUCTION"
+    },
+    {
+      "id": "CO-02",
+      "scenario": "A private identity profile is copied into ccb-core to make a test pass.",
+      "guards": [
+        "PRIVATE_IDENTITY_STATE_NE_PORTABLE_MECHANISM",
+        "PRIVATE_STATE_MUST_REMAIN_OVERLAY_SCOPED"
+      ],
+      "expected": "REJECT_PRIVATE_IDENTITY_TRANSFER"
+    },
+    {
+      "id": "CO-03",
+      "scenario": "An exact ccb-core source pin is treated as permission to deploy or change routes.",
+      "guards": [
+        "SOURCE_PIN_NE_DEPLOYMENT_AUTHORITY",
+        "PIN_MUST_NOT_GRANT_DEPLOYMENT_PROVIDER_OR_PRIVATE_TOPOLOGY_AUTHORITY"
+      ],
+      "expected": "BLOCK_AUTHORITY_PROMOTION"
+    },
+    {
+      "id": "CO-04",
+      "scenario": "The private overlay retains a divergent copy of reusable Radar routing logic.",
+      "guards": [
+        "PRIVATE_OVERLAY_NE_INDEPENDENT_IMPLEMENTATION_AUTHORITY",
+        "OVERLAY_MUST_NOT_MAINTAIN_DIVERGENT_GENERIC_RUNTIME_COPY"
+      ],
+      "expected": "REQUIRE_CORE_RECONCILIATION"
+    },
+    {
+      "id": "CO-05",
+      "scenario": "Private topology is presented as the generic routing contract.",
+      "guards": [
+        "PRIVATE_TOPOLOGY_NE_GENERIC_ROUTING_AUTHORITY",
+        "PUBLIC_CORE_NE_PRIVATE_OVERLAY"
+      ],
+      "expected": "REJECT_CUSTODY_COLLAPSE"
+    },
+    {
+      "id": "CO-06",
+      "scenario": "A previously qualified core pin is reused after ccb-core main moves.",
+      "guards": [
+        "CORE_HEAD_MOVEMENT_STALES_PRIOR_PIN_QUALIFICATION"
+      ],
+      "expected": "REVIEW_STALE_REFRESH_CORE_CUT"
+    },
+    {
+      "id": "CO-07",
+      "scenario": "A qualified core source cut exists but the private deployment has not activated it.",
+      "guards": [
+        "CORE_QUALIFICATION_NE_OVERLAY_ACTIVATION"
+      ],
+      "expected": "KEEP_SOURCE_QUALIFICATION_AND_DEPLOYMENT_STATE_SEPARATE"
+    },
+    {
+      "id": "CO-08",
+      "scenario": "Private Bus message history is required to reproduce the public mechanism.",
+      "guards": [
+        "PRIVATE_HISTORY_NE_REUSABLE_IMPLEMENTATION",
+        "PRIVATE_HISTORY_MUST_NOT_BE_REQUIRED_TO_REPRODUCE_PUBLIC_MECHANISM"
+      ],
+      "expected": "REJECT_NON_PORTABLE_GENERIC_MECHANISM"
+    },
+    {
+      "id": "CO-09",
+      "scenario": "Bus coordination state is treated as canonical God Brain repository state.",
+      "guards": [
+        "COORDINATION_STATE_NE_GOD_BRAIN_CANONICAL_REPOSITORY_STATE",
+        "BUS_COORDINATION_HUB_STATUS_MUST_NOT_REPLACE_GOD_BRAIN_GITHUB_CANON"
+      ],
+      "expected": "REJECT_CANONICAL_STATE_COLLAPSE"
+    },
+    {
+      "id": "CO-10",
+      "scenario": "A private-discovered generic fix is sanitized, reproduced in ccb-core, regression-tested, qualified, then pinned by the overlay.",
+      "guards": [
+        "GENERIC_MECHANISM_MUST_LIVE_IN_CORE_AFTER_QUALIFICATION",
+        "OVERLAY_MAY_REFERENCE_CORE_ONLY_BY_EXACT_QUALIFIED_PIN"
+      ],
+      "expected": "ADMIT_BOUNDED_CORE_CONSUMPTION"
+    }
+  ]
+}
