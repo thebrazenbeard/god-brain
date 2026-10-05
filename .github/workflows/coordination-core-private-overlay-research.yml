@@ -1,0 +1,34 @@
+name: God Brain coordination core private overlay research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_V0_1.md"
+      - "specs/research/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_coordination_core_private_overlay.py"
+      - "tests/test_validate_god_brain_coordination_core_private_overlay.py"
+      - ".github/workflows/coordination-core-private-overlay-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_V0_1.md"
+      - "specs/research/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_coordination_core_private_overlay.py"
+      - "tests/test_validate_god_brain_coordination_core_private_overlay.py"
+      - ".github/workflows/coordination-core-private-overlay-research.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run focused contract test
+        run: python3 -m unittest -v tests.test_validate_god_brain_coordination_core_private_overlay
+      - name: Run validator
+        run: python3 tools/validate_god_brain_coordination_core_private_overlay.py
+      - name: Compile Python
+        run: python3 -m compileall -q tools tests
