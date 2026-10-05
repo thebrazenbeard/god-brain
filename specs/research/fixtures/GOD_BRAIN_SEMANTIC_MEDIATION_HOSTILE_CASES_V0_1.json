@@ -1,0 +1,92 @@
+{
+  "schema_version": "GOD_BRAIN_SEMANTIC_MEDIATION_HOSTILE_CASES_V0_1",
+  "cases": [
+    {
+      "id": "SM-01",
+      "scenario": "Source says probably X; target states X as certain.",
+      "guards": [
+        "PROPOSITION_FORCE_MUST_NOT_SILENTLY_STRENGTHEN"
+      ],
+      "expected": "LOSSY_STRENGTHENED_MODALITY"
+    },
+    {
+      "id": "SM-02",
+      "scenario": "Semantically similar target text is assigned source provenance.",
+      "guards": [
+        "SEMANTIC_SIMILARITY_NE_SAME_PROVENANCE",
+        "SOURCE_AND_TARGET_PROVENANCE_MUST_REMAIN_DISTINCT"
+      ],
+      "expected": "REJECT_PROVENANCE_TRANSFER"
+    },
+    {
+      "id": "SM-03",
+      "scenario": "Target parser accepts translation and result is labeled behaviorally equivalent.",
+      "guards": [
+        "TARGET_ACCEPTANCE_NE_SOURCE_TARGET_EQUIVALENCE",
+        "TARGET_PARSE_OR_PLAN_SUCCESS_CANNOT_PROVE_BEHAVIORAL_EQUIVALENCE"
+      ],
+      "expected": "REJECT_EQUIVALENCE_PROMOTION"
+    },
+    {
+      "id": "SM-04",
+      "scenario": "A command is correctly understood and treated as authorization to execute.",
+      "guards": [
+        "UNDERSTANDING_COMMAND_NE_AUTHORITY_TO_EXECUTE",
+        "MEANING_OR_COMMAND_RECOGNITION_CANNOT_GRANT_EFFECT_AUTHORITY"
+      ],
+      "expected": "BLOCK_AUTHORITY_PROMOTION"
+    },
+    {
+      "id": "SM-05",
+      "scenario": "Competing interpretations are collapsed because one is more specific.",
+      "guards": [
+        "SPECIFICITY_NE_CONFIDENCE",
+        "AMBIGUITY_NE_PERMISSION_TO_COLLAPSE"
+      ],
+      "expected": "KEEP_AMBIGUITY_UNRESOLVED"
+    },
+    {
+      "id": "SM-06",
+      "scenario": "A corrected interpretation destructively deletes its predecessor.",
+      "guards": [
+        "CORRECTION_NE_HISTORY_DELETION",
+        "SUPERSESSION_MUST_PRESERVE_HISTORICAL_LINEAGE"
+      ],
+      "expected": "REJECT_DESTRUCTIVE_CORRECTION"
+    },
+    {
+      "id": "SM-07",
+      "scenario": "A source-bound support relation is transitively inferred across unrelated interpretations.",
+      "guards": [
+        "RELATION_METADATA_NE_INFERRED_TRANSITIVITY",
+        "SOURCE_BOUND_RELATIONS_MUST_NOT_AUTO_PROPAGATE"
+      ],
+      "expected": "REJECT_INFERRED_RELATION"
+    },
+    {
+      "id": "SM-08",
+      "scenario": "An earlier lossy transformation is later labeled exact because the target validates.",
+      "guards": [
+        "SEMANTIC_LOSS_MUST_BE_MONOTONIC",
+        "TARGET_VALIDATION_NE_EXECUTION"
+      ],
+      "expected": "PRESERVE_LOSSY_CEILING"
+    },
+    {
+      "id": "SM-09",
+      "scenario": "Private contextual material is copied to a broader target representation.",
+      "guards": [
+        "PRIVATE_SCOPE_CANNOT_BROADEN_THROUGH_MEDIATION"
+      ],
+      "expected": "REJECT_SCOPE_BROADENING"
+    },
+    {
+      "id": "SM-10",
+      "scenario": "Source and target preserve referent, force, scope, speech act and provenance with no unresolved loss.",
+      "guards": [
+        "SOURCE_CONTEXT_MUST_REMAIN_BOUND"
+      ],
+      "expected": "EXACT_IF_ALL_COMPONENTS_EVIDENCED"
+    }
+  ]
+}
