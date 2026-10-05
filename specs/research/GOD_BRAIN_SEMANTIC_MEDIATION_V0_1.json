@@ -1,0 +1,137 @@
+{
+  "schema_version": "GOD_BRAIN_SEMANTIC_MEDIATION_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "assessment_date": "2026-10-05",
+  "parent_coordination_head": "c40d98a98a4627ec3b1a83ffaad514ad345f9612",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/sql-connectome",
+      "ref": "main",
+      "exact_head": "b609fcec50fe5a135ca1d8139f5563f5631582b2",
+      "role": "TYPED_TRANSLATION_FIDELITY_AND_CROSS_BOUND_RECEIPTS"
+    },
+    {
+      "repository": "thebrazenbeard/spm",
+      "ref": "main",
+      "exact_head": "d9ea72798ac892ac75f858177b6ed0c5a6b4c37c",
+      "role": "MEANING_IN_CONTEXT_AND_PRAGMATIC_STATE"
+    },
+    {
+      "repository": "thebrazenbeard/semiotics",
+      "ref": "main",
+      "exact_head": "37117a2097f7f2aa35968fc9db24eacf7240826e",
+      "role": "SOURCE_BOUND_INTERPRETATION_AND_REVISION_HISTORY"
+    }
+  ],
+  "invariants": [
+    "SYNTAX_SIMILARITY_NE_SEMANTIC_EQUIVALENCE",
+    "SEMANTIC_SIMILARITY_NE_SAME_PROVENANCE",
+    "TRANSLATION_PASS_NE_BEHAVIORAL_EQUIVALENCE",
+    "INTERPRETATION_NE_TRUTH",
+    "SPECIFICITY_NE_CONFIDENCE",
+    "MEANING_NE_AUTHORIZATION",
+    "TARGET_ACCEPTANCE_NE_SOURCE_TARGET_EQUIVALENCE",
+    "AMBIGUITY_NE_PERMISSION_TO_COLLAPSE",
+    "UNDERSTANDING_COMMAND_NE_AUTHORITY_TO_EXECUTE",
+    "CORRECTION_NE_HISTORY_DELETION",
+    "PROPOSITION_FORCE_MUST_NOT_SILENTLY_STRENGTHEN",
+    "SOURCE_CONTEXT_MUST_REMAIN_BOUND",
+    "SEMANTIC_LOSS_MUST_BE_MONOTONIC",
+    "TARGET_VALIDATION_NE_EXECUTION",
+    "RELATION_METADATA_NE_INFERRED_TRANSITIVITY"
+  ],
+  "fidelity_states": [
+    "EXACT",
+    "QUALIFIED",
+    "LOSSY",
+    "UNRESOLVED",
+    "INCOMPATIBLE"
+  ],
+  "objects": {
+    "MeaningFrame": {
+      "required": [
+        "frame_id",
+        "source_ref",
+        "context",
+        "referents",
+        "propositions",
+        "speech_acts",
+        "ambiguities",
+        "provenance"
+      ],
+      "purpose": "bind explicit meaning-in-context without truth promotion"
+    },
+    "MediationMapping": {
+      "required": [
+        "mapping_id",
+        "source_frame_id",
+        "target_representation",
+        "transformations",
+        "preserved_fields",
+        "changed_fields",
+        "unresolved_fields"
+      ],
+      "purpose": "record typed semantic transformations instead of relying on similarity"
+    },
+    "FidelityAssessment": {
+      "required": [
+        "assessment_id",
+        "mapping_id",
+        "component_fidelity",
+        "overall_fidelity",
+        "semantic_loss",
+        "evidence_refs",
+        "claim_ceiling"
+      ],
+      "purpose": "bound what a mediation result actually preserves"
+    },
+    "MediationReceipt": {
+      "required": [
+        "receipt_id",
+        "source_digest",
+        "target_digest",
+        "source_frame_digest",
+        "mapping_digest",
+        "fidelity_digest",
+        "upstream_receipts",
+        "authority_state"
+      ],
+      "purpose": "cross-bind provenance, mediation evidence and authority separation"
+    }
+  },
+  "pipeline": [
+    "BIND_SOURCE_CONTEXT",
+    "CONSTRUCT_SOURCE_MEANING_FRAME",
+    "DECLARE_TARGET_REPRESENTATION",
+    "MAP_WITH_TYPED_TRANSFORMATIONS",
+    "ASSESS_COMPONENT_FIDELITY",
+    "PRESERVE_UNRESOLVED_AMBIGUITY",
+    "VALIDATE_TARGET_REPRESENTATION_WHERE_AVAILABLE",
+    "EMIT_PROVENANCE_BOUND_MEDIATION_RECEIPT",
+    "HAND_OFF_WITHOUT_AUTHORITY_PROMOTION"
+  ],
+  "rules": [
+    "MODALITY_POLARITY_SCOPE_REFERENT_AND_SPEECH_ACT_CHANGES_MUST_BE_EXPLICIT",
+    "SOURCE_AND_TARGET_PROVENANCE_MUST_REMAIN_DISTINCT",
+    "UNRESOLVED_INTERPRETATIONS_MUST_REMAIN_UNRESOLVED_WITHOUT_EVIDENCE",
+    "SUPERSESSION_MUST_PRESERVE_HISTORICAL_LINEAGE",
+    "SOURCE_BOUND_RELATIONS_MUST_NOT_AUTO_PROPAGATE",
+    "SEMANTIC_LOSS_CANNOT_BE_ERASED_BY_LATER_STAGE",
+    "TARGET_PARSE_OR_PLAN_SUCCESS_CANNOT_PROVE_BEHAVIORAL_EQUIVALENCE",
+    "MEANING_OR_COMMAND_RECOGNITION_CANNOT_GRANT_EFFECT_AUTHORITY",
+    "PRIVATE_SCOPE_CANNOT_BROADEN_THROUGH_MEDIATION",
+    "REVIEW_OR_MODEL_OUTPUT_CANNOT_SELF_PROMOTE_FIDELITY"
+  ],
+  "claim_ceiling": [
+    "NO_UNIVERSAL_SEMANTIC_EQUIVALENCE",
+    "NO_BEHAVIORAL_EQUIVALENCE_FROM_TRANSLATION",
+    "NO_TRUTH_PROMOTION",
+    "NO_CURRENTNESS_PROMOTION",
+    "NO_EFFECT_AUTHORITY",
+    "NO_EXECUTION",
+    "NO_PRIVATE_SCOPE_BROADENING",
+    "NO_MODEL_COGNITION_DEPENDENCY",
+    "NO_AGI_OR_CONSCIOUSNESS_CLAIM",
+    "NO_SIMULATION_OR_EXTERNAL_CONTACT_CLAIM"
+  ]
+}

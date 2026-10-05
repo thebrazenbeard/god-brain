@@ -1,0 +1,42 @@
+name: God Brain semantic mediation research
+
+on:
+  push:
+    paths:
+      - "docs/research/GOD_BRAIN_SEMANTIC_MEDIATION_V0_1.md"
+      - "specs/research/GOD_BRAIN_SEMANTIC_MEDIATION_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_SEMANTIC_MEDIATION_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_semantic_mediation.py"
+      - "tests/test_validate_god_brain_semantic_mediation.py"
+      - ".github/workflows/semantic-mediation-research.yml"
+  pull_request:
+    paths:
+      - "docs/research/GOD_BRAIN_SEMANTIC_MEDIATION_V0_1.md"
+      - "specs/research/GOD_BRAIN_SEMANTIC_MEDIATION_V0_1.json"
+      - "specs/research/fixtures/GOD_BRAIN_SEMANTIC_MEDIATION_HOSTILE_CASES_V0_1.json"
+      - "tools/validate_god_brain_semantic_mediation.py"
+      - "tests/test_validate_god_brain_semantic_mediation.py"
+      - ".github/workflows/semantic-mediation-research.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact subject
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: repo
+          persist-credentials: false
+      - name: Run focused contract test
+        working-directory: repo
+        run: python3 -m unittest -v tests.test_validate_god_brain_semantic_mediation
+      - name: Run validator
+        working-directory: repo
+        run: python3 tools/validate_god_brain_semantic_mediation.py
+      - name: Compile Python
+        working-directory: repo
+        run: python3 -m compileall -q tools tests
