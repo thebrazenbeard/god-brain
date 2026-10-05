@@ -1,0 +1,117 @@
+{
+  "schema_version": "GOD_BRAIN_COORDINATION_CORE_PRIVATE_OVERLAY_V0_1",
+  "status": "RESEARCH_SPECIFICATION_NO_RUNTIME",
+  "assessment_date": "2026-10-05",
+  "parent_source_universe_head": "f56f52b3606839147a12e68375612336fb9bbfdd",
+  "donor_sources": [
+    {
+      "repository": "thebrazenbeard/ccb-core",
+      "ref": "main",
+      "exact_head": "0b542a78ebf5827a518e0731a63f17a7ac8a2727",
+      "role": "REUSABLE_CCB_RADAR_IMPLEMENTATION_AUTHORITY"
+    },
+    {
+      "repository": "thebrazenbeard/chat-communication-bus",
+      "ref": "main",
+      "exact_head": "e0bcb5eb18630693de55a1af2066411c7af079bb",
+      "role": "PRIVATE_COORDINATION_DEPLOYMENT_OVERLAY"
+    }
+  ],
+  "invariants": [
+    "REUSABLE_CODE_AUTHORITY_NE_PRIVATE_DEPLOYMENT_STATE",
+    "PUBLIC_CORE_NE_PRIVATE_OVERLAY",
+    "PRIVATE_DISCOVERY_NE_CANONICAL_GENERIC_FIX",
+    "SOURCE_PIN_NE_DEPLOYMENT_AUTHORITY",
+    "PRIVATE_HISTORY_NE_REUSABLE_IMPLEMENTATION",
+    "PRIVATE_TOPOLOGY_NE_GENERIC_ROUTING_AUTHORITY",
+    "PRIVATE_IDENTITY_STATE_NE_PORTABLE_MECHANISM",
+    "GENERIC_FIX_REQUIRES_SANITIZED_CORE_REPRODUCTION",
+    "CORE_QUALIFICATION_NE_OVERLAY_ACTIVATION",
+    "OVERLAY_PIN_NE_CORE_MUTATION_AUTHORITY",
+    "PRIVATE_OVERLAY_NE_INDEPENDENT_IMPLEMENTATION_AUTHORITY",
+    "COORDINATION_STATE_NE_GOD_BRAIN_CANONICAL_REPOSITORY_STATE"
+  ],
+  "objects": {
+    "CoreMechanismBinding": {
+      "required": [
+        "repository",
+        "ref",
+        "exact_head",
+        "role",
+        "public_safe_scope",
+        "qualification_refs"
+      ],
+      "purpose": "bind reusable coordination mechanisms to a public-safe exact source cut"
+    },
+    "PrivateOverlayBinding": {
+      "required": [
+        "repository",
+        "ref",
+        "exact_head",
+        "role",
+        "private_state_classes",
+        "core_pin",
+        "privacy_scope"
+      ],
+      "purpose": "bind deployment/private coordination state without turning it into reusable-code authority"
+    },
+    "GenericFixCandidate": {
+      "required": [
+        "candidate_id",
+        "discovery_source",
+        "provenance_refs",
+        "sanitization_state",
+        "reproduction_state",
+        "regression_state",
+        "core_candidate_ref",
+        "disposition"
+      ],
+      "purpose": "route generic fixes discovered in private state through sanitized public-core qualification"
+    },
+    "ConsumptionPin": {
+      "required": [
+        "overlay_repository",
+        "core_repository",
+        "exact_core_head",
+        "qualification_ref",
+        "private_inputs",
+        "authority_flags"
+      ],
+      "purpose": "allow a private overlay to consume a qualified core cut without inheriting effect authority"
+    }
+  },
+  "pipeline": [
+    "DISCOVER_GENERIC_OR_PRIVATE_FIX",
+    "CLASSIFY_CORE_VS_OVERLAY",
+    "SANITIZE_PRIVATE_MATERIAL",
+    "REPRODUCE_IN_PUBLIC_CORE",
+    "ADD_DETERMINISTIC_REGRESSION",
+    "QUALIFY_EXACT_CORE_CUT",
+    "PIN_OVERLAY_TO_QUALIFIED_CORE",
+    "RECONCILE_PRIVATE_STATE_SEPARATELY"
+  ],
+  "admission_rules": [
+    "GENERIC_MECHANISM_MUST_LIVE_IN_CORE_AFTER_QUALIFICATION",
+    "PRIVATE_DISCOVERY_MUST_SANITIZE_BEFORE_CORE_REPRODUCTION",
+    "CORE_FIX_MUST_HAVE_DETERMINISTIC_REGRESSION",
+    "OVERLAY_MAY_REFERENCE_CORE_ONLY_BY_EXACT_QUALIFIED_PIN",
+    "OVERLAY_MUST_NOT_MAINTAIN_DIVERGENT_GENERIC_RUNTIME_COPY",
+    "PRIVATE_STATE_MUST_REMAIN_OVERLAY_SCOPED",
+    "PIN_MUST_NOT_GRANT_DEPLOYMENT_PROVIDER_OR_PRIVATE_TOPOLOGY_AUTHORITY",
+    "CORE_HEAD_MOVEMENT_STALES_PRIOR_PIN_QUALIFICATION",
+    "PRIVATE_HISTORY_MUST_NOT_BE_REQUIRED_TO_REPRODUCE_PUBLIC_MECHANISM",
+    "BUS_COORDINATION_HUB_STATUS_MUST_NOT_REPLACE_GOD_BRAIN_GITHUB_CANON"
+  ],
+  "claim_ceiling": [
+    "NO_RUNTIME_MIGRATION",
+    "NO_PRIVATE_HISTORY_PUBLICATION",
+    "NO_PRIVATE_IDENTITY_OR_TOPOLOGY_TRANSFER",
+    "NO_PROVIDER_OR_CREDENTIAL_CHANGE",
+    "NO_DEPLOYMENT_OR_ROUTE_ACTIVATION",
+    "NO_MERGE_AUTHORITY",
+    "NO_MANDATORY_CCB_CORE_RUNTIME_DEPENDENCY",
+    "NO_COORDINATION_HUB_REPLACEMENT",
+    "NO_INDEPENDENT_REVIEW_CLAIM",
+    "NO_SIMULATION_OR_EXTERNAL_CONTACT_CLAIM"
+  ]
+}
