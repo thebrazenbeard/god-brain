@@ -25,18 +25,19 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone exact workflow subject
+      - name: Checkout exact workflow subject
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: repo
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Validate exact workflow subject diff
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: |
-          git clone --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" repo
-          cd repo
-          git fetch origin "${BASE_SHA}" "${HEAD_SHA}"
-          git checkout --detach "${HEAD_SHA}"
-          git diff --check "${BASE_SHA}..${HEAD_SHA}"
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python3 repo/tools/validate_workflow_subject_diff.py
       - name: Validate anomaly/contact protocol
         working-directory: repo
         run: python3 tools/validate_god_brain_anomaly_contact_protocol.py
