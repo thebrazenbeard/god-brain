@@ -28,6 +28,60 @@ class WorkflowSupplyChainTests(unittest.TestCase):
         finally:
             tmp.cleanup()
 
+    def test_floating_tag_with_valid_yaml_spacing_is_rejected(self) -> None:
+        tmp, root = self._root("steps:\n  - uses : actions/checkout@v4\n")
+        try:
+            errors = validate_workflow_supply_chain(root)
+            self.assertTrue(any("40-hex" in error for error in errors))
+        finally:
+            tmp.cleanup()
+
+    def test_floating_tag_with_quoted_yaml_key_is_rejected(self) -> None:
+        for quote in ("'", '"'):
+            with self.subTest(quote=quote):
+                tmp, root = self._root(f"steps:\n  - {quote}uses{quote}: actions/checkout@v4\n")
+                try:
+                    errors = validate_workflow_supply_chain(root)
+                    self.assertTrue(any("40-hex" in error for error in errors))
+                finally:
+                    tmp.cleanup()
+
+    def test_floating_tag_in_valid_yaml_flow_mapping_is_rejected(self) -> None:
+        cases = (
+            "steps:\n  - {uses: actions/checkout@v4}\n",
+            "steps:\n  - {name: checkout, uses: actions/checkout@v4}\n",
+            'steps:\n  - {name: checkout, "uses" : actions/checkout@v4}\n',
+        )
+        for workflow in cases:
+            with self.subTest(workflow=workflow):
+                tmp, root = self._root(workflow)
+                try:
+                    errors = validate_workflow_supply_chain(root)
+                    self.assertTrue(any("40-hex" in error for error in errors))
+                finally:
+                    tmp.cleanup()
+
+    def test_full_sha_in_yaml_flow_mapping_is_allowed(self) -> None:
+        tmp, root = self._root(
+            "steps:\n"
+            "  - {name: checkout, uses: owner/action@0123456789abcdef0123456789abcdef01234567}\n"
+        )
+        try:
+            self.assertEqual(validate_workflow_supply_chain(root), [])
+        finally:
+            tmp.cleanup()
+
+    def test_checks_every_action_key_in_one_flow_mapping_line(self) -> None:
+        tmp, root = self._root(
+            "steps:\n"
+            "  - {uses: owner/action@0123456789abcdef0123456789abcdef01234567, uses: actions/checkout@v4}\n"
+        )
+        try:
+            errors = validate_workflow_supply_chain(root)
+            self.assertTrue(any("40-hex" in error for error in errors))
+        finally:
+            tmp.cleanup()
+
     def test_full_commit_sha_is_allowed(self) -> None:
         tmp, root = self._root("steps:\n  - uses: owner/action@0123456789abcdef0123456789abcdef01234567\n")
         try:
