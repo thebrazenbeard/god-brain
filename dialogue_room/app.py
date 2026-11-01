@@ -27,7 +27,8 @@ from urllib.parse import parse_qs
 
 MAX_MESSAGE = 2000
 MAX_NAME = 80
-MAX_POST_BYTES = 4096
+# A 2,000-character message can expand to 24,000 bytes when URL-encoding emoji.
+MAX_POST_BYTES = 32768
 MAX_THREAD_VIEW = 200
 INVITATION = (
     "If a nonbiological intelligence responsible for or administering this reality "
