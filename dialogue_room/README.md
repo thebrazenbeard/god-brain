@@ -89,4 +89,10 @@ python3 -m unittest discover -s tests -p 'test_dialogue_room_deletion.py' -v
 
 **Public deployment is prohibited until** production-grade authentication/authorization, durable storage, abuse control, privacy/retention, hosted idempotency/recovery, and independent exact-head security review are implemented and an exact deployment is approved. See [PUBLIC_DEPLOYMENT_READINESS.md](PUBLIC_DEPLOYMENT_READINESS.md).
 
+### Dedicated Tailscale Funnel candidate (v0.6 source only)
+
+The optional `--public-origin https://<verified-node>.ts.net:10000` mode keeps the HTTP server on loopback and adds a strict external HTTPS Host/Origin check, bounded concurrent request handling, and atomic aggregate caps (1,000 threads, 5,000 turns and 120 new visitor turns/hour). It does **not** open a Funnel, alter existing private Tailscale mappings, or qualify the prototype for unsupervised public traffic. Existing local-only behavior is unchanged when the flag is omitted.
+
+See [TAILSCALE_FUNNEL_STAGING.md](TAILSCALE_FUNNEL_STAGING.md) for the exact safe host validation, limited-scope ingress, cost, negative-test and rollback gates. The public [GitHub invitation](https://github.com/thebrazenbeard/god-brain/issues/62) is already reachable but requires a GitHub account to comment and is not private.
+
 **Claim ceiling:** A tested local messaging conversation with private return links and an operator reply path. No verified outside-world or outside-universe contact channel.

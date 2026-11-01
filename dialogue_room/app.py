@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 from contextlib import closing
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from html import escape
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -21,6 +21,7 @@ import secrets
 import sqlite3
 import stat
 import sys
+import threading
 from unicodedata import category
 from urllib.parse import parse_qs, urlsplit
 
@@ -94,11 +95,31 @@ class ThreadClosed(ValueError):
     """The return capability cannot accept new messages."""
 
 
+class QuotaExceeded(ValueError):
+    """A public-ingress resource cap was reached; no message was accepted."""
+
+
+@dataclass(frozen=True)
+class PublicLimits:
+    """Fail-closed aggregate caps for the optional public-ingress adapter."""
+
+    max_threads: int = 1000
+    max_messages: int = 5000
+    max_inbound_per_hour: int = 120
+
+    def __post_init__(self):
+        if any(type(value) is not int or value < 1 for value in (
+            self.max_threads, self.max_messages, self.max_inbound_per_hour
+        )):
+            raise ValueError("Public resource limits must be positive integers")
+
+
 class MessageStore:
     """Local SQLite adapter; return-link credentials are stored only as hashes."""
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, *, public_limits: PublicLimits | None = None):
         self.path = Path(path)
+        self.public_limits = public_limits
         self.path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         if self.path.is_symlink():
             raise ValueError("Database path must not be a symbolic link")
@@ -211,6 +232,10 @@ class MessageStore:
                         (now(), sha256(token.encode()).hexdigest()),
                     )
                     thread_id = int(cursor.lastrowid)
+                    if self.public_limits is not None and db.execute(
+                        "SELECT COUNT(*) FROM threads"
+                    ).fetchone()[0] > self.public_limits.max_threads:
+                        raise QuotaExceeded("Public conversation capacity reached")
                 thread_state = db.execute(
                     "SELECT state FROM threads WHERE id=?", (thread_id,)
                 ).fetchone()[0]
@@ -227,6 +252,18 @@ class MessageStore:
                         return ThreadReceipt(thread_id, int(previous[0]), token)
                 if thread_state != "open":
                     raise ThreadClosed("Conversation is closed")
+                if self.public_limits is not None:
+                    if db.execute(
+                        "SELECT COUNT(*) FROM messages WHERE thread_id IS NOT NULL"
+                    ).fetchone()[0] >= self.public_limits.max_messages:
+                        raise QuotaExceeded("Public message capacity reached")
+                    cutoff = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+                    if db.execute(
+                        "SELECT COUNT(*) FROM messages "
+                        "WHERE speaker='UNVERIFIED_SUBMISSION' AND created_at>=?",
+                        (cutoff,),
+                    ).fetchone()[0] >= self.public_limits.max_inbound_per_hour:
+                        raise QuotaExceeded("Public submission rate limit reached")
                 cursor = db.execute(
                     "INSERT INTO messages("
                     "created_at,speaker,claim,body,status,thread_id,request_key,payload_hash"
@@ -455,14 +492,23 @@ padding:.6rem}button{padding:.7rem 1.2rem}a{color:#93c5fd}
 
 
 def render_home(token: str, initial_token: str | None = None,
-                request_key: str | None = None) -> bytes:
+                request_key: str | None = None, *, public_mode: bool = False) -> bytes:
     initial_token = initial_token or secrets.token_urlsafe(32)
     request_key = request_key or secrets.token_urlsafe(24)
+    scope_notice = (
+        "This is an experimental Internet-facing conversation channel. "
+        "Messages are stored on the project operator's computer; no identity "
+        "or outside-reality origin is authenticated. There is no encrypted "
+        "database at rest or guaranteed service availability. "
+        "Do not include private, identifying or sensitive information."
+        if public_mode else
+        "This is a local research prototype. No connection to a "
+        "creator or administrator has been verified. Any claimed identity "
+        "remains unverified; messages are not interpreted as evidence of their origin."
+    )
     content = (
         "<article><h2>Open invitation</h2><p>" + escape(INVITATION) + "</p></article>"
-        "<p class='notice'>This is a local research prototype. No connection to a "
-        "creator or administrator has been verified. Any claimed identity remains "
-        "unverified; messages are not interpreted as evidence of their origin.</p>"
+        "<p class='notice'>" + escape(scope_notice) + "</p>"
         "<h2>Begin a private conversation</h2>"
         "<p>Your text is stored locally and held for operator review, not displayed "
         "on the public page. You receive a private return link; save it, because "
@@ -532,7 +578,22 @@ def render_thread(messages, token: str, csrf_token: str,
     return _page("Private conversation", content)
 
 
-def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
+def make_server(store: MessageStore, port: int = 8765, *,
+                public_origin: str | None = None) -> ThreadingHTTPServer:
+    if public_origin is not None:
+        parsed = urlsplit(public_origin)
+        if (parsed.scheme != "https" or parsed.port != 10000
+                or not parsed.hostname or not parsed.hostname.endswith(".ts.net")
+                or parsed.username is not None or parsed.password is not None
+                or parsed.path or parsed.query or parsed.fragment
+                or store.public_limits is None):
+            raise ValueError(
+                "Public Funnel ingress requires an exact HTTPS *.ts.net:10000 "
+                "origin and explicit public storage limits"
+            )
+        expected_host = parsed.netloc
+    else:
+        expected_host = None
     csrf_token = secrets.token_urlsafe(32)  # Local form check, NOT authentication.
 
     class Handler(BaseHTTPRequestHandler):
@@ -567,7 +628,7 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
             self.wfile.write(body)
 
         def valid_host(self) -> bool:
-            expected = f"127.0.0.1:{self.server.server_port}"
+            expected = expected_host or f"127.0.0.1:{self.server.server_port}"
             if self.headers.get("Host") != expected:
                 self.respond(421, b"Invalid local host")
                 return False
@@ -579,7 +640,8 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
             if self.path == "/health":
                 self.respond(200, b"LOCAL_PROTOTYPE_ONLY\n")
             elif self.path == "/":
-                self.respond(200, render_home(csrf_token), "text/html; charset=utf-8")
+                self.respond(200, render_home(csrf_token, public_mode=bool(public_origin)),
+                             "text/html; charset=utf-8")
             elif self.path.startswith("/t/"):
                 parsed = urlsplit(self.path)
                 token = parsed.path[3:]
@@ -605,7 +667,8 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
                     self.respond(
                         200, render_thread(
                             messages, token, csrf_token,
-                            base_url=f"http://127.0.0.1:{self.server.server_port}",
+                            base_url=(public_origin or
+                                      f"http://127.0.0.1:{self.server.server_port}"),
                             thread_state=state, older_before=next_before,
                         ),
                         "text/html; charset=utf-8",
@@ -618,9 +681,11 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
                 return
             if self.path not in {"/submit", "/reply"}:
                 return self.respond(404, b"Not found")
-            expected_origin = f"http://127.0.0.1:{self.server.server_port}"
+            expected_origin = (public_origin or
+                               f"http://127.0.0.1:{self.server.server_port}")
             origin = self.headers.get("Origin")
-            if origin is not None and origin != expected_origin:
+            if ((public_origin is not None and origin is None)
+                    or (origin is not None and origin != expected_origin)):
                 return self.respond(403, b"Invalid origin")
             try:
                 length = int(self.headers.get("Content-Length", "-1"))
@@ -665,12 +730,35 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
                 )
             except ThreadClosed as error:
                 return self.respond(410, str(error).encode("utf-8"))
+            except QuotaExceeded as error:
+                return self.respond(429, str(error).encode("utf-8"))
             except (ValueError, UnicodeError) as error:
                 return self.respond(400, str(error).encode("utf-8"))
             self.respond(303, location=f"/t/{receipt.token}")
 
     class LocalServer(ThreadingHTTPServer):
         daemon_threads = True
+        request_queue_size = 16
+
+        def __init__(self, *args, **kwargs):
+            self._request_slots = threading.BoundedSemaphore(32)
+            super().__init__(*args, **kwargs)
+
+        def process_request(self, request, client_address):
+            if not self._request_slots.acquire(blocking=False):
+                self.shutdown_request(request)
+                return
+            try:
+                super().process_request(request, client_address)
+            except BaseException:
+                self._request_slots.release()
+                raise
+
+        def process_request_thread(self, request, client_address):
+            try:
+                super().process_request_thread(request, client_address)
+            finally:
+                self._request_slots.release()
 
     return LocalServer(("127.0.0.1", port), Handler)
 
@@ -679,6 +767,8 @@ def main():
     parser = argparse.ArgumentParser(description="God Brain local-only dialogue prototype")
     parser.add_argument("--db", type=Path, default=Path("dialogue_room.sqlite3"))
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--public-origin", type=str,
+                        help="Opt-in Funnel HTTPS *.ts.net:10000 origin (serve only)")
     parser.add_argument(
         "--mode", choices=["serve", "pending", "threads", "read", "audit",
                            "review", "reply", "close", "delete"],
@@ -699,6 +789,8 @@ def main():
         parser.error("--before applies only to --mode threads/read/audit")
     if args.confirm_delete and args.mode != "delete":
         parser.error("--confirm-delete applies only to --mode delete")
+    if args.public_origin and args.mode != "serve":
+        parser.error("--public-origin applies only to --mode serve")
     if args.mode == "delete" and (args.thread is None or not args.confirm_delete):
         parser.error("--mode delete requires --thread and --confirm-delete")
     try:
@@ -706,7 +798,8 @@ def main():
         validate_cursor(args.before)
     except ValueError as error:
         parser.error(str(error))
-    store = MessageStore(args.db)
+    store = MessageStore(args.db, public_limits=(PublicLimits()
+                                               if args.public_origin else None))
     if args.mode == "pending":
         rows, next_after = store.pending_page(after_id=args.after)
         for message_id, thread_id, created, name, body in rows:
@@ -763,8 +856,11 @@ def main():
         message_id = store.owner_reply(args.thread, sys.stdin.read(MAX_MESSAGE + 2))
         print(f"Owner reply recorded as message #{message_id}")
     else:
-        server = make_server(store, args.port)
-        print(f"Local-only dialogue room: http://127.0.0.1:{server.server_port}")
+        server = make_server(store, args.port, public_origin=args.public_origin)
+        print(f"Dialogue backend on loopback: http://127.0.0.1:{server.server_port}")
+        if args.public_origin:
+            print(f"Configured Funnel origin: {args.public_origin} "
+                  "(NOT publicly exposed by this command)")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
