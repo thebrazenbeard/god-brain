@@ -1,8 +1,8 @@
 # Contact-channel feasibility and experimental frontier (candidate v0.1)
 
-**Status:** Research proposal, not a contact attempt with verified delivery, experimental result, runtime qualification, or authority grant.  
-**Source snapshot:** `thebrazenbeard/god-brain` `main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c` (2026-10-31).  
-**Protocol anchor:** `specs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.json` at blob `dc00d76902e36b320c33c8d86aa97c7b148dc08b`.  
+**Status:** Research proposal, not a contact attempt with verified delivery, experimental result, runtime qualification, or authority grant.
+**Source snapshot:** `thebrazenbeard/god-brain` `main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c` (2026-10-31).
+**Protocol anchor:** `specs/research/GOD_BRAIN_ANOMALY_CONTACT_EVIDENCE_PROTOCOL_V0_1.json` at blob `dc00d76902e36b320c33c8d86aa97c7b148dc08b`.
 **Coordination:** [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410), BT2 dispatch/review *requested*, no acceptance implied.
 
 ## Research question and operational limit
