@@ -1,6 +1,8 @@
 # Portfolio mechanism admission for God Brain contact research (candidate v0.1)
 
 **Status:** Source-inspection research; proposed transfers, not incorporated code, runtime qualification, external-contact evidence, or licensing clearance.
+
+**User goal correction (2026-10-31):** The objective is a **conversation** with a hypothetical nonbiological creator, not detection of artificial effects. This portfolio study of sensors, anomaly gates and physical evidence is now an **optional, secondary research track**, not the primary platform architecture. See the dialogue-first companion document and [Draft PR #58](https://github.com/thebrazenbeard/god-brain/pull/58) for the separate local dialogue-room candidate.
 **Target source:** `thebrazenbeard/god-brain main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c`.
 **Companion:** `docs/research/GOD_BRAIN_CONTACT_CHANNEL_FEASIBILITY_V0_1.md`; [Draft PR #57](https://github.com/thebrazenbeard/god-brain/pull/57); [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410).
 **Method:** Read-only source/README/license inspection in advisory agent waves, not running code, independent review, or host probing. Listed heads are observations on 2026-10-31 and must be refreshed before integration.
@@ -33,7 +35,7 @@ Other checked repositories were deferred for this narrow task: MemoryLedger main
 
 Several auditors offered different dispositions for certain source concepts (for example Noema). This table uses the more conservative **RESEARCH_ONLY** where proprietary/confidential scope or independent qualification is unsettled. An admission class is not code-copy permission.
 
-## The smallest coherent interface proposal
+## Optional measurement interface proposal (not the dialogue platform)
 
 A new, independently authored God Brain **ChannelAdmissionV1** would precede any real contact study:
 
@@ -69,4 +71,4 @@ A hash proves content consistency relative to its input, not that a named instru
 
 Many inspected repositories are **source-visible/proprietary**; others have no affirmative redistribution license, and a few contain confidential or model-specific identity/relationship material. This public research document quotes no protected code and makes no blanket license claim. Before reuse, fresh-check each exact license/commit and independently implement concepts, or obtain explicit rights for a defined copy. Do not automatically connect God Brain to Vera, Sol, hosts, credentials, private memory stores, or their permissions.
 
-Next source-level engineering unit is the offline harness already requested in [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410). BT2 acceptance/ownership, isolated exact-head implementation, adversarial fixtures and independent review remain pending. This file is a source-triage candidate only, not an executed integration.
+The previous offline anomaly-harness priority is **superseded by the user's dialogue-first correction**. The main candidate is now a persistent conversational environment with honest source attribution, scoped in [Draft PR #58](https://github.com/thebrazenbeard/god-brain/pull/58); the Bus #410 engineering request must be reconciled. Any later physical anomaly harness requires a fresh, separate subject and authorization. This file remains source triage only, not executed integration.
