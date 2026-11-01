@@ -34,6 +34,7 @@ MAX_THREAD_VIEW = 200
 MAX_OPERATOR_PAGE = 100
 MAX_AUDIT_PAGE = 200
 MAX_CURSOR = (1 << 63) - 1
+CONSENT_VERSION = "dialogue-privacy-v1"
 INVITATION = (
     "If a nonbiological intelligence responsible for or administering this reality "
     "exists and can perceive this invitation, the person behind this project hopes "
@@ -211,7 +212,8 @@ class MessageStore:
 
     def submit(self, name: str, body: str, token: str | None = None, *,
                request_key: str | None = None,
-               create_thread: bool = False) -> ThreadReceipt:
+               create_thread: bool = False,
+               consent_version: str | None = None) -> ThreadReceipt:
         name, body = validate_message(name, body)
         if request_key is not None and not re.fullmatch(r"[A-Za-z0-9_-]{24,64}", request_key):
             raise ValueError("Invalid request key")
@@ -223,6 +225,9 @@ class MessageStore:
                 if token is None:
                     token = secrets.token_urlsafe(32)
                     create_thread = True
+                if (create_thread and self.public_limits is not None
+                        and consent_version != CONSENT_VERSION):
+                    raise ValueError("Privacy consent is required before starting a conversation")
                 thread_id = self._thread_id(db, token)
                 if thread_id is None:
                     if not create_thread or not re.fullmatch(r"[A-Za-z0-9_-]{40,50}", token):
@@ -233,7 +238,7 @@ class MessageStore:
                     )
                     thread_id = int(cursor.lastrowid)
                     if self.public_limits is not None and db.execute(
-                        "SELECT COUNT(*) FROM threads"
+                        "SELECT COUNT(*) FROM threads WHERE state != 'deleted'"
                     ).fetchone()[0] > self.public_limits.max_threads:
                         raise QuotaExceeded("Public conversation capacity reached")
                 thread_state = db.execute(
@@ -271,6 +276,15 @@ class MessageStore:
                     (now(), "UNVERIFIED_SUBMISSION", name, body, "held", thread_id,
                      request_key, fingerprint if request_key is not None else None),
                 )
+                if create_thread and consent_version == CONSENT_VERSION:
+                    # Versioned consent is recorded atomically with the first accepted
+                    # turn; the audit retains only the thread ID, never its bearer token.
+                    db.execute(
+                        "INSERT INTO moderation_events(created_at,actor,action,thread_id) "
+                        "VALUES(?,?,?,?)",
+                        (now(), "UNVERIFIED_RETURN_LINK_HOLDER",
+                         "consent:" + CONSENT_VERSION, thread_id),
+                    )
                 return ThreadReceipt(thread_id, int(cursor.lastrowid), token)
 
     def thread_view(self, token: str, before_id: int | None = None):
@@ -315,7 +329,8 @@ class MessageStore:
         with closing(self._connect()) as db:
             rows = db.execute(
                 "SELECT id,thread_id,created_at,claim,body FROM messages "
-                "WHERE speaker='UNVERIFIED_SUBMISSION' AND status='held' "
+                "WHERE speaker IN ('UNVERIFIED_SUBMISSION','DELETION_REQUEST') "
+                "AND status='held' "
                 "AND id > ? ORDER BY id LIMIT ?",
                 (after_id or 0, MAX_OPERATOR_PAGE + 1),
             ).fetchall()
@@ -374,7 +389,8 @@ class MessageStore:
                 ).fetchone()
                 cursor = db.execute(
                     "UPDATE messages SET status=? WHERE id=? "
-                    "AND speaker='UNVERIFIED_SUBMISSION' AND status='held'",
+                    "AND speaker IN ('UNVERIFIED_SUBMISSION','DELETION_REQUEST') "
+                    "AND status='held'",
                     (decision, message_id),
                 )
                 if cursor.rowcount == 1:
@@ -425,6 +441,43 @@ class MessageStore:
                         (now(), "LOCAL_OPERATOR", state, thread_id),
                     )
                 return cursor.rowcount == 1
+
+    def request_deletion(self, token: str) -> bool:
+        """Queue one held request by a return-link holder; never delete automatically.
+
+        This bypasses regular message quotas so a full inbox cannot prevent a
+        link holder from requesting an operator decision.
+        """
+        with closing(self._connect()) as db:
+            with db:
+                db.execute("BEGIN IMMEDIATE")
+                thread_id = self._thread_id(db, token)
+                if thread_id is None:
+                    raise ValueError("Unknown conversation return link")
+                state = db.execute(
+                    "SELECT state FROM threads WHERE id=?", (thread_id,),
+                ).fetchone()[0]
+                if state in {"revoked", "deleted"}:
+                    raise ThreadClosed("Conversation return link unavailable")
+                if db.execute(
+                    "SELECT 1 FROM messages WHERE thread_id=? "
+                    "AND speaker='DELETION_REQUEST' LIMIT 1", (thread_id,),
+                ).fetchone():
+                    return False
+                db.execute(
+                    "INSERT INTO messages(created_at,speaker,claim,body,status,thread_id) "
+                    "VALUES(?,?,?,?,?,?)",
+                    (now(), "DELETION_REQUEST", "Return-link holder (unverified)",
+                     "Please delete this conversation. This request is held for "
+                     "the local operator; no content has been deleted automatically.",
+                     "held", thread_id),
+                )
+                db.execute(
+                    "INSERT INTO moderation_events(created_at,actor,action,thread_id) "
+                    "VALUES(?,?,?,?)",
+                    (now(), "UNVERIFIED_RETURN_LINK_HOLDER", "deletion_requested", thread_id),
+                )
+                return True
 
     def delete_thread(self, thread_id: int) -> bool:
         """Operator-only explicit deletion; preserve a non-readable token tombstone.
@@ -487,7 +540,8 @@ padding:1rem;border-radius:12px;margin:1rem 0;overflow-wrap:anywhere}
 .notice{border-left:4px solid #fbbf24}small{color:#bec8d7}
 input,textarea{display:block;width:100%;box-sizing:border-box;margin:.5rem 0;
 padding:.6rem}button{padding:.7rem 1.2rem}a{color:#93c5fd}
-.body{white-space:pre-wrap}</style></head><body><h1>God Brain · Dialogue Room</h1>
+.body{white-space:pre-wrap}input[type=checkbox]{display:inline;width:auto;margin-right:.5rem}
+</style></head><body><h1>God Brain · Dialogue Room</h1>
 """ + content + "</body></html>").encode("utf-8")
 
 
@@ -506,6 +560,14 @@ def render_home(token: str, initial_token: str | None = None,
         "creator or administrator has been verified. Any claimed identity "
         "remains unverified; messages are not interpreted as evidence of their origin."
     )
+    consent_control = (
+        "<label><input type='checkbox' name='privacy_consent' "
+        f"value='{CONSENT_VERSION}' required> I understand my text is held "
+        "on the operator's computer until that operator chooses to delete it; "
+        "I must save my private link to follow up or request deletion, and "
+        "deletion from backups cannot be guaranteed.</label>"
+        if public_mode else ""
+    )
     content = (
         "<article><h2>Open invitation</h2><p>" + escape(INVITATION) + "</p></article>"
         "<p class='notice'>" + escape(scope_notice) + "</p>"
@@ -519,6 +581,7 @@ def render_home(token: str, initial_token: str | None = None,
         "<form method='post' action='/submit'>"
         "<label>Claimed name<input name='name' maxlength='80' required></label>"
         "<label>Message<textarea name='message' maxlength='2000' rows='5' required></textarea></label>"
+        + consent_control +
         f"<input type='hidden' name='initial_token' value='{escape(initial_token)}'>"
         f"<input type='hidden' name='request_key' value='{escape(request_key)}'>"
         f"<input type='hidden' name='csrf' value='{escape(token)}'>"
@@ -536,6 +599,8 @@ def render_thread(messages, token: str, csrf_token: str,
     for msg_id, created, speaker, claim, body, status in messages:
         if speaker == "PROJECT_OWNER":
             who = "Project owner (local operator)"
+        elif speaker == "DELETION_REQUEST":
+            who = "Deletion request — return-link holder (identity unverified)"
         else:
             who = "Unverified submission — claimed name: " + escape(claim)
         state = ("Held for review" if status == "held" else
@@ -573,6 +638,19 @@ def render_thread(messages, token: str, csrf_token: str,
         )
     else:
         content += "<p class='notice'>Conversation closed. No more messages can be submitted.</p>"
+    content += (
+        "<h2>Request manual deletion</h2>"
+        "<p>Use this only if you want the operator to consider deleting this "
+        "conversation. The request enters the private review queue; it does "
+        "not delete anything automatically or guarantee a response. The "
+        "operator may explicitly delete the active conversation, but past "
+        "backups, copies and system snapshots may remain. If you lose this "
+        "link, we cannot verify which conversation was yours.</p>"
+        "<form method='post' action='/request-deletion'>"
+        f"<input type='hidden' name='return_token' value='{escape(token)}'>"
+        f"<input type='hidden' name='csrf' value='{escape(csrf_token)}'>"
+        "<button type='submit'>Request operator deletion review</button></form>"
+    )
     content += ("<p><small>Showing at most 200 messages per page. "
                 "Owner replies require local database access; no public owner login exists.</small></p>")
     return _page("Private conversation", content)
@@ -679,7 +757,7 @@ def make_server(store: MessageStore, port: int = 8765, *,
         def do_POST(self):
             if not self.valid_host():
                 return
-            if self.path not in {"/submit", "/reply"}:
+            if self.path not in {"/submit", "/reply", "/request-deletion"}:
                 return self.respond(404, b"Not found")
             expected_origin = (public_origin or
                                f"http://127.0.0.1:{self.server.server_port}")
@@ -709,11 +787,18 @@ def make_server(store: MessageStore, port: int = 8765, *,
 
                 if not secrets.compare_digest(field("csrf"), csrf_token):
                     return self.respond(403, b"Invalid form token")
+                if self.path == "/request-deletion":
+                    return_token = field("return_token")
+                    store.request_deletion(return_token)
+                    return self.respond(303, location=f"/t/{return_token}")
                 first = self.path == "/submit"
                 return_token = field("initial_token") if first else field("return_token")
+                consent_version = (field("privacy_consent") if first and public_origin
+                                   else None)
                 receipt = store.submit(
                     field("name"), field("message"), return_token,
                     request_key=field("request_key"), create_thread=first,
+                    consent_version=consent_version,
                 )
             except IdempotencyConflict as error:
                 # A changed retry must not overwrite an accepted message, but

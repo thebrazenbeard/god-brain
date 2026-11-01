@@ -20,8 +20,8 @@
 
 - The service still binds **only to `127.0.0.1`**. The only approved candidate external origin shape is `https://<dedicated-node>.ts.net:10000`; the exact tailnet hostname must be verified on the host and cleared for public disclosure before use.
 - The `--public-origin` flag opts into strict Host and Origin validation, a bounded thread/turn count and hourly submission cap. Any mismatched hostname, missing or wrong browser Origin, over-quota message, invalid token, oversized body or return-capability replay must fail closed.
-- Every first submission is private to the random return-capability holder and OS-protected local owner. No verified external respondent identity; no public owner HTTP endpoint. Private links require care because their path and capability may be visible to the forwarding/TLS provider, browser history or a copied URL.
-- The capped stdlib HTTP server remains a **reference candidate**. Before public launch, independent exact-head hostile security review must assess connection exhaustion, abuse/rate enforcement, Windows ACL/backup custody, TLS/Host forwarding, visitor consent and withdrawal, stored-data privacy and outage recovery.
+- Every first submission requires a checked, versioned retention/privacy acknowledgment and is private to the random return-capability holder and OS-protected local owner. A holder can queue a private deletion request for operator review; nothing is automatically deleted, and receipt does not guarantee a response or backup erasure. No verified external respondent identity; no public owner HTTP endpoint. Private links require care because their path and capability may be visible to the forwarding/TLS provider, browser history or a copied URL.
+- The capped stdlib HTTP server remains a **reference candidate**. Before public launch, independent exact-head hostile security review must assess connection exhaustion, abuse/rate enforcement, Windows ACL/backup custody, TLS/Host forwarding, the actual consent and withdrawal handling, stored-data privacy and outage recovery.
 
 ## Safe validation sequence — no public ingress
 
