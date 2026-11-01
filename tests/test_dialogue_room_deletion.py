@@ -2,6 +2,7 @@
 
 import concurrent.futures
 from contextlib import closing
+from contextlib import closing
 import http.client
 from pathlib import Path
 import secrets
@@ -25,7 +26,7 @@ class ManualDeletionTests(unittest.TestCase):
             path = Path(folder) / "room.sqlite3"
             store = MessageStore(path)
             receipt = store.submit("Visitor", "A lasting conversation")
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 db.execute("UPDATE threads SET created_at='2000-01-01' WHERE id=?",
                            (receipt.thread_id,))
                 db.execute("UPDATE messages SET created_at='2000-01-01' WHERE thread_id=?",
@@ -53,7 +54,7 @@ class ManualDeletionTests(unittest.TestCase):
             self.assertIsNone(reopened.thread_messages(token))
             self.assertEqual(reopened.read_thread(first.thread_id), [])
             self.assertEqual(reopened.pending(), [])
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 self.assertEqual(db.execute(
                     "SELECT COUNT(*) FROM messages WHERE thread_id=?",
                     (first.thread_id,)).fetchone()[0], 0)

@@ -1,4 +1,5 @@
 import concurrent.futures
+from contextlib import closing
 import http.client
 import os
 from pathlib import Path
@@ -96,7 +97,7 @@ class StoreTests(unittest.TestCase):
                     return error
                 return None
 
-            with sqlite3.connect(store.path, timeout=10) as locker:
+            with closing(sqlite3.connect(store.path, timeout=10)) as locker, locker:
                 locker.execute("BEGIN IMMEDIATE")
                 with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
                     future = pool.submit(attempt_reply)
@@ -132,7 +133,7 @@ class StoreTests(unittest.TestCase):
             store = MessageStore(path)
             receipt = store.submit("Creator of the universe", "Hello there")
             reopened = MessageStore(path)
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 self.assertEqual(db.execute(
                     "SELECT COUNT(*) FROM messages WHERE speaker='PROJECT_INVITATION'"
                 ).fetchone()[0], 1)
@@ -163,7 +164,7 @@ class StoreTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             store = MessageStore(Path(folder) / "room.sqlite3")
             receipt = store.submit("Visitor", "Test")
-            with sqlite3.connect(store.path) as db:
+            with closing(sqlite3.connect(store.path)) as db, db:
                 stored = db.execute("SELECT token_hash FROM threads WHERE id=?",
                                     (receipt.thread_id,)).fetchone()[0]
             self.assertNotEqual(stored, receipt.token)
@@ -175,7 +176,7 @@ class StoreTests(unittest.TestCase):
             path = Path(folder) / "preclosure.sqlite3"
             token = secrets.token_urlsafe(32)
             import hashlib
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 db.execute("CREATE TABLE threads (id INTEGER PRIMARY KEY, "
                            "created_at TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE)")
                 db.execute("INSERT INTO threads VALUES(1,'old',?)",
@@ -191,7 +192,7 @@ class StoreTests(unittest.TestCase):
             upgraded = MessageStore(path)
             self.assertEqual(upgraded.thread_state(token), "open")
             self.assertEqual(upgraded.thread_messages(token)[0][4], "Historic")
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 cols = [c[1] for c in db.execute("PRAGMA table_info(messages)")]
                 self.assertIn("request_key", cols)
                 self.assertIn("payload_hash", cols)
@@ -245,7 +246,7 @@ class StoreTests(unittest.TestCase):
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
                     list(pool.map(initialize, range(12)))
-                with sqlite3.connect(path) as db:
+                with closing(sqlite3.connect(path)) as db, db:
                     count = db.execute(
                         "SELECT COUNT(*) FROM messages WHERE speaker='PROJECT_INVITATION'"
                     ).fetchone()[0]
@@ -270,7 +271,7 @@ class StoreTests(unittest.TestCase):
     def test_legacy_public_posts_become_held_without_data_loss(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "legacy.sqlite3"
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 db.execute("CREATE TABLE messages (id INTEGER PRIMARY KEY, "
                            "created_at TEXT NOT NULL, speaker TEXT NOT NULL, "
                            "claim TEXT NOT NULL, body TEXT NOT NULL)")
@@ -282,7 +283,7 @@ class StoreTests(unittest.TestCase):
             store = MessageStore(path)
             self.assertEqual(store.pending()[0][4], "Private legacy message")
             self.assertEqual(len(store.pending()), 1)
-            with sqlite3.connect(path) as db:
+            with closing(sqlite3.connect(path)) as db, db:
                 self.assertEqual(db.execute("SELECT status FROM messages WHERE id=1")
                                  .fetchone()[0], "public")
 
