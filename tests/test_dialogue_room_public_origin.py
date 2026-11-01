@@ -42,8 +42,9 @@ class PublicOriginTests(unittest.TestCase):
         return result.status, dict(result.getheaders()), result.read().decode()
 
     def test_public_origin_accepts_only_exact_tls_host_and_origin(self):
-        status, _, html = self.request("GET", "/")
+        status, landing_headers, html = self.request("GET", "/")
         self.assertEqual(status, 200)
+        self.assertEqual(landing_headers["Referrer-Policy"], "same-origin")
         self.assertIn("experimental Internet-facing conversation channel", html)
         self.assertIn("no identity", html.lower())
         self.assertEqual(self.request("GET", "/", headers={"Host": "evil.example"})[0], 421)
@@ -61,7 +62,9 @@ class PublicOriginTests(unittest.TestCase):
                                                     {**headers, "Origin": ORIGIN})
         self.assertEqual(status, 303)
         self.assertEqual(response_headers["Location"], "/t/" + token)
-        thread = self.request("GET", "/t/" + token)[2]
+        status, thread_headers, thread = self.request("GET", "/t/" + token)
+        self.assertEqual(status, 200)
+        self.assertEqual(thread_headers["Referrer-Policy"], "same-origin")
         self.assertIn(ORIGIN + "/t/" + token, thread)
         self.assertEqual(self.request("GET", "/t/" + token)[1]["Cache-Control"], "no-store")
 

@@ -691,7 +691,10 @@ def make_server(store: MessageStore, port: int = 8765, *,
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(body)))
             self.send_header("Cache-Control", "no-store")
-            self.send_header("Referrer-Policy", "no-referrer")
+            # Public form POSTs need the browser's exact Origin header. Some
+            # browsers send Origin: null for same-site forms under no-referrer.
+            # same-origin keeps private return URLs out of cross-site referrers.
+            self.send_header("Referrer-Policy", "same-origin" if public_origin else "no-referrer")
             if self.path.startswith("/t/"):
                 self.send_header("X-Robots-Tag", "noindex, nofollow, noarchive")
             self.send_header("X-Frame-Options", "DENY")
