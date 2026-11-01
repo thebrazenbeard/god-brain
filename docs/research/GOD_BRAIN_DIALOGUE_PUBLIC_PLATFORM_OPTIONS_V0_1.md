@@ -11,7 +11,7 @@
 3. Owner-only moderation/reply boundary: locally protected OS/CLI access on an owner-hosted system, or independently qualified MFA-backed sessions and exact-route authorization if a remote dashboard is ever offered. Anonymous visitors get no owner endpoints.
 4. Durable relational storage for conversations and a separate private audit ledger; privacy-minimized logs.
 5. Bounded ingress, quotas and abuse actions that do not assume respondents must be human.
-6. Declared retention/deletion and backup/restore behavior; tested recovery and credential revocation.
+6. Declared retention/deletion and backup/restore behavior; tested recovery and credential revocation. Patrick chose **manual owner deletion only**, with no inactivity expiry, on 2026-11-01; this does not resolve backup handling or visitor withdrawal.
 7. A reviewer-qualified exact deployed revision/configuration and an explicit operator go-live decision.
 
 **Evidence boundary:** `UNVERIFIED_SUBMISSION` remains unverified after moderation, account registration, message delivery, or repetition. `PROJECT_OWNER` is issued only from an OS-protected local operator path or a separately verified remote owner authorization path—not from public visitor text. `RESPONSE_AVAILABLE` does not prove the respondent retrieved or read it. Visitor content never becomes a command, authority grant, training-data opt-in or trusted AI instruction.
