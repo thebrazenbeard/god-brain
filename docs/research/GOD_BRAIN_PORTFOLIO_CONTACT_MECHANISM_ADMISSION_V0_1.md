@@ -1,8 +1,8 @@
 # Portfolio mechanism admission for God Brain contact research (candidate v0.1)
 
-**Status:** Source-inspection research; proposed transfers, not incorporated code, runtime qualification, external-contact evidence, or licensing clearance.  
-**Target source:** `thebrazenbeard/god-brain main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c`.  
-**Companion:** `docs/research/GOD_BRAIN_CONTACT_CHANNEL_FEASIBILITY_V0_1.md`; [Draft PR #57](https://github.com/thebrazenbeard/god-brain/pull/57); [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410).  
+**Status:** Source-inspection research; proposed transfers, not incorporated code, runtime qualification, external-contact evidence, or licensing clearance.
+**Target source:** `thebrazenbeard/god-brain main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c`.
+**Companion:** `docs/research/GOD_BRAIN_CONTACT_CHANNEL_FEASIBILITY_V0_1.md`; [Draft PR #57](https://github.com/thebrazenbeard/god-brain/pull/57); [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410).
 **Method:** Read-only source/README/license inspection in advisory agent waves, not running code, independent review, or host probing. Listed heads are observations on 2026-10-31 and must be refreshed before integration.
 
 The objective is to borrow useful *mechanisms and experimental discipline* from the owner's source universe, not to merge every model, identity, personal memory, hardware tunnel, or execution authority into God Brain. Reuse does not require runtime coupling. A copied or renamed idea is not independent corroboration.
