@@ -8,30 +8,35 @@
 
 1. A readable HTTPS invitation and privacy notice that does not expose any incoming text.
 2. Held visitor submissions with an opaque, high-entropy private return link; stable receipt on retry.
-3. Owner MFA-backed session and exact-route authorization for private inbox, review, reply, closure and revocation.
+3. Owner-only moderation/reply boundary: locally protected OS/CLI access on an owner-hosted system, or independently qualified MFA-backed sessions and exact-route authorization if a remote dashboard is ever offered. Anonymous visitors get no owner endpoints.
 4. Durable relational storage for conversations and a separate private audit ledger; privacy-minimized logs.
 5. Bounded ingress, quotas and abuse actions that do not assume respondents must be human.
 6. Declared retention/deletion and backup/restore behavior; tested recovery and credential revocation.
 7. A reviewer-qualified exact deployed revision/configuration and an explicit operator go-live decision.
 
-**Evidence boundary:** `UNVERIFIED_SUBMISSION` remains unverified after moderation, account registration, message delivery, or repetition. `PROJECT_OWNER` is issued only after server-side owner authorization. `RESPONSE_AVAILABLE` does not prove the respondent retrieved or read it. Visitor content never becomes a command, authority grant, training-data opt-in or trusted AI instruction.
+**Evidence boundary:** `UNVERIFIED_SUBMISSION` remains unverified after moderation, account registration, message delivery, or repetition. `PROJECT_OWNER` is issued only from an OS-protected local operator path or a separately verified remote owner authorization path—not from public visitor text. `RESPONSE_AVAILABLE` does not prove the respondent retrieved or read it. Visitor content never becomes a command, authority grant, training-data opt-in or trusted AI instruction.
 
-## Provider choices — research only
+## Hard zero-cost admission rule (owner correction, 2026-11-01)
 
-| Candidate | Fit | Primary constraints |
+**Absolute project spending ceiling: $0.** Patrick explicitly prohibits Vercel and any payment, billing activation, entered payment method, required spending minimum, automatic overage, or paid fallback. **Vercel is excluded**, not an available option. A provider marketing a free plan does not pass until its required enrollment flow, *all* features in the design, quota exhaustion behavior and recovery route are verified to satisfy those conditions. No account, provider, payment method, public listener or deployment has been authorized by this research.
+
+| Path under investigation | Evidence and fit | Current disposition |
 | --- | --- | --- |
-| **Cloudflare Workers + D1 + Access** | One-vendor HTTPS/SQL/edge option with relatively low entry cost; evaluate in an isolated preview | Rewrite the Python HTTP handler; validate Access JWT at every privileged origin route; apply quotas and data-region/backup policy; application rollback does not roll back D1 schema |
-| **Vercel + Supabase Postgres/Auth** | Reuses a Vercel-oriented ecosystem; Postgres transactions and Supabase MFA/RLS | Two provider/account surfaces, correct service-key isolation, robust revocation and RLS tests; Vercel Functions must not depend on local SQLite persistence |
-| **Managed VM/container + relational DB** | Potentially retains more of the Python code and conventional networking | More TLS, host hardening, operations, backups, monitoring and cost responsibility; public TCP 616/666 give no proven communication advantage |
+| **Cloudflare Workers Free + D1 Free (without Access)** | Official Workers and D1 docs describe free request/database allowances; a Worker rewrite could supply HTTPS and private SQL-backed threads | **UNVERIFIED** complete cardless/zero-billing operational path; bespoke secure owner authorization, retention, data-region, limits and restore remain unbuilt. Do not create or deploy yet |
+| **Already-owned machine + Tailscale Personal/Funnel** | Tailscale documents a free Personal tier and public HTTPS forwarding through Funnel, potentially preserving local-only operator authority | **UNVERIFIED** no-payment-method enrollment, always-on host capability, abuse defenses, tunnel stability, privacy and safe TLS boundary. Do not expose the stdlib Python handler |
+| **GitHub Pages** | Supports a static invitation at no hosting fee within plan limits | **INSUFFICIENT ALONE:** no private, durable two-way message-processing backend |
+
+**Cloudflare Zero Trust/Access Free is specifically disqualified:** its official setup guide requires entering payment details even when selecting Free. Do not pair Workers+D1 with Access or represent that pairing as compliant with Patrick's budget rule.
 
 Use HTTPS on **443**. Optional paths `/616` and `/666` could be ordinary aliases on the same site after review. No additional TCP listener is needed for the dialogue protocol.
 
-Sources retrieved for this decision:
+Official sources retrieved for this decision:
 
-- [Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/) and [D1 limits](https://developers.cloudflare.com/d1/platform/limits/); verify quotas/prices again at provider selection.
-- [Cloudflare Access for self-hosted apps](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/) and [Worker rollback boundaries](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/).
-- [Vercel SQLite in Functions](https://vercel.com/kb/guide/is-sqlite-supported-in-vercel), [Vercel pricing](https://vercel.com/pricing).
-- [Supabase pricing](https://supabase.com/pricing), [MFA](https://supabase.com/docs/guides/auth/auth-mfa), [RLS/privileged keys](https://supabase.com/docs/guides/database/postgres/row-level-security), [session lifecycle](https://supabase.com/docs/guides/auth/sessions).
+- [Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/), [D1 limits](https://developers.cloudflare.com/d1/platform/limits/) and [Worker rollback boundaries](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/); verify terms again at account decision.
+- [Cloudflare Zero Trust/Access setup](https://developers.cloudflare.com/cloudflare-one/setup/), which expressly requires payment details even for Free.
+- [Tailscale pricing](https://tailscale.com/pricing) and [Funnel public-access limits](https://tailscale.com/docs/features/tailscale-funnel); neither citation establishes that account enrollment is cardless for this owner.
+- [GitHub Pages overview](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), which describes a static-site service.
+- [Supabase MFA](https://supabase.com/docs/guides/auth/auth-mfa) and [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) are *background design references*, not admission of a provider or price.
 - [PostgreSQL INSERT/ON CONFLICT](https://www.postgresql.org/docs/current/sql-insert.html).
 - [OWASP denial-of-service](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html), [CSRF](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html), [logging](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html).
 
@@ -65,7 +70,7 @@ Public GitHub visibility does not provide code-reuse rights. God Brain's own REA
 Before creating accounts, configuring DNS/secrets or going live, bind:
 
 - Selected provider/project and public origin/domain, data region and storage location.
-- Explicit spending ceiling and handling of overages/free-tier suspension.
+- Verified absolute $0 contract: no payment details, billing enrollment, minimum cost, upgrade/overage or paid recovery requirement. If not provable, reject or stop.
 - Owner enrollment/MFA method and recovery contact controlled by Patrick.
 - Visitor consent, deletion/retention period, moderation rules, backup custody and breach response.
 - Rate/abuse budgets, bot policy and accessible non-human-compatible submission route.

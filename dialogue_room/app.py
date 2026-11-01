@@ -22,7 +22,7 @@ import sqlite3
 import stat
 import sys
 from unicodedata import category
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlsplit
 
 
 MAX_MESSAGE = 2000
@@ -30,6 +30,9 @@ MAX_NAME = 80
 # A 2,000-character message can expand to 24,000 bytes when URL-encoding emoji.
 MAX_POST_BYTES = 32768
 MAX_THREAD_VIEW = 200
+MAX_OPERATOR_PAGE = 100
+MAX_AUDIT_PAGE = 200
+MAX_CURSOR = (1 << 63) - 1
 INVITATION = (
     "If a nonbiological intelligence responsible for or administering this reality "
     "exists and can perceive this invitation, the person behind this project hopes "
@@ -60,6 +63,20 @@ def terminal_safe(value: str) -> str:
         else f"\\u{ord(char):04x}"
         for char in value
     )
+
+
+def validate_cursor(cursor: int | None) -> int | None:
+    """Reject malformed and SQLite-overflowing continuation positions."""
+    if cursor is not None and (type(cursor) is not int or not 0 < cursor <= MAX_CURSOR):
+        raise ValueError("Invalid page cursor")
+    return cursor
+
+
+def page_rows(rows: list, limit: int, *, ascending: bool = False) -> tuple[list, int | None]:
+    """Return a bounded page and a cursor at the last displayed row."""
+    page = rows[:limit]
+    cursor = int(page[-1][0]) if len(rows) > limit else None
+    return (page if ascending else list(reversed(page))), cursor
 
 
 @dataclass(frozen=True)
@@ -138,6 +155,18 @@ class MessageStore:
                     "CREATE UNIQUE INDEX IF NOT EXISTS uq_message_request "
                     "ON messages(thread_id, request_key) WHERE request_key IS NOT NULL"
                 )
+                db.execute(
+                    "CREATE INDEX IF NOT EXISTS ix_messages_thread_id "
+                    "ON messages(thread_id,id)"
+                )
+                db.execute(
+                    "CREATE INDEX IF NOT EXISTS ix_messages_held_id "
+                    "ON messages(speaker,status,id)"
+                )
+                db.execute(
+                    "CREATE INDEX IF NOT EXISTS ix_audit_thread_id "
+                    "ON moderation_events(thread_id,id)"
+                )
                 db.execute("UPDATE messages SET status='public' WHERE speaker='PROJECT_INVITATION'")
                 if not db.execute(
                     "SELECT 1 FROM messages WHERE speaker='PROJECT_INVITATION' LIMIT 1"
@@ -207,8 +236,9 @@ class MessageStore:
                 )
                 return ThreadReceipt(thread_id, int(cursor.lastrowid), token)
 
-    def thread_view(self, token: str):
+    def thread_view(self, token: str, before_id: int | None = None):
         """Read authorization state and visible messages from one DB snapshot."""
+        before_id = validate_cursor(before_id)
         with closing(self._connect()) as db:
             db.execute("BEGIN")
             thread_id = self._thread_id(db, token)
@@ -219,12 +249,18 @@ class MessageStore:
             ).fetchone()[0]
             if state == "revoked":
                 return None
+            where = "WHERE thread_id=?"
+            params = [thread_id]
+            if before_id is not None:
+                where += " AND id < ?"
+                params.append(before_id)
             rows = db.execute(
                 "SELECT id,created_at,speaker,claim,body,status FROM messages "
-                "WHERE thread_id=? ORDER BY id DESC LIMIT ?",
-                (thread_id, MAX_THREAD_VIEW),
+                + where + " ORDER BY id DESC LIMIT ?",
+                (*params, MAX_THREAD_VIEW + 1),
             ).fetchall()
-            return list(reversed(rows)), str(state)
+            page, next_before = page_rows(rows, MAX_THREAD_VIEW)
+            return page, str(state), next_before
 
     def thread_messages(self, token: str):
         view = self.thread_view(token)
@@ -237,33 +273,58 @@ class MessageStore:
                 return None
             return str(db.execute("SELECT state FROM threads WHERE id=?", (thread_id,)).fetchone()[0])
 
-    def pending(self):
+    def pending_page(self, after_id: int | None = None):
+        after_id = validate_cursor(after_id)
         with closing(self._connect()) as db:
-            return db.execute(
+            rows = db.execute(
                 "SELECT id,thread_id,created_at,claim,body FROM messages "
                 "WHERE speaker='UNVERIFIED_SUBMISSION' AND status='held' "
-                "ORDER BY id LIMIT 100"
+                "AND id > ? ORDER BY id LIMIT ?",
+                (after_id or 0, MAX_OPERATOR_PAGE + 1),
             ).fetchall()
+            return page_rows(rows, MAX_OPERATOR_PAGE, ascending=True)
 
-    def list_threads(self):
+    def pending(self):
+        return self.pending_page()[0]
+
+    def list_threads_page(self, before_id: int | None = None):
+        before_id = validate_cursor(before_id)
         with closing(self._connect()) as db:
-            return db.execute(
+            where = "" if before_id is None else "WHERE t.id < ? "
+            params = () if before_id is None else (before_id,)
+            rows = db.execute(
                 "SELECT t.id,t.created_at,COUNT(m.id),"
                 "SUM(CASE WHEN m.status='held' THEN 1 ELSE 0 END),"
                 "MAX(m.created_at) FROM threads t LEFT JOIN messages m ON m.thread_id=t.id "
-                "GROUP BY t.id ORDER BY MAX(m.id) DESC LIMIT 100"
+                + where + "GROUP BY t.id ORDER BY t.id DESC LIMIT ?",
+                (*params, MAX_OPERATOR_PAGE + 1),
             ).fetchall()
+            page = rows[:MAX_OPERATOR_PAGE]
+            next_before = int(page[-1][0]) if len(rows) > MAX_OPERATOR_PAGE else None
+            return page, next_before
 
-    def read_thread(self, thread_id: int):
+    def list_threads(self):
+        return self.list_threads_page()[0]
+
+    def read_thread_page(self, thread_id: int, before_id: int | None = None):
+        before_id = validate_cursor(before_id)
         with closing(self._connect()) as db:
             if not db.execute("SELECT 1 FROM threads WHERE id=?", (thread_id,)).fetchone():
                 raise ValueError("Unknown conversation thread")
+            where = "WHERE thread_id=?"
+            params = [thread_id]
+            if before_id is not None:
+                where += " AND id < ?"
+                params.append(before_id)
             rows = db.execute(
                 "SELECT id,created_at,speaker,claim,body,status FROM messages "
-                "WHERE thread_id=? ORDER BY id DESC LIMIT ?",
-                (thread_id, MAX_THREAD_VIEW),
+                + where + " ORDER BY id DESC LIMIT ?",
+                (*params, MAX_THREAD_VIEW + 1),
             ).fetchall()
-            return list(reversed(rows))
+            return page_rows(rows, MAX_THREAD_VIEW)
+
+    def read_thread(self, thread_id: int):
+        return self.read_thread_page(thread_id)[0]
 
     def review(self, message_id: int, decision: str) -> bool:
         if decision not in {"reviewed", "rejected"}:
@@ -328,13 +389,23 @@ class MessageStore:
                     )
                 return cursor.rowcount == 1
 
-    def audit_events(self, thread_id: int):
+    def audit_events_page(self, thread_id: int, before_id: int | None = None):
+        before_id = validate_cursor(before_id)
         with closing(self._connect()) as db:
-            return db.execute(
+            where = "WHERE thread_id=?"
+            params = [thread_id]
+            if before_id is not None:
+                where += " AND id < ?"
+                params.append(before_id)
+            rows = db.execute(
                 "SELECT id,created_at,actor,action,message_id FROM moderation_events "
-                "WHERE thread_id=? ORDER BY id DESC LIMIT 200",
-                (thread_id,),
-            ).fetchall()[::-1]
+                + where + " ORDER BY id DESC LIMIT ?",
+                (*params, MAX_AUDIT_PAGE + 1),
+            ).fetchall()
+            return page_rows(rows, MAX_AUDIT_PAGE)
+
+    def audit_events(self, thread_id: int):
+        return self.audit_events_page(thread_id)[0]
 
 
 def _page(title: str, content: str) -> bytes:
@@ -379,7 +450,8 @@ def render_home(token: str, initial_token: str | None = None,
 
 def render_thread(messages, token: str, csrf_token: str,
                   request_key: str | None = None, base_url: str = "",
-                  thread_state: str = "open") -> bytes:
+                  thread_state: str = "open", older_before: int | None = None) -> bytes:
+    older_before = validate_cursor(older_before)
     request_key = request_key or secrets.token_urlsafe(24)
     items = []
     for msg_id, created, speaker, claim, body, status in messages:
@@ -396,7 +468,7 @@ def render_thread(messages, token: str, csrf_token: str,
         )
     return_link = base_url + "/t/" + token
     content = (
-        "<p class='notice'>Bookmark or save this page's full URL now. It is your "
+        "<p class='notice'>Save the canonical return link shown below. It is your "
         "private return link; possession grants access, not identity. "
         "Keep it confidential. This thread does not verify any respondent's origin.</p>"
         f"<p>Copy your return link: <a href='{escape(return_link)}'>"
@@ -405,6 +477,11 @@ def render_thread(messages, token: str, csrf_token: str,
         "and no response is guaranteed.</p>"
         "<h2>Your conversation</h2>" + "\n".join(items)
     )
+    if older_before is not None:
+        content += (
+            f"<nav><a href='/t/{escape(token)}?before={older_before}'>"
+            "Older messages</a></nav>"
+        )
     if thread_state == "open":
         content += (
             "<h2>Follow up</h2><form method='post' action='/reply'>"
@@ -417,7 +494,7 @@ def render_thread(messages, token: str, csrf_token: str,
         )
     else:
         content += "<p class='notice'>Conversation closed. No more messages can be submitted.</p>"
-    content += ("<p><small>Showing at most the 200 most recent messages. "
+    content += ("<p><small>Showing at most 200 messages per page. "
                 "Owner replies require local database access; no public owner login exists.</small></p>")
     return _page("Private conversation", content)
 
@@ -442,6 +519,8 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
             self.send_header("Content-Length", str(len(body)))
             self.send_header("Cache-Control", "no-store")
             self.send_header("Referrer-Policy", "no-referrer")
+            if self.path.startswith("/t/"):
+                self.send_header("X-Robots-Tag", "noindex, nofollow, noarchive")
             self.send_header("X-Frame-Options", "DENY")
             self.send_header("X-Content-Type-Options", "nosniff")
             self.send_header(
@@ -469,17 +548,32 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
             elif self.path == "/":
                 self.respond(200, render_home(csrf_token), "text/html; charset=utf-8")
             elif self.path.startswith("/t/"):
-                token = self.path[3:]
-                view = store.thread_view(token)
+                parsed = urlsplit(self.path)
+                token = parsed.path[3:]
+                before_id = None
+                if parsed.fragment or len(parsed.query) > 64:
+                    return self.respond(400, b"Invalid page cursor")
+                if parsed.query:
+                    try:
+                        query = parse_qs(parsed.query, keep_blank_values=True,
+                                         max_num_fields=1)
+                        raw = query["before"]
+                        if set(query) != {"before"} or len(raw) != 1 or not re.fullmatch(
+                                r"[1-9][0-9]{0,18}", raw[0]):
+                            raise ValueError("Invalid page cursor")
+                        before_id = validate_cursor(int(raw[0]))
+                    except (KeyError, ValueError):
+                        return self.respond(400, b"Invalid page cursor")
+                view = store.thread_view(token, before_id=before_id)
                 if view is None:
                     self.respond(404, b"Unknown return link")
                 else:
-                    messages, state = view
+                    messages, state, next_before = view
                     self.respond(
                         200, render_thread(
                             messages, token, csrf_token,
                             base_url=f"http://127.0.0.1:{self.server.server_port}",
-                            thread_state=state,
+                            thread_state=state, older_before=next_before,
                         ),
                         "text/html; charset=utf-8",
                     )
@@ -560,32 +654,54 @@ def main():
     parser.add_argument("--id", type=int, help="Message ID for --mode review")
     parser.add_argument("--decision", choices=["reviewed", "rejected"])
     parser.add_argument("--thread", type=int, help="Thread ID for --mode reply")
+    parser.add_argument("--after", type=int, help="Oldest-first pending queue cursor")
+    parser.add_argument("--before", type=int, help="Newest-first thread/history/audit cursor")
     parser.add_argument("--state", choices=["closed", "revoked"], help="Target state for --mode close")
     args = parser.parse_args()
+    if args.after is not None and args.mode != "pending":
+        parser.error("--after applies only to --mode pending")
+    if args.before is not None and args.mode not in {"threads", "read", "audit"}:
+        parser.error("--before applies only to --mode threads/read/audit")
+    try:
+        validate_cursor(args.after)
+        validate_cursor(args.before)
+    except ValueError as error:
+        parser.error(str(error))
     store = MessageStore(args.db)
     if args.mode == "pending":
-        for message_id, thread_id, created, name, body in store.pending():
+        rows, next_after = store.pending_page(after_id=args.after)
+        for message_id, thread_id, created, name, body in rows:
             print(f"message #{message_id} / thread #{thread_id} / {created} / "
                   f"{terminal_safe(name)}\n{terminal_safe(body)}\n")
+        if next_after is not None:
+            print(f"More pending messages: repeat with --after {next_after}")
     elif args.mode == "threads":
-        for thread_id, created, count, held, latest in store.list_threads():
+        rows, next_before = store.list_threads_page(before_id=args.before)
+        for thread_id, created, count, held, latest in rows:
             print(f"thread #{thread_id} / created {created} / messages {count} "
                   f"/ held {held} / last activity {latest}")
+        if next_before is not None:
+            print(f"More threads: repeat with --before {next_before}")
     elif args.mode == "read":
         if args.thread is None:
             parser.error("--mode read requires --thread")
         try:
-            rows = store.read_thread(args.thread)
+            rows, next_before = store.read_thread_page(args.thread, before_id=args.before)
         except ValueError as error:
             parser.error(str(error))
         for message_id, created, speaker, claim, body, status in rows:
             print(f"#{message_id} / {created} / {speaker} / "
                   f"{terminal_safe(claim)} / {status}\n{terminal_safe(body)}\n")
+        if next_before is not None:
+            print(f"Older messages: repeat with --before {next_before}")
     elif args.mode == "audit":
         if args.thread is None:
             parser.error("--mode audit requires --thread")
-        for event_id, created, actor, action, message_id in store.audit_events(args.thread):
+        rows, next_before = store.audit_events_page(args.thread, before_id=args.before)
+        for event_id, created, actor, action, message_id in rows:
             print(f"event #{event_id} / {created} / {actor} / {action} / message #{message_id}")
+        if next_before is not None:
+            print(f"Older events: repeat with --before {next_before}")
     elif args.mode == "close":
         if args.thread is None or args.state is None:
             parser.error("--mode close requires --thread and --state")
