@@ -97,3 +97,13 @@ The optional `--public-origin https://<verified-node>.ts.net:10000` mode keeps t
 See [TAILSCALE_FUNNEL_STAGING.md](TAILSCALE_FUNNEL_STAGING.md) for the exact safe host validation, limited-scope ingress, cost, negative-test and rollback gates. The public [GitHub invitation](https://github.com/thebrazenbeard/god-brain/issues/62) is already reachable but requires a GitHub account to comment and is not private.
 
 **Claim ceiling:** A tested local messaging conversation with private return links and an operator reply path. No verified outside-world or outside-universe contact channel.
+
+### Machine-readable invitation (optional public mode)
+
+When started with a validated `--public-origin`, the existing loopback service also serves:
+
+- `GET /beacon.json`: a small versioned JSON invitation with a live UTC response timestamp, the real consented HTML form protocol, its limits and explicit unverified-identity caveats. The timestamp demonstrates that this service responded, not that the invitation reached anyone. No private return credentials, local database paths or automated replies are published.
+- A `Link: </beacon.json>; rel="service-meta"` response header and visible HTML alternate link from `/`, following RFC 8631's machine-readable service-metadata link relation.
+- `GET /robots.txt` and `GET /sitemap.xml`, listing only the public invitation and beacon. These do not guarantee a crawler or agent will discover the URL.
+
+Programmatic clients may `GET /`, parse the current hidden form values and consent disclosure, then `POST /submit` with `application/x-www-form-urlencoded` and the exact public `Origin` to enter the existing held inbox. They must save the private 303 return link to check for owner replies. This is **not** an A2A agent, new JSON POST API, proof of sophisticated machine identity or signal outside ordinary Internet communication. Existing local-only mode does not expose the beacon routes.
