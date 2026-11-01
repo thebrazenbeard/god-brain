@@ -5,6 +5,7 @@ provider account is involved. The local HTTP tests require loopback sockets.
 """
 
 import http.client
+from contextlib import closing
 from pathlib import Path
 import re
 import secrets
@@ -86,7 +87,7 @@ class PageStoreTests(unittest.TestCase):
     def test_indexes_present_after_reopening_existing_database(self):
         receipt = self.store.submit("Visitor", "Test")
         MessageStore(self.store.path)
-        with sqlite3.connect(self.store.path) as db:
+        with closing(sqlite3.connect(self.store.path)) as db, db:
             def indexed_columns(table):
                 return {
                     tuple(row[2] for row in db.execute(f"PRAGMA index_info({index[1]})"))
