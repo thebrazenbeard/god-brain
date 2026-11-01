@@ -201,9 +201,14 @@ class HttpTests(unittest.TestCase):
         self.assertNotIn("Secret beta", self.request("GET", first)[2])
         self.assertNotIn("Secret alpha", self.request("GET", second)[2])
         self.assertEqual(self.post("/reply", token, return_token="bad")[0], 400)
-        self.assertEqual(self.request("POST", "/submit", "x" * 5000, {
+        self.assertEqual(self.request("POST", "/submit", "x" * 40000, {
             "Content-Type": "application/x-www-form-urlencoded"})[0], 413)
         self.assertEqual(self.request("GET", "/", headers={"Host": "attacker.example"})[0], 421)
+
+    def test_unicode_character_limit_matches_post_body_budget(self):
+        token = self.csrf_token()
+        self.assertEqual(self.post("/submit", token, message="🙂" * 2000)[0], 303)
+        self.assertEqual(self.post("/submit", token, message="🙂" * 2001)[0], 400)
 
 
 if __name__ == "__main__":
