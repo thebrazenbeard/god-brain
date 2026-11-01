@@ -36,7 +36,14 @@ Sources: [IANA 616](https://www.iana.org/assignments/service-names-port-numbers?
 6. **Outbound reply:** Only owner-authorized publication; no automatic assistant impersonation or unreviewed autonomous messaging.
 7. **Protected effects:** No message, regardless of claimed origin, can grant authority to run code, change settings, spend money, access private records, or bypass moderation.
 
-The loopback SQLite prototype is **not production-ready**: it has no remote-user identity verification, owner authentication, moderation queue, durable managed storage, network rate limits, abuse controls, recovery or retention policy. Publishing that server as-is would violate this readiness contract.
+The loopback SQLite prototype is **not production-ready**. Its local held queue, private return links and CLI operator reply mechanism do not provide remote owner authentication, a production moderation dashboard, durable managed storage, network rate limits, abuse controls, idempotency, account recovery or a retention policy. Publishing that server as-is would violate this readiness contract.
+
+
+## Local private-thread reference slice (v0.2 candidate)
+
+The Draft PR implementation now separates the public invitation from held visitor messages. It issues high-entropy per-thread bearer return links (only hashes stored), offers private follow-up views and local operator replies through a database-access CLI, and bounds returned history. Tests cover restart persistence, thread isolation, escaped input, duplicate-invitation concurrency, legacy migration and owner/visitor label separation. Newly created POSIX database files use mode 0600; existing files with overly broad mode fail closed until manually secured.
+
+This is a **local reference design only**. A return-link bearer proves possession, not identity. The local CLI is not an authenticated online admin dashboard. Public ingress still requires identity and session management, durable managed storage, privacy/retention decisions, idempotent retry handling, abuse/rate limits, backup/recovery, independently reviewed deployment configuration and Patrick's exact-effect go-live authorization. Do not expose the stdlib handler or forward external ports to it.
 
 ## Candidate architecture and acceptance gates
 
