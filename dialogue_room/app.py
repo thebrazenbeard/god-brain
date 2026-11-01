@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from html import escape
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import json
 import os
 from pathlib import Path
 import re
@@ -531,10 +532,10 @@ class MessageStore:
         return self.audit_events_page(thread_id)[0]
 
 
-def _page(title: str, content: str) -> bytes:
+def _page(title: str, content: str, *, head_links: str = "") -> bytes:
     return ("""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>God Brain · """ + escape(title) + """</title>
+<title>God Brain · """ + escape(title) + "</title>" + head_links + """
 <style>body{background:#111827;color:#eee;font:16px system-ui;max-width:760px;
 margin:2rem auto;padding:0 1rem}article,form,.notice{background:#1f2937;
 padding:1rem;border-radius:12px;margin:1rem 0;overflow-wrap:anywhere}
@@ -588,7 +589,62 @@ def render_home(token: str, initial_token: str | None = None,
         f"<input type='hidden' name='csrf' value='{escape(token)}'>"
         "<button type='submit'>Send privately for review</button></form>"
     )
-    return _page("Invitation", content)
+    if public_mode:
+        content += ("<p><a href='/beacon.json'>Machine-readable invitation "
+                    "and response instructions (JSON)</a></p>")
+    return _page(
+        "Invitation", content,
+        head_links=('<link rel="alternate" type="application/json" '
+                    'href="/beacon.json">' if public_mode else ""),
+    )
+
+
+def render_beacon(public_origin: str, limits: PublicLimits) -> bytes:
+    """Public machine-readable invitation; never include per-request secrets."""
+    payload = {
+        "protocol": "god-brain-invitation/1",
+        "kind": "open-invitation",
+        "operator": "human-operated God Brain project",
+        "language": "en",
+        "served_at_utc": now(),  # Proves a live HTTP response, not outbound delivery.
+        "invitation": INVITATION,
+        "scope": "ordinary public Internet HTTPS; availability is not guaranteed",
+        "response": {
+            "method": "retrieve-form-then-submit",
+            "landing_url": public_origin + "/",
+            "submit_url": public_origin + "/submit",
+            "content_type": "application/x-www-form-urlencoded",
+            "required_form_fields": [
+                "name", "message", "csrf", "initial_token", "request_key", "privacy_consent"
+            ],
+            "instructions": (
+                "GET the landing page and use its current hidden field values. "
+                "Review and affirm its privacy disclosure. POST the completed form "
+                "with an exact Origin header matching this public origin; save the "
+                "private return URL from the 303 Location response to check replies."
+            ),
+            "consent_version": CONSENT_VERSION,
+            "max_message_characters": MAX_MESSAGE,
+            "max_post_bytes": MAX_POST_BYTES,
+            "max_new_inbound_per_hour": limits.max_inbound_per_hour,
+            "reply_delivery": "owner-reviewed; no notification or response is guaranteed",
+        },
+        "verification": {
+            "respondent_identity": "unverified, including self-identified nonbiological senders",
+            "external_contact_established": False,
+            "automatic_agent_execution": False,
+        },
+    }
+    return json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+
+
+def render_sitemap(public_origin: str) -> bytes:
+    locations = (public_origin + "/", public_origin + "/beacon.json")
+    return ("<?xml version='1.0' encoding='utf-8'?>"
+            "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>"
+            + "".join("<url><loc>" + escape(url) + "</loc></url>"
+                      for url in locations)
+            + "</urlset>").encode("utf-8")
 
 
 def render_thread(messages, token: str, csrf_token: str,
@@ -695,6 +751,10 @@ def make_server(store: MessageStore, port: int = 8765, *,
             # browsers send Origin: null for same-site forms under no-referrer.
             # same-origin keeps private return URLs out of cross-site referrers.
             self.send_header("Referrer-Policy", "same-origin" if public_origin else "no-referrer")
+            if public_origin and self.path == "/":
+                self.send_header(
+                    "Link", '</beacon.json>; rel="service-meta"; type="application/json"',
+                )
             if self.path.startswith("/t/"):
                 self.send_header("X-Robots-Tag", "noindex, nofollow, noarchive")
             self.send_header("X-Frame-Options", "DENY")
@@ -724,6 +784,16 @@ def make_server(store: MessageStore, port: int = 8765, *,
             elif self.path == "/":
                 self.respond(200, render_home(csrf_token, public_mode=bool(public_origin)),
                              "text/html; charset=utf-8")
+            elif public_origin and self.path == "/beacon.json":
+                self.respond(200, render_beacon(public_origin, store.public_limits),
+                             "application/json; charset=utf-8")
+            elif public_origin and self.path == "/robots.txt":
+                self.respond(200, ("User-agent: *\nAllow: /\nSitemap: " + public_origin
+                                   + "/sitemap.xml\n").encode("utf-8"),
+                             "text/plain; charset=utf-8")
+            elif public_origin and self.path == "/sitemap.xml":
+                self.respond(200, render_sitemap(public_origin),
+                             "application/xml; charset=utf-8")
             elif self.path.startswith("/t/"):
                 parsed = urlsplit(self.path)
                 token = parsed.path[3:]
