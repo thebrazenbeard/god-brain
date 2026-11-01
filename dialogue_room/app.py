@@ -229,6 +229,7 @@ class MessageStore:
                         and consent_version != CONSENT_VERSION):
                     raise ValueError("Privacy consent is required before starting a conversation")
                 thread_id = self._thread_id(db, token)
+                new_thread = thread_id is None
                 if thread_id is None:
                     if not create_thread or not re.fullmatch(r"[A-Za-z0-9_-]{40,50}", token):
                         raise ValueError("Unknown conversation return link")
@@ -276,7 +277,7 @@ class MessageStore:
                     (now(), "UNVERIFIED_SUBMISSION", name, body, "held", thread_id,
                      request_key, fingerprint if request_key is not None else None),
                 )
-                if create_thread and consent_version == CONSENT_VERSION:
+                if new_thread and consent_version == CONSENT_VERSION:
                     # Versioned consent is recorded atomically with the first accepted
                     # turn; the audit retains only the thread ID, never its bearer token.
                     db.execute(

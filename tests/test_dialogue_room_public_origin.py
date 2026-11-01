@@ -87,6 +87,15 @@ class PublicOriginTests(unittest.TestCase):
                    self.store.audit_events(thread_id)]
         self.assertIn(("UNVERIFIED_RETURN_LINK_HOLDER", "consent:dialogue-privacy-v1"), actions)
         self.assertNotIn(token, str(actions))
+        # An old initial form can be reposted with a new request key; it must
+        # not falsely claim a second initial consent event for this thread.
+        self.assertEqual(self.request("POST", "/submit", urlencode({
+            **payload, "message": "Second turn via old form",
+            "request_key": secrets.token_urlsafe(24),
+            "privacy_consent": "dialogue-privacy-v1",
+        }), headers)[0], 303)
+        actions = [row[3] for row in self.store.audit_events(thread_id)]
+        self.assertEqual(actions.count("consent:dialogue-privacy-v1"), 1)
 
     def test_private_link_holder_can_queue_one_deletion_request_even_at_quota(self):
         html = self.request("GET", "/")[2]
