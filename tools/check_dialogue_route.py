@@ -1,8 +1,9 @@
-"""Read-only health/identity probe for the optional God Brain Funnel service.
+"""Read-only health/contract probe for the optional God Brain Funnel service.
 
 This tool never starts a service, edits routing, or touches the dialogue database.
 It distinguishes a listening *other* process from the expected dialogue service;
 an HTTP 200 from an arbitrary web server is not a healthy God Brain route.
+This is a semantic fingerprint, not cryptographic authentication of a server.
 
 Usage::
 
@@ -44,7 +45,7 @@ def classify_beacon(status: int, content_type: str, body: bytes,
     """Return 'healthy' or a bounded failure code, never a response body."""
     if status != 200:
         return f"http_{status}"
-    if not content_type.lower().startswith("application/json"):
+    if content_type.split(";", 1)[0].strip().lower() != "application/json":
         return "not_json_content_type"
     if len(body) > MAX_BEACON_BYTES:
         return "oversize_beacon"
