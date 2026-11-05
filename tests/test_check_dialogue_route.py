@@ -51,6 +51,10 @@ class RouteProbeTests(unittest.TestCase):
     def test_valid_contract_and_wrong_service_even_at_http_200(self):
         self.assertEqual(classify_beacon(200, "application/json", beacon(), ORIGIN),
                          "healthy")
+        self.assertEqual(classify_beacon(200, "application/json; charset=utf-8",
+                                         beacon(), ORIGIN), "healthy")
+        self.assertEqual(classify_beacon(200, "application/jsonp", beacon(), ORIGIN),
+                         "not_json_content_type")
         self.assertEqual(classify_beacon(200, "text/html", b"<html>OK</html>", ORIGIN),
                          "not_json_content_type")
         self.assertEqual(classify_beacon(200, "application/json",
