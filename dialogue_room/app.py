@@ -53,11 +53,28 @@ def validate_message(name: str, body: str) -> tuple[str, str]:
     return name, body
 
 
+def terminal_safe(value: str) -> str:
+    """Render visitor text for CLI review without terminal-control spoofing."""
+    return "".join(
+        char if char in "\n\t" or category(char) not in {"Cc", "Cf", "Cs", "Zl", "Zp"}
+        else f"\\u{ord(char):04x}"
+        for char in value
+    )
+
+
 @dataclass(frozen=True)
 class ThreadReceipt:
     thread_id: int
     message_id: int
     token: str
+
+
+class IdempotencyConflict(ValueError):
+    """An already accepted request key was reused with different content."""
+
+
+class ThreadClosed(ValueError):
+    """The return capability cannot accept new messages."""
 
 
 class MessageStore:
@@ -88,12 +105,20 @@ class MessageStore:
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "created_at TEXT NOT NULL, speaker TEXT NOT NULL, "
                     "claim TEXT NOT NULL, body TEXT NOT NULL, "
-                    "status TEXT NOT NULL DEFAULT 'held', thread_id INTEGER)"
+                    "status TEXT NOT NULL DEFAULT 'held', thread_id INTEGER, "
+                    "request_key TEXT, payload_hash TEXT)"
                 )
                 db.execute(
                     "CREATE TABLE IF NOT EXISTS threads ("
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "created_at TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE)"
+                    "created_at TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE, "
+                    "state TEXT NOT NULL DEFAULT 'open')"
+                )
+                db.execute(
+                    "CREATE TABLE IF NOT EXISTS moderation_events ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "created_at TEXT NOT NULL, actor TEXT NOT NULL, "
+                    "action TEXT NOT NULL, thread_id INTEGER, message_id INTEGER)"
                 )
                 # Non-destructive migration of the earlier single public stream:
                 # old unverified posts become held and cannot be linked to a visitor.
@@ -102,6 +127,17 @@ class MessageStore:
                     db.execute("ALTER TABLE messages ADD COLUMN status TEXT NOT NULL DEFAULT 'held'")
                 if "thread_id" not in cols:
                     db.execute("ALTER TABLE messages ADD COLUMN thread_id INTEGER")
+                if "request_key" not in cols:
+                    db.execute("ALTER TABLE messages ADD COLUMN request_key TEXT")
+                if "payload_hash" not in cols:
+                    db.execute("ALTER TABLE messages ADD COLUMN payload_hash TEXT")
+                thread_cols = {row[1] for row in db.execute("PRAGMA table_info(threads)")}
+                if "state" not in thread_cols:
+                    db.execute("ALTER TABLE threads ADD COLUMN state TEXT NOT NULL DEFAULT 'open'")
+                db.execute(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS uq_message_request "
+                    "ON messages(thread_id, request_key) WHERE request_key IS NOT NULL"
+                )
                 db.execute("UPDATE messages SET status='public' WHERE speaker='PROJECT_INVITATION'")
                 if not db.execute(
                     "SELECT 1 FROM messages WHERE speaker='PROJECT_INVITATION' LIMIT 1"
@@ -123,39 +159,83 @@ class MessageStore:
         ).fetchone()
         return int(row[0]) if row else None
 
-    def submit(self, name: str, body: str, token: str | None = None) -> ThreadReceipt:
+    def submit(self, name: str, body: str, token: str | None = None, *,
+               request_key: str | None = None,
+               create_thread: bool = False) -> ThreadReceipt:
         name, body = validate_message(name, body)
+        if request_key is not None and not re.fullmatch(r"[A-Za-z0-9_-]{24,64}", request_key):
+            raise ValueError("Invalid request key")
+        fingerprint = sha256((name + "\0" + body).encode("utf-8")).hexdigest()
         with closing(self._connect()) as db:
             with db:
+                # Serialize the thread lookup, receipt lookup and insertion as one unit.
+                db.execute("BEGIN IMMEDIATE")
                 if token is None:
                     token = secrets.token_urlsafe(32)
+                    create_thread = True
+                thread_id = self._thread_id(db, token)
+                if thread_id is None:
+                    if not create_thread or not re.fullmatch(r"[A-Za-z0-9_-]{40,50}", token):
+                        raise ValueError("Unknown conversation return link")
                     cursor = db.execute(
                         "INSERT INTO threads(created_at,token_hash) VALUES(?,?)",
                         (now(), sha256(token.encode()).hexdigest()),
                     )
                     thread_id = int(cursor.lastrowid)
-                else:
-                    thread_id = self._thread_id(db, token)
-                    if thread_id is None:
-                        raise ValueError("Unknown conversation return link")
+                thread_state = db.execute(
+                    "SELECT state FROM threads WHERE id=?", (thread_id,)
+                ).fetchone()[0]
+                if thread_state == "revoked":
+                    raise ThreadClosed("Conversation return link revoked")
+                if request_key is not None:
+                    previous = db.execute(
+                        "SELECT id,payload_hash FROM messages WHERE thread_id=? AND request_key=?",
+                        (thread_id, request_key),
+                    ).fetchone()
+                    if previous is not None:
+                        if previous[1] != fingerprint:
+                            raise IdempotencyConflict("Request key reused with different content")
+                        return ThreadReceipt(thread_id, int(previous[0]), token)
+                if thread_state != "open":
+                    raise ThreadClosed("Conversation is closed")
                 cursor = db.execute(
-                    "INSERT INTO messages(created_at,speaker,claim,body,status,thread_id) "
-                    "VALUES(?,?,?,?,?,?)",
-                    (now(), "UNVERIFIED_SUBMISSION", name, body, "held", thread_id),
+                    "INSERT INTO messages("
+                    "created_at,speaker,claim,body,status,thread_id,request_key,payload_hash"
+                    ") VALUES(?,?,?,?,?,?,?,?)",
+                    (now(), "UNVERIFIED_SUBMISSION", name, body, "held", thread_id,
+                     request_key, fingerprint if request_key is not None else None),
                 )
                 return ThreadReceipt(thread_id, int(cursor.lastrowid), token)
 
-    def thread_messages(self, token: str):
+    def thread_view(self, token: str):
+        """Read authorization state and visible messages from one DB snapshot."""
         with closing(self._connect()) as db:
+            db.execute("BEGIN")
             thread_id = self._thread_id(db, token)
             if thread_id is None:
+                return None
+            state = db.execute(
+                "SELECT state FROM threads WHERE id=?", (thread_id,)
+            ).fetchone()[0]
+            if state == "revoked":
                 return None
             rows = db.execute(
                 "SELECT id,created_at,speaker,claim,body,status FROM messages "
                 "WHERE thread_id=? ORDER BY id DESC LIMIT ?",
                 (thread_id, MAX_THREAD_VIEW),
             ).fetchall()
-            return list(reversed(rows))
+            return list(reversed(rows)), str(state)
+
+    def thread_messages(self, token: str):
+        view = self.thread_view(token)
+        return view[0] if view is not None else None
+
+    def thread_state(self, token: str) -> str | None:
+        with closing(self._connect()) as db:
+            thread_id = self._thread_id(db, token)
+            if thread_id is None:
+                return None
+            return str(db.execute("SELECT state FROM threads WHERE id=?", (thread_id,)).fetchone()[0])
 
     def pending(self):
         with closing(self._connect()) as db:
@@ -190,25 +270,71 @@ class MessageStore:
             raise ValueError("Decision must be reviewed or rejected")
         with closing(self._connect()) as db:
             with db:
+                db.execute("BEGIN IMMEDIATE")
+                row = db.execute(
+                    "SELECT thread_id FROM messages WHERE id=?", (message_id,)
+                ).fetchone()
                 cursor = db.execute(
                     "UPDATE messages SET status=? WHERE id=? "
                     "AND speaker='UNVERIFIED_SUBMISSION' AND status='held'",
                     (decision, message_id),
                 )
+                if cursor.rowcount == 1:
+                    db.execute(
+                        "INSERT INTO moderation_events(created_at,actor,action,thread_id,message_id) "
+                        "VALUES(?,?,?,?,?)",
+                        (now(), "LOCAL_OPERATOR", decision, row[0], message_id),
+                    )
                 return cursor.rowcount == 1
 
     def owner_reply(self, thread_id: int, body: str) -> int:
         body = validate_message("Project owner", body)[1]
         with closing(self._connect()) as db:
             with db:
+                # Prevent closure/revocation from racing the owner-state check.
+                db.execute("BEGIN IMMEDIATE")
                 if not db.execute("SELECT 1 FROM threads WHERE id=?", (thread_id,)).fetchone():
                     raise ValueError("Unknown conversation thread")
+                if db.execute("SELECT state FROM threads WHERE id=?", (thread_id,)).fetchone()[0] != "open":
+                    raise ThreadClosed("Conversation is closed")
                 cursor = db.execute(
                     "INSERT INTO messages(created_at,speaker,claim,body,status,thread_id) "
                     "VALUES(?,?,?,?,?,?)",
                     (now(), "PROJECT_OWNER", "", body, "owner", thread_id),
                 )
+                db.execute(
+                    "INSERT INTO moderation_events(created_at,actor,action,thread_id,message_id) "
+                    "VALUES(?,?,?,?,?)",
+                    (now(), "LOCAL_OPERATOR", "owner_reply", thread_id, int(cursor.lastrowid)),
+                )
                 return int(cursor.lastrowid)
+
+    def close_thread(self, thread_id: int, state: str) -> bool:
+        if state not in {"closed", "revoked"}:
+            raise ValueError("Thread state must be closed or revoked")
+        allowed = ("open", "closed") if state == "revoked" else ("open",)
+        with closing(self._connect()) as db:
+            with db:
+                cursor = db.execute(
+                    "UPDATE threads SET state=? WHERE id=? AND state IN ("
+                    + ",".join("?" for _ in allowed) + ")",
+                    (state, thread_id, *allowed),
+                )
+                if cursor.rowcount == 1:
+                    db.execute(
+                        "INSERT INTO moderation_events(created_at,actor,action,thread_id) "
+                        "VALUES(?,?,?,?)",
+                        (now(), "LOCAL_OPERATOR", state, thread_id),
+                    )
+                return cursor.rowcount == 1
+
+    def audit_events(self, thread_id: int):
+        with closing(self._connect()) as db:
+            return db.execute(
+                "SELECT id,created_at,actor,action,message_id FROM moderation_events "
+                "WHERE thread_id=? ORDER BY id DESC LIMIT 200",
+                (thread_id,),
+            ).fetchall()[::-1]
 
 
 def _page(title: str, content: str) -> bytes:
@@ -225,7 +351,10 @@ padding:.6rem}button{padding:.7rem 1.2rem}a{color:#93c5fd}
 """ + content + "</body></html>").encode("utf-8")
 
 
-def render_home(token: str) -> bytes:
+def render_home(token: str, initial_token: str | None = None,
+                request_key: str | None = None) -> bytes:
+    initial_token = initial_token or secrets.token_urlsafe(32)
+    request_key = request_key or secrets.token_urlsafe(24)
     content = (
         "<article><h2>Open invitation</h2><p>" + escape(INVITATION) + "</p></article>"
         "<p class='notice'>This is a local research prototype. No connection to a "
@@ -235,17 +364,23 @@ def render_home(token: str) -> bytes:
         "<p>Your text is stored locally and held for operator review, not displayed "
         "on the public page. You receive a private return link; save it, because "
         "losing it means losing access. Anyone with the link can read and reply. "
-        "There is no automatic deletion schedule in this prototype.</p>"
+        "There is no automatic deletion schedule in this prototype. "
+        "Do not include secrets or sensitive personal details.</p>"
         "<form method='post' action='/submit'>"
         "<label>Claimed name<input name='name' maxlength='80' required></label>"
         "<label>Message<textarea name='message' maxlength='2000' rows='5' required></textarea></label>"
+        f"<input type='hidden' name='initial_token' value='{escape(initial_token)}'>"
+        f"<input type='hidden' name='request_key' value='{escape(request_key)}'>"
         f"<input type='hidden' name='csrf' value='{escape(token)}'>"
         "<button type='submit'>Send privately for review</button></form>"
     )
     return _page("Invitation", content)
 
 
-def render_thread(messages, token: str, csrf_token: str) -> bytes:
+def render_thread(messages, token: str, csrf_token: str,
+                  request_key: str | None = None, base_url: str = "",
+                  thread_state: str = "open") -> bytes:
+    request_key = request_key or secrets.token_urlsafe(24)
     items = []
     for msg_id, created, speaker, claim, body, status in messages:
         if speaker == "PROJECT_OWNER":
@@ -259,20 +394,31 @@ def render_thread(messages, token: str, csrf_token: str) -> bytes:
             f"<article><small>#{msg_id} · {escape(created)} · {state}</small>"
             f"<h3>{who}</h3><p class='body'>{escape(body)}</p></article>"
         )
+    return_link = base_url + "/t/" + token
     content = (
         "<p class='notice'>Bookmark or save this page's full URL now. It is your "
         "private return link; possession grants access, not identity. "
         "Keep it confidential. This thread does not verify any respondent's origin.</p>"
-        "<h2>Your conversation</h2>" + "\n".join(items) +
-        "<h2>Follow up</h2><form method='post' action='/reply'>"
-        "<label>Claimed name<input name='name' maxlength='80' required></label>"
-        "<label>Message<textarea name='message' maxlength='2000' rows='5' required></textarea></label>"
-        f"<input type='hidden' name='return_token' value='{escape(token)}'>"
-        f"<input type='hidden' name='csrf' value='{escape(csrf_token)}'>"
-        "<button type='submit'>Submit follow-up for review</button></form>"
-        "<p><small>Showing at most the 200 most recent messages. "
-        "Owner replies require local database access; no public owner login exists.</small></p>"
+        f"<p>Copy your return link: <a href='{escape(return_link)}'>"
+        f"{escape(return_link)}</a></p>"
+        "<p>Check this link manually for replies. There is no notification service "
+        "and no response is guaranteed.</p>"
+        "<h2>Your conversation</h2>" + "\n".join(items)
     )
+    if thread_state == "open":
+        content += (
+            "<h2>Follow up</h2><form method='post' action='/reply'>"
+            "<label>Claimed name<input name='name' maxlength='80' required></label>"
+            "<label>Message<textarea name='message' maxlength='2000' rows='5' required></textarea></label>"
+            f"<input type='hidden' name='return_token' value='{escape(token)}'>"
+            f"<input type='hidden' name='request_key' value='{escape(request_key)}'>"
+            f"<input type='hidden' name='csrf' value='{escape(csrf_token)}'>"
+            "<button type='submit'>Submit follow-up for review</button></form>"
+        )
+    else:
+        content += "<p class='notice'>Conversation closed. No more messages can be submitted.</p>"
+    content += ("<p><small>Showing at most the 200 most recent messages. "
+                "Owner replies require local database access; no public owner login exists.</small></p>")
     return _page("Private conversation", content)
 
 
@@ -324,12 +470,17 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
                 self.respond(200, render_home(csrf_token), "text/html; charset=utf-8")
             elif self.path.startswith("/t/"):
                 token = self.path[3:]
-                messages = store.thread_messages(token)
-                if messages is None:
+                view = store.thread_view(token)
+                if view is None:
                     self.respond(404, b"Unknown return link")
                 else:
+                    messages, state = view
                     self.respond(
-                        200, render_thread(messages, token, csrf_token),
+                        200, render_thread(
+                            messages, token, csrf_token,
+                            base_url=f"http://127.0.0.1:{self.server.server_port}",
+                            thread_state=state,
+                        ),
                         "text/html; charset=utf-8",
                     )
             else:
@@ -366,8 +517,27 @@ def make_server(store: MessageStore, port: int = 8765) -> ThreadingHTTPServer:
 
                 if not secrets.compare_digest(field("csrf"), csrf_token):
                     return self.respond(403, b"Invalid form token")
-                return_token = field("return_token") if self.path == "/reply" else None
-                receipt = store.submit(field("name"), field("message"), return_token)
+                first = self.path == "/submit"
+                return_token = field("initial_token") if first else field("return_token")
+                receipt = store.submit(
+                    field("name"), field("message"), return_token,
+                    request_key=field("request_key"), create_thread=first,
+                )
+            except IdempotencyConflict as error:
+                # A changed retry must not overwrite an accepted message, but
+                # the holder can still recover the existing private thread.
+                link = "/t/" + return_token
+                return self.respond(
+                    409, _page(
+                        "Already received",
+                        "<p class='notice'>An earlier submission used this request key. "
+                        "Your changed text was not sent.</p>"
+                        f"<p><a href='{escape(link)}'>Open your existing private "
+                        "conversation</a> to check it and send a new follow-up.</p>",
+                    ), "text/html; charset=utf-8",
+                )
+            except ThreadClosed as error:
+                return self.respond(410, str(error).encode("utf-8"))
             except (ValueError, UnicodeError) as error:
                 return self.respond(400, str(error).encode("utf-8"))
             self.respond(303, location=f"/t/{receipt.token}")
@@ -383,17 +553,20 @@ def main():
     parser.add_argument("--db", type=Path, default=Path("dialogue_room.sqlite3"))
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument(
-        "--mode", choices=["serve", "pending", "threads", "read", "review", "reply"],
+        "--mode", choices=["serve", "pending", "threads", "read", "audit",
+                           "review", "reply", "close"],
         default="serve",
     )
     parser.add_argument("--id", type=int, help="Message ID for --mode review")
     parser.add_argument("--decision", choices=["reviewed", "rejected"])
     parser.add_argument("--thread", type=int, help="Thread ID for --mode reply")
+    parser.add_argument("--state", choices=["closed", "revoked"], help="Target state for --mode close")
     args = parser.parse_args()
     store = MessageStore(args.db)
     if args.mode == "pending":
         for message_id, thread_id, created, name, body in store.pending():
-            print(f"message #{message_id} / thread #{thread_id} / {created} / {name}\n{body}\n")
+            print(f"message #{message_id} / thread #{thread_id} / {created} / "
+                  f"{terminal_safe(name)}\n{terminal_safe(body)}\n")
     elif args.mode == "threads":
         for thread_id, created, count, held, latest in store.list_threads():
             print(f"thread #{thread_id} / created {created} / messages {count} "
@@ -406,7 +579,18 @@ def main():
         except ValueError as error:
             parser.error(str(error))
         for message_id, created, speaker, claim, body, status in rows:
-            print(f"#{message_id} / {created} / {speaker} / {claim} / {status}\n{body}\n")
+            print(f"#{message_id} / {created} / {speaker} / "
+                  f"{terminal_safe(claim)} / {status}\n{terminal_safe(body)}\n")
+    elif args.mode == "audit":
+        if args.thread is None:
+            parser.error("--mode audit requires --thread")
+        for event_id, created, actor, action, message_id in store.audit_events(args.thread):
+            print(f"event #{event_id} / {created} / {actor} / {action} / message #{message_id}")
+    elif args.mode == "close":
+        if args.thread is None or args.state is None:
+            parser.error("--mode close requires --thread and --state")
+        if not store.close_thread(args.thread, args.state):
+            parser.error("Unknown thread or invalid state transition")
     elif args.mode == "review":
         if args.id is None or not args.decision:
             parser.error("--mode review requires --id and --decision")
