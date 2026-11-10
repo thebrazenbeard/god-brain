@@ -9,8 +9,6 @@
 *.db-journal
 
 # Local credentials and Python output.
-.env
-.env.*
 !.env.example
 .dev.vars
 .dev.vars.*
@@ -18,3 +16,5 @@
 .venv/
 __pycache__/
 *.py[cod]
+config.bat
+node_modules

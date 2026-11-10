@@ -214,8 +214,8 @@ class MessageStore:
                 thread_state = db.execute(
                     "SELECT state FROM threads WHERE id=?", (thread_id,)
                 ).fetchone()[0]
-                if thread_state == "revoked":
-                    raise ThreadClosed("Conversation return link revoked")
+                if thread_state in {"revoked", "deleted"}:
+                    raise ThreadClosed("Conversation return link unavailable")
                 if request_key is not None:
                     previous = db.execute(
                         "SELECT id,payload_hash FROM messages WHERE thread_id=? AND request_key=?",
@@ -247,7 +247,7 @@ class MessageStore:
             state = db.execute(
                 "SELECT state FROM threads WHERE id=?", (thread_id,)
             ).fetchone()[0]
-            if state == "revoked":
+            if state in {"revoked", "deleted"}:
                 return None
             where = "WHERE thread_id=?"
             params = [thread_id]
@@ -389,6 +389,38 @@ class MessageStore:
                     )
                 return cursor.rowcount == 1
 
+    def delete_thread(self, thread_id: int) -> bool:
+        """Operator-only explicit deletion; preserve a non-readable token tombstone.
+
+        No timer calls this method. Retaining the token hash prevents an old
+        initial form from silently creating a new thread with that credential.
+        SQLite secure_delete reduces ordinary freed-page content remnants but
+        does not erase backups, WAL copies, or filesystem snapshots.
+        """
+        with closing(self._connect()) as db:
+            # This connection must apply secure_delete before modifying rows.
+            db.execute("PRAGMA secure_delete=ON")
+            with db:
+                db.execute("BEGIN IMMEDIATE")
+                changed = db.execute(
+                    "UPDATE threads SET state='deleted' "
+                    "WHERE id=? AND state != 'deleted'", (thread_id,)
+                )
+                if changed.rowcount != 1:
+                    return False
+                db.execute("DELETE FROM messages WHERE thread_id=?", (thread_id,))
+                # Preserve action types/times, not references to deleted turns.
+                db.execute(
+                    "UPDATE moderation_events SET message_id=NULL WHERE thread_id=?",
+                    (thread_id,),
+                )
+                db.execute(
+                    "INSERT INTO moderation_events(created_at,actor,action,thread_id) "
+                    "VALUES(?,?,?,?)",
+                    (now(), "LOCAL_OPERATOR", "deleted", thread_id),
+                )
+                return True
+
     def audit_events_page(self, thread_id: int, before_id: int | None = None):
         before_id = validate_cursor(before_id)
         with closing(self._connect()) as db:
@@ -435,7 +467,8 @@ def render_home(token: str, initial_token: str | None = None,
         "<p>Your text is stored locally and held for operator review, not displayed "
         "on the public page. You receive a private return link; save it, because "
         "losing it means losing access. Anyone with the link can read and reply. "
-        "There is no automatic deletion schedule in this prototype. "
+        "Messages remain until the local operator explicitly deletes their "
+        "conversation; there is no inactivity timer or automatic expiry. "
         "Do not include secrets or sensitive personal details.</p>"
         "<form method='post' action='/submit'>"
         "<label>Claimed name<input name='name' maxlength='80' required></label>"
@@ -648,7 +681,7 @@ def main():
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument(
         "--mode", choices=["serve", "pending", "threads", "read", "audit",
-                           "review", "reply", "close"],
+                           "review", "reply", "close", "delete"],
         default="serve",
     )
     parser.add_argument("--id", type=int, help="Message ID for --mode review")
@@ -657,11 +690,17 @@ def main():
     parser.add_argument("--after", type=int, help="Oldest-first pending queue cursor")
     parser.add_argument("--before", type=int, help="Newest-first thread/history/audit cursor")
     parser.add_argument("--state", choices=["closed", "revoked"], help="Target state for --mode close")
+    parser.add_argument("--confirm-delete", action="store_true",
+                        help="Required for irreversible --mode delete of one thread's messages")
     args = parser.parse_args()
     if args.after is not None and args.mode != "pending":
         parser.error("--after applies only to --mode pending")
     if args.before is not None and args.mode not in {"threads", "read", "audit"}:
         parser.error("--before applies only to --mode threads/read/audit")
+    if args.confirm_delete and args.mode != "delete":
+        parser.error("--confirm-delete applies only to --mode delete")
+    if args.mode == "delete" and (args.thread is None or not args.confirm_delete):
+        parser.error("--mode delete requires --thread and --confirm-delete")
     try:
         validate_cursor(args.after)
         validate_cursor(args.before)
@@ -707,6 +746,10 @@ def main():
             parser.error("--mode close requires --thread and --state")
         if not store.close_thread(args.thread, args.state):
             parser.error("Unknown thread or invalid state transition")
+    elif args.mode == "delete":
+        if not store.delete_thread(args.thread):
+            parser.error("Unknown or already deleted thread")
+        print(f"Thread #{args.thread}: messages deleted; return link tombstoned")
     elif args.mode == "review":
         if args.id is None or not args.decision:
             parser.error("--mode review requires --id and --decision")

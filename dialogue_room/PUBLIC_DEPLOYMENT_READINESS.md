@@ -4,6 +4,7 @@
 **Current code candidates:** [God Brain Draft PR #58](https://github.com/thebrazenbeard/god-brain/pull/58) (local thread foundation) and stacked [Draft PR #59](https://github.com/thebrazenbeard/god-brain/pull/59) (local retry, closure, audit and privacy hardening), originally based on `main@7eec60b93b6d355f4c50e5bcb4cc23a19eb2291c`.
 **User direction:** Patrick authorized *working toward a publicly accessible version with security, moderation and privacy safeguards* and asked to evaluate additional listeners on TCP 666 and 616 (2026-10-31 client date). On 2026-11-01 he reaffirmed the absolute **$0 budget**, prohibited Vercel, and rejected any billing enrollment, payment method, minimum charge or overage. Conditional merge/deployment authority applies **only after** technical, privacy, cost and review gates pass.
 **BT2 coordination:** [Bus #410](https://github.com/thebrazenbeard/chat-communication-bus/issues/410), pending accepted engineering/review ownership.
+**Owner privacy decision (2026-11-01):** conversations remain indefinitely in the active database **until Patrick explicitly deletes a selected conversation**. No inactivity timer or automatic expiration. The v0.5 local CLI supports an explicitly confirmed delete, but does not solve visitor withdrawal or production backup erasure.
 
 ## Goal and route
 
@@ -36,7 +37,7 @@ Sources: [IANA 616](https://www.iana.org/assignments/service-names-port-numbers?
 6. **Outbound reply:** Only owner-authorized publication; no automatic assistant impersonation or unreviewed autonomous messaging.
 7. **Protected effects:** No message, regardless of claimed origin, can grant authority to run code, change settings, spend money, access private records, or bypass moderation.
 
-The loopback SQLite prototype is **not production-ready**. Its local held queue, private return links and CLI operator reply mechanism do not provide remote owner authentication, a production moderation dashboard, durable managed storage, network rate limits, abuse controls, hosted idempotency/recovery, account recovery or a retention policy. Publishing that server as-is would violate this readiness contract.
+The loopback SQLite prototype is **not production-ready**. Its local held queue, private return links and CLI operator reply mechanism do not provide remote owner authentication, a production moderation dashboard, durable managed storage, network rate limits, abuse controls, hosted idempotency/recovery, account recovery or complete production privacy/backup/withdrawal controls. Publishing that server as-is would violate this readiness contract.
 
 
 ## Local private-thread reference slice (v0.2 candidate)
@@ -51,6 +52,12 @@ The separate successor work adds per-form high-entropy request keys, atomic SQLi
 
 Future hosted storage should implement the same idempotency contract transactionally, for example with a PostgreSQL unique `(thread_id, request_key)` constraint and conflict-handling; a failed or ambiguous initial submission must not produce a different private return link when retried. The backend should store only token hashes and never put raw capabilities into public logs. **Remotely exposed** owner operations require separate MFA-backed identity and server-side authorization per action. An owner-hosted deployment could instead retain a local OS-protected CLI with **no public owner control route**, subject to verified host permissions, audit and recovery.
 
+## Manual retention/deletion successor (v0.5 candidate)
+
+Patrick chose **retain until explicit owner deletion**, without a default expiry or inactivity timer. The local-only successor adds a confirmed `--mode delete --thread ID --confirm-delete` operation. In one SQLite write transaction it tombstones the thread state, deletes its messages and their idempotency receipts, clears deleted message IDs from its audit rows and records the operator's `deleted` action. A stale return token remains hashed only as a tombstone, cannot access content and cannot recreate a thread via an old initial form. `PRAGMA secure_delete=ON` reduces ordinary SQLite deleted-cell remnants at this point of deletion.
+
+This choice does **not** authorize a destructive command against existing user conversations, automated retention jobs or public deletion routes. The active database's deleted rows are not guaranteed erased from backups, old WAL/journals, system snapshots or copies. Before public exposure, separately establish visitor notice/consent and a withdrawal-request process, production backup lifecycle and documented deletion behavior, export/recovery expectations, and independent reviewer qualification. Owner-controlled indefinite retention is a user preference, **not proof of sufficient legal/privacy compliance** for public visitors.
+
 Research references: [PostgreSQL INSERT/ON CONFLICT](https://www.postgresql.org/docs/current/sql-insert.html), [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Supabase MFA](https://supabase.com/docs/guides/auth/auth-mfa), [Cloudflare Workers Free pricing](https://developers.cloudflare.com/workers/platform/pricing/), [D1 Free limits](https://developers.cloudflare.com/d1/platform/limits/), [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel), and [Cloudflare Zero Trust setup](https://developers.cloudflare.com/cloudflare-one/setup/). The last source explicitly requires payment details even for Zero Trust Free, so **Cloudflare Access is disqualified** under Patrick's policy. Workers+D1 without Access and existing-machine/Funnel approaches are **unverified research candidates**, not approved deploy targets. No provider has a verified complete cardless, zero-billing, private two-way path yet.
 
 ## Candidate architecture and acceptance gates
@@ -64,7 +71,7 @@ Acceptance tests before any public ingress:
 - Oversized bodies, malformed encodings, cross-origin requests, CSRF, replay and burst submissions fail closed.
 - Submitted content stays in quarantine until an authorized moderator releases it.
 - A restart/redeployment cannot lose accepted durable records or duplicate an ambiguous submission without detection.
-- Remote owner session expiry/revocation where applicable—or local OS operator access separation where owner operations never go online—plus audit history, private access and content deletion are verified.
+- Remote owner session expiry/revocation where applicable—or local OS operator access separation where owner operations never go online—plus audit history, private access, explicit owner-initiated content deletion, and backup/replica deletion limits are verified.
 - Public pages do not leak secret keys, raw private messages, client IP addresses, or private identifiers.
 - Failure, timeout, abuse or missing provenance produce explicit UNKNOWN/HELD states, never claimed contact.
 - Independent source/security review binds the exact deployed code and provider configuration.
