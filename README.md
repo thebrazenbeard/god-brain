@@ -2,6 +2,8 @@
 
 # God Brain
 
+**Public web interface:** [Open the God Brain research laboratory](https://thebrazenbeard.github.io/god-brain/). The static GitHub Pages site provides an architecture explorer and temporary browser-only evidence desk. It does not host an AI respondent, store messages, or replace the separate local dialogue service.
+
 **Experimental cognitive architecture, executable reference kernels, and falsifiable research protocols.**
 
 God Brain is a research toolkit for building and testing bounded cognitive-system mechanisms: provenance-aware evidence, current memory, causal and world-model hypotheses, routing, policy-constrained effects, and self-correction. Its broader question is whether an artificial cognitive instrument could meaningfully investigate unusually difficult questions about intelligence, reality, and simulation hypotheses. Those questions are research motivations, **not evidence that a simulator, deity, external intelligence, or contact channel exists**.
