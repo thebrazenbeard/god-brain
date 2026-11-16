@@ -58,7 +58,6 @@
       form.submit();
     } catch {
       status.textContent = "Could not connect to the private room. Nothing was sent; copy your draft and open the private room instead.";
-    } finally {
       busy = false;
       update();
     }

@@ -100,3 +100,14 @@ test("editing the message during ticket retrieval aborts the old submission", as
                "This is not the version I submitted");
   assert.match(b.elements["send-status"].textContent, /nothing was sent/i);
 });
+
+test("a successful native submit stays latched while browser navigation completes", async () => {
+  const b = browser();
+  fill(b.elements);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.elements["dialogue-form"].posted, true);
+  assert.equal(b.elements["send-message"].disabled, true,
+               "Send must remain disabled until browser navigation");
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.calls.length, 1, "Only one anonymous ticket may be requested");
+});
