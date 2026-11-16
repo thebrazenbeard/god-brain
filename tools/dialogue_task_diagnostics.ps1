@@ -62,14 +62,21 @@ $risks = [System.Collections.Generic.List[string]]::new()
 try {
     $tasks = @(Get-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -ErrorAction Stop)
     if ($tasks.Count -eq 0) {
-        $report.task_query_status = 'NOT_FOUND'
-        $report.task.exists = $false
+        # A successful empty provider result lacks the exact CIM no-match
+        # error identity; it is not verified absence.
+        $report.task_query_status = 'INCOMPLETE'
+        $risks.Add('TASK_QUERY_EMPTY_UNVERIFIED')
     } elseif ($tasks.Count -gt 1) {
         $report.task_query_status = 'AMBIGUOUS'
     } else {
+        $task = $tasks[0]
+        if ([string]$task.TaskName -cne $TaskName -or
+            [string]$task.TaskPath -cne $TaskPath) {
+            $report.task_query_status = 'INCOMPLETE'
+            $risks.Add('TASK_IDENTITY_UNVERIFIED')
+        } else {
         $report.task_query_status = 'OK'
         $report.task.exists = $true
-        $task = $tasks[0]
         $settings = $task.Settings
         $properties = @()
         if ($null -ne $settings) {
@@ -145,6 +152,7 @@ try {
             $report.task_info_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-ScheduledTaskInfo'
             $risks.Add('TASK_LAST_RUN_INFO_UNAVAILABLE')
         }
+        }
     }
 } catch {
     $report.task_query_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-ScheduledTask'
@@ -173,18 +181,26 @@ try {
 }
 
 try {
-    # Query only the requested port; the exact CIM no-match status is ABSENT.
-    $listeners = @(Get-NetTCPConnection -LocalPort $LoopbackPort -State Listen -ErrorAction Stop |
-                   Where-Object { $_.LocalPort -eq $LoopbackPort })
-    $report.listener_query_status = 'OK'
-    $report.port_listener_present = ($listeners.Count -gt 0)
+    # Query only the requested port. Successful empty output is not a CIM
+    # no-match error and therefore cannot establish absence.
+    $listeners = @(Get-NetTCPConnection -LocalPort $LoopbackPort -State Listen -ErrorAction Stop)
     if ($listeners.Count -eq 0) {
-        $report.listener_binding = 'ABSENT'
+        $report.listener_query_status = 'INCOMPLETE'
+        $risks.Add('LISTENER_QUERY_EMPTY_UNVERIFIED')
     } else {
         $loopbackCount = 0
         $nonLoopbackCount = 0
         $unknownCount = 0
+        $invalidCount = 0
         foreach ($listener in $listeners) {
+            # Validate the returned row, not only the query arguments.
+            # Reject Established/CloseWait or mismatched-port rows.
+            if ($null -eq $listener -or
+                [string]$listener.LocalPort -cne [string]$LoopbackPort -or
+                [string]$listener.State -cne 'Listen') {
+                $invalidCount++
+                continue
+            }
             $parsed = $null
             $address = [string]$listener.LocalAddress
             if (-not [System.Net.IPAddress]::TryParse($address, [ref]$parsed)) {
@@ -195,14 +211,21 @@ try {
                 $nonLoopbackCount++
             }
         }
-        if ($unknownCount -gt 0) {
-            $report.listener_binding = 'UNKNOWN'
-        } elseif ($loopbackCount -gt 0 -and $nonLoopbackCount -gt 0) {
-            $report.listener_binding = 'MIXED'
-        } elseif ($nonLoopbackCount -gt 0) {
-            $report.listener_binding = 'WILDCARD_OR_NON_LOOPBACK'
+        if ($invalidCount -gt 0) {
+            $report.listener_query_status = 'INCOMPLETE'
+            $risks.Add('LISTENER_ROW_UNVERIFIED')
         } else {
-            $report.listener_binding = 'LOOPBACK_ONLY'
+            $report.listener_query_status = 'OK'
+            $report.port_listener_present = $true
+            if ($unknownCount -gt 0) {
+                $report.listener_binding = 'UNKNOWN'
+            } elseif ($loopbackCount -gt 0 -and $nonLoopbackCount -gt 0) {
+                $report.listener_binding = 'MIXED'
+            } elseif ($nonLoopbackCount -gt 0) {
+                $report.listener_binding = 'WILDCARD_OR_NON_LOOPBACK'
+            } else {
+                $report.listener_binding = 'LOOPBACK_ONLY'
+            }
         }
     }
 } catch {

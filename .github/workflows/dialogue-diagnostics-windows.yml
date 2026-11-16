@@ -1,0 +1,27 @@
+name: Dialogue diagnostic Windows fixtures
+
+on:
+  pull_request:
+    paths:
+      - 'tools/dialogue_task_diagnostics.ps1'
+      - 'tests/test_dialogue_task_diagnostics.py'
+      - 'docs/DIALOGUE_WINDOWS_TASK_DIAGNOSTICS.md'
+      - '.github/workflows/dialogue-diagnostics-windows.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-windows-tests:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact PR head without persistent credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Run read-only PowerShell 5.1 fixtures on isolated Windows runner
+        shell: pwsh
+        run: python -B -m unittest -v tests.test_dialogue_task_diagnostics
