@@ -19,10 +19,15 @@ function browser(fetcher, embedded=false) {
       addEventListener(type, fn) { this.callbacks[type] = fn; },
       reportValidity() { return true; },
       select() { this.selected = true; },
+      focus() { this.focused = true; },
       submit() { this.posted = true; }
     };
   }
   let calls = [];
+  const clock = {now: 1_000_000};
+  const BrowserDate = class extends Date {
+    static now() { return clock.now; }
+  };
   const windowEvents = {};
   const win = {addEventListener(type, fn) {windowEvents[type] = fn;}};
   win.self = win;
@@ -30,6 +35,7 @@ function browser(fetcher, embedded=false) {
   const context = {
     window: win,
     navigator: {},
+    Date: BrowserDate,
     document: {getElementById: id => elements[id]},
     fetch: async (url, options) => {
       calls.push({url, options});
@@ -37,7 +43,7 @@ function browser(fetcher, embedded=false) {
     }
   };
   vm.runInNewContext(source, context, {timeout: 1000});
-  return {elements, calls, windowEvents};
+  return {elements, calls, windowEvents, clock};
 }
 function fill(els, consent=true) {
   els["sender-name"].value = "Visitor";
@@ -71,6 +77,8 @@ test("prepares a recovery link but never POSTs until user saves it", async () =>
   assert.equal(b.calls[0].options.credentials, "omit");
   assert.equal(b.elements["dialogue-form"].posted, false);
   assert.equal(b.elements["return-link-panel"].hidden, false);
+  assert.equal(b.elements["private-return-url"].focused, true,
+               "Newly revealed link receives keyboard focus");
   assert.equal(b.elements["private-return-url"].value,
     "https://lappy.tail86ea75.ts.net:10000/t/" + TICKET.initial_token);
   assert.equal(b.elements["send-message"].disabled, true);
@@ -192,4 +200,19 @@ test("BFCache return preserves draft but clears old ticket and consent", async (
   b.elements["return-link-saved"].checked = true;
   b.elements["return-link-saved"].callbacks.change();
   assert.equal(b.elements["send-message"].disabled, false);
+});
+
+test("an aged prepared ticket cannot POST without fresh preparation", async () => {
+  const b = browser();
+  fill(b.elements);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  b.elements["return-link-saved"].checked = true;
+  b.elements["return-link-saved"].callbacks.change();
+  b.clock.now += 11 * 60 * 1000;
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.elements["dialogue-form"].posted, false);
+  assert.equal(b.elements["return-link-panel"].hidden, true);
+  assert.equal(b.elements["initial-token"].value, "");
+  assert.equal(b.calls.length, 1, "No automatic second ticket or POST");
+  assert.match(b.elements["send-status"].textContent, /prepare a new|too old/i);
 });

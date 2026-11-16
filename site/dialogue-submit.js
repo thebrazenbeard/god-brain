@@ -3,6 +3,8 @@
 (() => {
   "use strict";
   const origin = "https://lappy.tail86ea75.ts.net:10000";
+  // Client-side UX freshness only; server tokens last until its restart.
+  const MAX_PREPARATION_AGE_MS = 10 * 60 * 1000;
   const form = document.getElementById("dialogue-form");
   const name = document.getElementById("sender-name");
   const draft = document.getElementById("draft-message");
@@ -41,6 +43,12 @@
   };
   const update = () => {
     if (prepared &&
+        (Date.now() < prepared.preparedAt ||
+         Date.now() - prepared.preparedAt > MAX_PREPARATION_AGE_MS)) {
+      clearPrepared();
+      status.textContent = "This prepared link is too old. Prepare a new private link before sending; no POST occurred.";
+    }
+    if (prepared &&
         (name.value !== prepared.name ||
          draft.value !== prepared.message || !consent.checked)) {
       clearPrepared();
@@ -73,6 +81,9 @@
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const wasPrepared = prepared !== null;
+    update();
+    if (wasPrepared && prepared === null) return;
     if (busy || send.disabled || !form.reportValidity()) return;
 
     if (prepared) {
@@ -114,7 +125,9 @@
       returnUrl.value = origin + "/t/" + ticket.initial_token;
       returnPanel.hidden = false;
       saved.checked = false;
-      prepared = {name: intendedName, message: intendedDraft};
+      prepared = {name: intendedName, message: intendedDraft,
+                  preparedAt: Date.now()};
+      returnUrl.focus();
       status.textContent = "Your private return link is ready. Save it, check the acknowledgement, then select Send privately. Nothing has been sent yet.";
     } catch {
       clearPrepared();

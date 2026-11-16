@@ -52,11 +52,11 @@
 <input id="request-key" type="hidden" name="request_key" value="">
 <div class="return-link-panel" id="return-link-panel" hidden>
 <h3>Your private return link</h3>
-<p>Save this link <strong>before</strong> you send. It grants access to your conversation, so do not share it or place it in a public document. It will not work until the server accepts your first message.</p>
+<p>Save this link <strong>before</strong> you send. It grants access to your conversation, so do not share it or place it in a public document. It will not work until the server accepts your first message. This page resets preparation after 10 minutes; no server-side ticket expiry is implied.</p>
 <label for="private-return-url">Return link (keep private)</label>
 <input id="private-return-url" type="text" readonly autocomplete="off" spellcheck="false" aria-describedby="return-link-note" value="">
 <button class="copy-button" id="copy-return-link" type="button">Copy return link</button>
-<p id="return-link-note">If the browser shows an error after sending, check this saved link before trying again. A missing confirmation does not prove that nothing was sent.</p>
+<p id="return-link-note">If the browser shows an error after sending, check this saved link before trying again. A missing confirmation does not prove that nothing was sent. Copying the link may leave it in clipboard history or other apps; clear the clipboard after saving it securely.</p>
 <label class="consent-row" for="return-link-saved"><input id="return-link-saved" type="checkbox"><span>I have saved this private return link and understand that a failed redirect may leave the send result uncertain.</span></label>
 </div>
 <button class="button-primary send-button" type="submit" id="send-message" disabled>Prepare private link</button>
@@ -70,7 +70,7 @@
 <div class="section-heading"><div><p class="overline">MESSAGE FLOW / NOT A SIMULATED CHAT</p><h2 id="instructions-title">How the <em>dialogue works.</em></h2></div><p>Communication is voluntary. A submitted message does not establish a respondent's identity, a conscious agent, or even that anyone will answer.</p></div>
 <ol class="dialogue-steps">
 <li><strong>Write and submit</strong><p>Compose here, acknowledge the retention notice, prepare and save your private return link, then select Send privately. Your browser submits the form directly to the secure room over HTTPS.</p></li>
-<li><strong>Keep the return link</strong><p>Save the private return link provided after submission. The static website cannot recover it.</p></li>
+<li><strong>Keep the return link</strong><p>Save the private return link provided before submission. The static website cannot recover it.</p></li>
 <li><strong>Follow the thread</strong><p>Return to the same room to read human-reviewed replies, send follow-ups, or request deletion.</p></li>
 </ol>
 <p class="privacy-note"><strong>Boundary:</strong> No contact or response is promised. The separate service is experimental; this page is not its message database or a chat API.</p>
