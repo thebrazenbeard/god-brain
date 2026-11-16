@@ -42,11 +42,13 @@
     returnPanel.hidden = true;
   };
   const update = () => {
+    let expiredPreparation = false;
     if (prepared &&
-        (Date.now() < prepared.preparedAt ||
-         Date.now() - prepared.preparedAt > MAX_PREPARATION_AGE_MS)) {
+        (performance.now() < prepared.preparedAt ||
+         performance.now() - prepared.preparedAt > MAX_PREPARATION_AGE_MS)) {
       clearPrepared();
-      status.textContent = "This prepared link is too old. Prepare a new private link before sending; no POST occurred.";
+      expiredPreparation = true;
+      status.textContent = "Prepared link needs refreshing. Prepare a new private link before sending; no POST occurred.";
     }
     if (prepared &&
         (name.value !== prepared.name ||
@@ -57,6 +59,7 @@
     send.textContent = prepared ? "Send privately" : "Prepare private link";
     send.disabled = busy || !name.value.trim() || !draft.value.trim() ||
       !consent.checked || (prepared !== null && !saved.checked);
+    if (expiredPreparation) send.focus();
   };
   for (const control of [name, draft, consent]) {
     control.addEventListener("input", update);
@@ -126,7 +129,7 @@
       returnPanel.hidden = false;
       saved.checked = false;
       prepared = {name: intendedName, message: intendedDraft,
-                  preparedAt: Date.now()};
+                  preparedAt: performance.now()};
       returnUrl.focus();
       status.textContent = "Your private return link is ready. Save it, check the acknowledgement, then select Send privately. Nothing has been sent yet.";
     } catch {

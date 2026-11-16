@@ -36,6 +36,7 @@ function browser(fetcher, embedded=false) {
     window: win,
     navigator: {},
     Date: BrowserDate,
+    performance: {now() { return clock.now; }},
     document: {getElementById: id => elements[id]},
     fetch: async (url, options) => {
       calls.push({url, options});
@@ -213,6 +214,8 @@ test("an aged prepared ticket cannot POST without fresh preparation", async () =
   assert.equal(b.elements["dialogue-form"].posted, false);
   assert.equal(b.elements["return-link-panel"].hidden, true);
   assert.equal(b.elements["initial-token"].value, "");
+  assert.equal(b.elements["send-message"].focused, true,
+               "Expired preflight returns focus to visible Prepare button");
   assert.equal(b.calls.length, 1, "No automatic second ticket or POST");
   assert.match(b.elements["send-status"].textContent, /prepare a new|too old/i);
 });
