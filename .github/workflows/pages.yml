@@ -7,6 +7,7 @@ on:
       - 'tests/test_public_site.py'
       - 'tests/test_pages_dialogue*.py'
       - 'tests/test_dialogue_composer.cjs'
+      - 'tests/test_dialogue_submit.cjs'
       - '.github/workflows/pages.yml'
   push:
     branches: [main]
@@ -15,6 +16,7 @@ on:
       - 'tests/test_public_site.py'
       - 'tests/test_pages_dialogue*.py'
       - 'tests/test_dialogue_composer.cjs'
+      - 'tests/test_dialogue_submit.cjs'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -38,6 +40,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_public_site.py' -v
           python3 -m unittest discover -s tests -p 'test_pages_dialogue*.py' -v
           node --test tests/test_dialogue_composer.cjs
+          node --test tests/test_dialogue_submit.cjs
 
   deploy:
     if: github.event_name != 'pull_request'

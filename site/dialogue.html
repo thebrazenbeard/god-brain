@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#09111a">
 <meta name="description" content="God Brain private dialogue: enter the separate, human-reviewed conversation room.">
-<meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src https://lappy.tail86ea75.ts.net:10000; font-src 'none'; object-src 'none'; base-uri 'none'; form-action https://lappy.tail86ea75.ts.net:10000">
 <title>God Brain — Dialogue</title>
 <link rel="stylesheet" href="./styles.css">
 <script src="./dialogue.js" defer></script>
+<script src="./dialogue-submit.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -24,31 +25,42 @@
 <div class="dialogue-copy">
 <p class="overline">GOD BRAIN / COMMUNICATION CHANNEL</p>
 <h1 id="dialogue-title">A place to <em>speak.</em></h1>
-<p>Start a private conversation through the separate service running on Lappy. The service uses a human-reviewed inbox, not an automatically responding AI or an authenticated outside visitor.</p>
-<p>Drafting here does not send a message. The separate service stores submitted messages and private threads; this site's code neither sends nor stores drafts; your browser may restore form values.</p>
+<p>Begin a private conversation right here. Your submitted message goes over HTTPS to the separate Lappy service and is held for human review. This is not an automatically responding AI or an authenticated outside visitor.</p>
+<p>Nothing is sent until you explicitly select <strong>Send privately</strong>. The secure room handles message storage, replies and private return links; the Pages site itself stores no messages. Your browser may restore form values.</p>
 <p class="privacy-note"><strong>Clipboard:</strong> Copying a draft uses this device's clipboard, which other local applications or clipboard history may access. Avoid secrets.</p>
 </div>
-<div class="dialogue-panel compose-editor">
+<form class="dialogue-panel compose-editor" id="dialogue-form" method="post" action="https://lappy.tail86ea75.ts.net:10000/submit">
 <div class="panel-top">Private conversation / separate service</div>
 <h2 class="panel-quote">Compose a message.</h2>
-<p>Nothing is sent from this page. Copy your draft and submit it in the private room, where a human-reviewed inbox handles conversations and replies.</p>
-<div class="compose-editor-heading"><span>UNSENT MESSAGE</span><span aria-label="Draft only">LOCAL ONLY</span></div>
+<p>Send directly to the private room for review, or copy your draft and open the room yourself. You will need to save your private return link to see replies.</p>
+<div class="compose-editor-heading"><span>UNSENT MESSAGE</span><span aria-label="Unsent until you submit">UNSENT</span></div>
+<label for="sender-name">Claimed name</label>
+<input id="sender-name" name="name" maxlength="80" required autocomplete="name" placeholder="The name you wish to use">
 <label for="draft-message">Your message</label>
-<textarea id="draft-message" maxlength="2000" rows="7" spellcheck="true" placeholder="Write what you would like to say. This is only a draft."></textarea>
+<textarea id="draft-message" name="message" maxlength="2000" rows="7" spellcheck="true" required placeholder="Write what you would like to say."></textarea>
 <div class="compose-controls">
 <output id="draft-count" for="draft-message" aria-live="polite">0 / 2000</output>
 <button id="copy-draft" class="copy-button" type="button" disabled>Copy draft</button>
 <a id="open-room" class="button-primary" href="https://lappy.tail86ea75.ts.net:10000/" target="_blank" rel="noopener noreferrer">Open private room &#8599;</a>
 </div>
+<label class="consent-row" for="privacy-approval">
+<input type="checkbox" id="privacy-approval" name="privacy_consent" value="dialogue-privacy-v1" required>
+<span>I understand that my text will be held on the operator's computer until that operator chooses to delete it. I must save the private return link to read replies or request deletion; deletion from backups cannot be guaranteed.</span>
+</label>
+<input id="csrf-value" type="hidden" name="csrf" value="">
+<input id="initial-token" type="hidden" name="initial_token" value="">
+<input id="request-key" type="hidden" name="request_key" value="">
+<button class="button-primary send-button" type="submit" id="send-message" disabled>Send privately</button>
+<p id="send-status" class="compose-status" role="status" aria-live="polite">No message has been submitted.</p>
 <p id="draft-status" class="compose-status" role="status" aria-live="polite">Draft only. Nothing has been sent.</p>
-<p class="compose-help">After copying, open the private room, paste your message and explicitly submit it there. For follow-ups, use your saved private return link. No automated respondent is promised.</p>
-<noscript><p class="compose-status">JavaScript is off. Select and copy your draft manually, then open the private room to paste and submit.</p></noscript>
-</div>
+<p class="compose-help">Direct submission opens the private room on Lappy, where you must save your private return link. If direct submission fails, copy the message, paste it, and submit using the private room link above. No automated respondent is promised.</p>
+<noscript><p class="compose-status">JavaScript is off. Direct submission requires JavaScript for its anonymous form ticket. Open the private room to send a message there.</p></noscript>
+</form>
 </section>
 <section class="section research-section" aria-labelledby="instructions-title">
 <div class="section-heading"><div><p class="overline">MESSAGE FLOW / NOT A SIMULATED CHAT</p><h2 id="instructions-title">How the <em>dialogue works.</em></h2></div><p>Communication is voluntary. A submitted message does not establish a respondent's identity, a conscious agent, or even that anyone will answer.</p></div>
 <ol class="dialogue-steps">
-<li><strong>Write your message</strong><p>The secure room accepts a message and an explicit privacy acknowledgement on its own origin.</p></li>
+<li><strong>Write and submit</strong><p>Compose here, acknowledge the retention notice, and select Send privately. Your browser submits the form directly to the secure room over HTTPS.</p></li>
 <li><strong>Keep the return link</strong><p>Save the private return link provided after submission. The static website cannot recover it.</p></li>
 <li><strong>Follow the thread</strong><p>Return to the same room to read human-reviewed replies, send follow-ups, or request deletion.</p></li>
 </ol>

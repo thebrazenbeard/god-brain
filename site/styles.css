@@ -152,3 +152,11 @@ h1 em,h2 em{font-weight:normal;color:var(--gold)}
 .compose-status{min-height:1.5rem;font-size:.77rem;color:#cbd8bb;margin:.9rem 0 .45rem}
 .compose-help{color:#8fa9a9;font-size:.76rem;line-height:1.7;margin:0}
 @media(max-width:500px){.dialogue-section{padding:3rem var(--space)}.compose-editor{padding:1.2rem}.compose-controls{align-items:stretch}.compose-controls output{width:100%}.compose-controls .button-primary,.copy-button{width:100%;justify-content:center}}
+
+.compose-editor>input:not([type="hidden"]){display:block;width:100%;padding:.85rem 1rem;background:#081922;color:#e2ece8;border:1px solid #567476;font:1rem system-ui,sans-serif;margin:0 0 1.2rem}
+.compose-editor>input:not([type="hidden"]):focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.consent-row{display:flex!important;align-items:flex-start;gap:.7rem;margin:1.5rem 0!important;color:#d9e5dd!important;font-size:.78rem!important;line-height:1.65!important}
+.consent-row input{margin:.2rem 0 0;min-width:1.2rem;min-height:1.2rem;accent-color:#97b9af;flex:none}
+.send-button{width:100%;min-height:52px;cursor:pointer}
+.send-button:disabled{opacity:.52;cursor:not-allowed}
+.send-button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
