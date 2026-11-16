@@ -160,3 +160,12 @@ h1 em,h2 em{font-weight:normal;color:var(--gold)}
 .send-button{width:100%;min-height:52px;cursor:pointer}
 .send-button:disabled{opacity:.52;cursor:not-allowed}
 .send-button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+
+/* Explicit return-link preparation: protect the capability before navigating. */
+.return-link-panel{border:1px solid #6d8b83;background:#0c1c24;padding:1.1rem;margin:1rem 0 1.25rem;overflow-wrap:anywhere}
+.return-link-panel[hidden]{display:none}
+.return-link-panel h3{font:normal 1.3rem Georgia,serif;color:#e9e6d5;margin:.15rem 0 .6rem}
+.return-link-panel input[readonly]{display:block;width:100%;max-width:100%;min-width:0;padding:.7rem;border:1px solid #678b8b;background:#061319;color:#dce8e4;font:.85rem system-ui,sans-serif}
+.return-link-panel .copy-button{margin:.75rem 0}
+.return-link-panel .consent-row{margin:.8rem 0 .25rem!important}
