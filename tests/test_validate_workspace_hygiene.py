@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import struct
 import tempfile
 import unittest
 from pathlib import Path
@@ -52,11 +53,59 @@ class WorkspaceHygieneTests(unittest.TestCase):
         self.assertTrue(any("font" in error.lower()
                             for error in validate_workspace(self.root)))
 
-    def test_sfnt_magic_header_is_accepted_as_type_hint(self):
+    @staticmethod
+    def _minimal_sfnt(*, table_offset=28):
+        # A bounded synthetic sfnt table directory: not actual font glyph data.
+        return (b"\x00\x01\x00\x00" + struct.pack(">HHHH", 1, 16, 0, 0)
+                + b"name" + struct.pack(">III", 0, table_offset, 4)
+                + b"abcd")
+
+    def test_sfnt_valid_table_directory_is_accepted(self):
         font = self.root / "public" / "fonts" / "test.ttf"
         font.parent.mkdir(parents=True)
-        font.write_bytes(b"\x00\x01\x00\x00" + bytes(12))
+        font.write_bytes(self._minimal_sfnt())
         self.assertEqual(validate_workspace(self.root), [])
+
+    def test_sfnt_magic_without_table_directory_is_rejected(self):
+        font = self.root / "public" / "fonts" / "magic-only.ttf"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(b"OTTO" + bytes(12))
+        self.assertTrue(any("font" in x.lower()
+                            for x in validate_workspace(self.root)))
+
+    def test_sfnt_table_offset_past_end_is_rejected(self):
+        font = self.root / "public" / "fonts" / "offset.ttf"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(self._minimal_sfnt(table_offset=4096))
+        self.assertTrue(any("font" in x.lower()
+                            for x in validate_workspace(self.root)))
+
+    def test_invalid_ttc_container_is_rejected(self):
+        font = self.root / "public" / "fonts" / "invalid-collection.ttf"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(b"ttcf" + bytes(12))
+        self.assertTrue(any("font" in x.lower()
+                            for x in validate_workspace(self.root)))
+
+    def test_ttc_valid_directory_is_accepted(self):
+        font = self.root / "public" / "fonts" / "collection.ttf"
+        font.parent.mkdir(parents=True)
+        header = b"ttcf" + struct.pack(">II", 0x00010000, 1)
+        font.write_bytes(header + struct.pack(">I", 16)
+                         + self._minimal_sfnt(table_offset=44))
+        self.assertEqual(validate_workspace(self.root), [])
+
+    def test_public_nested_symlink_directory_is_rejected(self):
+        outside = self.root / "outside"
+        outside.mkdir()
+        public = self.root / "public"
+        public.mkdir()
+        try:
+            (public / "fonts").symlink_to(outside, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("directory symlinks unavailable on this host")
+        self.assertTrue(any("symlink" in x.lower()
+                            for x in validate_workspace(self.root)))
 
     def test_uppercase_disguised_font_extension_is_rejected(self):
         font = self.root / "public" / "fonts" / "FA-SOLID-600.TTF"

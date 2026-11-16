@@ -7,11 +7,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import struct
 from pathlib import Path
 
 
-SFNT_HEADERS = (b"\x00\x01\x00\x00", b"OTTO", b"true", b"typ1", b"ttcf")
+SFNT_HEADERS = (b"\x00\x01\x00\x00", b"OTTO", b"true", b"typ1")
 MAX_JSON_BYTES = 1024 * 1024
+MAX_FONT_TABLES = 256
+MAX_COLLECTION_FONTS = 256
 
 
 def _json(path: Path, errors: list[str], root: Path):
@@ -36,6 +39,62 @@ def _dict_nodes(data):
     elif isinstance(data, list):
         for item in data:
             yield from _dict_nodes(item)
+
+
+def _sfnt_directory_is_bounded(fp, file_size: int, header_offset: int) -> bool:
+    """Bounded SFNT table-directory check; not a full font-format verifier."""
+    if header_offset < 0 or header_offset + 12 > file_size:
+        return False
+    fp.seek(header_offset)
+    header = fp.read(12)
+    if len(header) != 12 or header[:4] not in SFNT_HEADERS:
+        return False
+    table_count = struct.unpack_from(">H", header, 4)[0]
+    if not (1 <= table_count <= MAX_FONT_TABLES):
+        return False
+    if header_offset + 12 + table_count * 16 > file_size:
+        return False
+    directory = fp.read(table_count * 16)
+    if len(directory) != table_count * 16:
+        return False
+    tags = set()
+    for index in range(table_count):
+        tag, _, offset, length = struct.unpack_from(">4sIII", directory, index * 16)
+        if tag in tags or any(c < 32 or c > 126 for c in tag):
+            return False
+        tags.add(tag)
+        if offset > file_size or length > file_size - offset:
+            return False
+    return True
+
+
+def _font_directory_is_bounded(path: Path) -> bool:
+    """Inspect bytes as inert data, reading only bounded headers/directories."""
+    with path.open("rb") as fp:
+        fp.seek(0, 2)
+        file_size = fp.tell()
+        fp.seek(0)
+        magic = fp.read(4)
+        if magic == b"ttcf":
+            fp.seek(0)
+            header = fp.read(12)
+            if len(header) != 12:
+                return False
+            _, version, count = struct.unpack(">4sII", header)
+            if version not in (0x00010000, 0x00020000):
+                return False
+            if not (1 <= count <= MAX_COLLECTION_FONTS):
+                return False
+            if 12 + 4 * count > file_size:
+                return False
+            offsets = fp.read(4 * count)
+            if len(offsets) != 4 * count:
+                return False
+            positions = struct.unpack(f">{count}I", offsets)
+            # A TTC table's offsets refer to the start of the TTC file.
+            return all(_sfnt_directory_is_bounded(fp, file_size, pos)
+                       for pos in positions)
+        return _sfnt_directory_is_bounded(fp, file_size, 0)
 
 
 def validate_workspace(root: Path) -> list[str]:
@@ -65,20 +124,22 @@ def validate_workspace(root: Path) -> list[str]:
         errors.append("public: unsafe symlink")
     elif public.is_dir():
         for path in sorted(public.rglob("*")):
+            name = path.relative_to(root).as_posix()
+            if path.is_symlink():
+                errors.append(f"{name}: unsafe public symlink")
+                continue
             if path.suffix.lower() != ".ttf":
                 continue
-            name = path.relative_to(root).as_posix()
-            if path.is_symlink() or not path.is_file():
+            if not path.is_file():
                 errors.append(f"{name}: invalid font entry")
                 continue
             try:
-                with path.open("rb") as fp:
-                    magic = fp.read(4)
-            except OSError:
+                valid_directory = _font_directory_is_bounded(path)
+            except (OSError, ValueError, struct.error):
                 errors.append(f"{name}: unreadable font")
                 continue
-            if magic not in SFNT_HEADERS:
-                errors.append(f"{name}: font header not recognized (no payload evaluated)")
+            if not valid_directory:
+                errors.append(f"{name}: font table directory invalid (no payload evaluated)")
     return errors
 
 
