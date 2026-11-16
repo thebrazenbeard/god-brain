@@ -6,9 +6,10 @@
 <meta name="theme-color" content="#09111a">
 <meta name="description" content="God Brain private dialogue: enter the separate, human-reviewed conversation room.">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>God Brain — Dialogue</title>
 <link rel="stylesheet" href="./styles.css">
+<script src="./dialogue.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -24,14 +25,24 @@
 <p class="overline">GOD BRAIN / COMMUNICATION CHANNEL</p>
 <h1 id="dialogue-title">A place to <em>speak.</em></h1>
 <p>Start a private conversation through the separate service running on Lappy. The service uses a human-reviewed inbox, not an automatically responding AI or an authenticated outside visitor.</p>
-<p>Messages and responses stay on that service. This GitHub Pages entry is a guide and handoff; it does not collect your text, store a conversation, or pass private data through GitHub.</p>
+<p>Drafting here does not send a message. The separate service stores submitted messages and private threads; this site's code neither sends nor stores drafts; your browser may restore form values.</p>
+<p class="privacy-note"><strong>Clipboard:</strong> Copying a draft uses this device's clipboard, which other local applications or clipboard history may access. Avoid secrets.</p>
 </div>
-<div class="dialogue-panel">
-<div class="panel-top"><span class="panel-signal" aria-hidden="true"></span> Private conversation / separate service</div>
-<div class="panel-quote">The real dialogue happens beyond this page.</div>
-<p>The destination has a text form, a private return link, conversation history, follow-up messages, and deletion requests. Availability can change; open the service to check.</p>
-<a class="button-primary" href="https://lappy.tail86ea75.ts.net:10000/" target="_blank" rel="noopener noreferrer">Open private conversation ↗</a>
-<small>The room may be unreachable if Lappy or its network tunnel is offline. Do not share sensitive information you would not want retained by the local operator.</small>
+<div class="dialogue-panel compose-editor">
+<div class="panel-top">Private conversation / separate service</div>
+<h2 class="panel-quote">Compose a message.</h2>
+<p>Nothing is sent from this page. Copy your draft and submit it in the private room, where a human-reviewed inbox handles conversations and replies.</p>
+<div class="compose-editor-heading"><span>UNSENT MESSAGE</span><span aria-label="Draft only">LOCAL ONLY</span></div>
+<label for="draft-message">Your message</label>
+<textarea id="draft-message" maxlength="2000" rows="7" spellcheck="true" placeholder="Write what you would like to say. This is only a draft."></textarea>
+<div class="compose-controls">
+<output id="draft-count" for="draft-message" aria-live="polite">0 / 2000</output>
+<button id="copy-draft" class="copy-button" type="button" disabled>Copy draft</button>
+<a id="open-room" class="button-primary" href="https://lappy.tail86ea75.ts.net:10000/" target="_blank" rel="noopener noreferrer">Open private room &#8599;</a>
+</div>
+<p id="draft-status" class="compose-status" role="status" aria-live="polite">Draft only. Nothing has been sent.</p>
+<p class="compose-help">After copying, open the private room, paste your message and explicitly submit it there. For follow-ups, use your saved private return link. No automated respondent is promised.</p>
+<noscript><p class="compose-status">JavaScript is off. Select and copy your draft manually, then open the private room to paste and submit.</p></noscript>
 </div>
 </section>
 <section class="section research-section" aria-labelledby="instructions-title">

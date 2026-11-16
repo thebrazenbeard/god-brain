@@ -5,12 +5,16 @@ on:
     paths:
       - 'site/**'
       - 'tests/test_public_site.py'
+      - 'tests/test_pages_dialogue*.py'
+      - 'tests/test_dialogue_composer.cjs'
       - '.github/workflows/pages.yml'
   push:
     branches: [main]
     paths:
       - 'site/**'
       - 'tests/test_public_site.py'
+      - 'tests/test_pages_dialogue*.py'
+      - 'tests/test_dialogue_composer.cjs'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -29,8 +33,11 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Check public site invariants
-        run: python3 -m unittest discover -s tests -p test_public_site.py -v
+      - name: Check public site and composer invariants
+        run: |
+          python3 -m unittest discover -s tests -p 'test_public_site.py' -v
+          python3 -m unittest discover -s tests -p 'test_pages_dialogue*.py' -v
+          node --test tests/test_dialogue_composer.cjs
 
   deploy:
     if: github.event_name != 'pull_request'
