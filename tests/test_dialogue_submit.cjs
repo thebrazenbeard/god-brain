@@ -23,7 +23,8 @@ function browser(fetcher, embedded=false) {
     };
   }
   let calls = [];
-  const win = {};
+  const windowEvents = {};
+  const win = {addEventListener(type, fn) {windowEvents[type] = fn;}};
   win.self = win;
   win.top = embedded ? {} : win;
   const context = {
@@ -36,7 +37,7 @@ function browser(fetcher, embedded=false) {
     }
   };
   vm.runInNewContext(source, context, {timeout: 1000});
-  return {elements, calls};
+  return {elements, calls, windowEvents};
 }
 function fill(els, consent=true) {
   els["sender-name"].value = "Visitor";
@@ -158,4 +159,37 @@ test("return link copy is never automatic and manual fallback works", async () =
   assert.equal(b.elements["private-return-url"].selected, undefined);
   await b.elements["copy-return-link"].callbacks.click();
   assert.equal(b.elements["private-return-url"].selected, true);
+});
+
+test("BFCache return preserves draft but clears old ticket and consent", async () => {
+  const b = browser();
+  fill(b.elements);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  b.elements["return-link-saved"].checked = true;
+  b.elements["return-link-saved"].callbacks.change();
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.elements["dialogue-form"].posted, true);
+  assert.equal(b.elements["send-message"].disabled, true);
+  assert.equal(typeof b.windowEvents.pageshow, "function");
+  b.windowEvents.pageshow({persisted: true});
+  assert.equal(b.elements["privacy-approval"].checked, false);
+  assert.equal(b.elements["csrf-value"].value, "");
+  assert.equal(b.elements["initial-token"].value, "");
+  assert.equal(b.elements["request-key"].value, "");
+  assert.equal(b.elements["return-link-panel"].hidden, true);
+  assert.equal(b.elements["private-return-url"].value, "");
+  assert.equal(b.elements["send-message"].disabled, true);
+  assert.match(b.elements["send-status"].textContent, /may already have been sent/i);
+  assert.equal(b.elements["draft-message"].value, "A real dialogue request");
+  b.elements["privacy-approval"].checked = true;
+  b.elements["privacy-approval"].callbacks.change();
+  assert.equal(b.elements["send-message"].disabled, false);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.calls.length, 2);
+  assert.equal(b.elements["dialogue-form"].posted, true);
+  assert.equal(b.elements["send-message"].disabled, true,
+               "Another acknowledgement is required before another POST");
+  b.elements["return-link-saved"].checked = true;
+  b.elements["return-link-saved"].callbacks.change();
+  assert.equal(b.elements["send-message"].disabled, false);
 });

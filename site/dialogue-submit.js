@@ -124,5 +124,15 @@
       update();
     }
   });
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted || !busy) return;
+    // BFCache may restore this page after a completed POST. Preserve the
+    // draft, but require fresh acknowledgement before another submission.
+    busy = false;
+    consent.checked = false;
+    clearPrepared();
+    update();
+    status.textContent = "You returned to your draft. Your previous message may already have been sent; check your saved private return link before sending again.";
+  });
   update();
 })();
