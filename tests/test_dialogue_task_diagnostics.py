@@ -61,7 +61,7 @@ class TaskDiagnosticTests(unittest.TestCase):
         report = self._run_fixture("""
 function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
  throw [System.UnauthorizedAccessException]::new('denied') }
-function Get-NetTCPConnection { [CmdletBinding()]param($State)
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
  throw [System.UnauthorizedAccessException]::new('denied') }
 function Get-WinEvent { [CmdletBinding()]param($ListLog)
  throw [System.UnauthorizedAccessException]::new('denied') }
@@ -82,7 +82,7 @@ function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
  StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
 function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
  [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
-function Get-NetTCPConnection { [CmdletBinding()]param($State)
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
  [pscustomobject]@{LocalPort=18768;LocalAddress='0.0.0.0'}
  [pscustomobject]@{LocalPort=10003;LocalAddress='127.0.0.1'} }
 function Get-WinEvent { [CmdletBinding()]param($ListLog)
@@ -103,7 +103,7 @@ function Get-WinEvent { [CmdletBinding()]param($ListLog)
 function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
  [pscustomobject]@{State='Ready';Settings=$null}
  [pscustomobject]@{State='Ready';Settings=$null} }
-function Get-NetTCPConnection { [CmdletBinding()]param($State)
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
  [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
 function Get-WinEvent { [CmdletBinding()]param($ListLog)
  [pscustomobject]@{IsEnabled=$false} }
@@ -112,6 +112,118 @@ function Get-WinEvent { [CmdletBinding()]param($ListLog)
         self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
         self.assertIsNone(report["task"]["exists"])
 
+
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_generic_object_not_found_is_not_verified_task_absence(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ $err = [System.Management.Automation.ErrorRecord]::new(
+  [System.Exception]::new('provider failure'), 'OtherObjectNotFound',
+  [System.Management.Automation.ErrorCategory]::ObjectNotFound, $null)
+ $PSCmdlet.ThrowTerminatingError($err) }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_query_status"], "ERROR")
+        self.assertIsNone(report["task"]["exists"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_single_task_with_missing_settings_is_not_validated(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=$null} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_query_status"], "INCOMPLETE")
+        self.assertIs(report["task"]["exists"], True)
+        self.assertIsNone(report["task"]["stop_if_going_on_batteries"])
+        self.assertIsNone(report["task"]["restart_attempts_configured"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_equivalent_ipv6_loopback_and_port_scoped_query(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ if ($LocalPort -ne 18768) { throw 'Unscoped port lookup' }
+ [pscustomobject]@{LocalPort=18768;LocalAddress='0:0:0:0:0:0:0:1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["listener_query_status"], "OK")
+        self.assertEqual(report["listener_binding"], "LOOPBACK_ONLY")
+        self.assertEqual(report["summary"], "LISTENER_PRESENT_NOT_A_HEALTH_OR_PUBLIC_READINESS_PROOF")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_history_access_denial_is_explicit(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ throw [System.UnauthorizedAccessException]::new('denied') }
+""")
+        self.assertEqual(report["history_query_status"], "ACCESS_DENIED")
+        self.assertIsNone(report["task_scheduler_history_enabled"])
+        self.assertEqual(report["cause"], "UNKNOWN")
+
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_invalid_ip_is_unknown_not_a_verified_exposure(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='not-an-ip'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["listener_binding"], "UNKNOWN")
+        self.assertIs(report["port_listener_present"], True)
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+        self.assertIn("LISTENER_BINDING_UNRESOLVED", report["risks"])
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_mixed_loopback_and_wildcard_are_exposure_risk(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'}
+ [pscustomobject]@{LocalPort=18768;LocalAddress='::'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["listener_binding"], "MIXED")
+        self.assertEqual(report["summary"], "LISTENER_PRESENT_NON_LOOPBACK_NOT_HEALTH_PROOF")
+        self.assertIn("LISTENER_MAY_BE_EXPOSED_BEYOND_LOOPBACK", report["risks"])
 
 if __name__ == "__main__":
     unittest.main()

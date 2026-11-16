@@ -11,7 +11,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 function Get-FailureCategory {
-    param($Record)
+    param($Record, [string]$ExpectedCmdlet)
     $exception = $Record.Exception
     if ($exception -is [System.Management.Automation.CommandNotFoundException]) {
         return 'ERROR'
@@ -21,7 +21,12 @@ function Get-FailureCategory {
         $Record.CategoryInfo.Category -eq [System.Management.Automation.ErrorCategory]::PermissionDenied) {
         return 'ACCESS_DENIED'
     }
-    if ($Record.CategoryInfo.Category -eq [System.Management.Automation.ErrorCategory]::ObjectNotFound) {
+    # Only the exact observed CIM no-match identity proves absence. A generic
+    # ObjectNotFound can mean a provider or prerequisite failed.
+    $expectedId = 'CmdletizationQuery_NotFound,' + $ExpectedCmdlet
+    if ($Record.CategoryInfo.Category -eq [System.Management.Automation.ErrorCategory]::ObjectNotFound -and
+        $Record.FullyQualifiedErrorId -eq $expectedId -and
+        $exception.GetType().FullName -eq 'Microsoft.PowerShell.Cmdletization.Cim.CimJobException') {
         return 'NOT_FOUND'
     }
     return 'ERROR'
@@ -34,6 +39,7 @@ $report = [ordered]@{
     cause = 'UNKNOWN'
     task_query_status = 'ERROR'
     listener_query_status = 'ERROR'
+    history_query_status = 'ERROR'
     task = [ordered]@{
         exists = $null
         state = $null
@@ -63,17 +69,30 @@ try {
         $report.task_query_status = 'OK'
         $report.task.exists = $true
         $task = $tasks[0]
-        $report.task.state = [string]$task.State
-        $report.task.stop_if_going_on_batteries =
-            [bool]$task.Settings.StopIfGoingOnBatteries
-        $report.task.disallow_start_on_batteries =
-            [bool]$task.Settings.DisallowStartIfOnBatteries
-        $report.task.restart_attempts_configured = [int]$task.Settings.RestartCount
-        if ($report.task.stop_if_going_on_batteries) {
-            $risks.Add('TASK_CONFIGURED_TO_STOP_ON_BATTERY')
+        $settings = $task.Settings
+        $properties = @()
+        if ($null -ne $settings) {
+            $properties = @($settings.PSObject.Properties.Name)
         }
-        if ($report.task.disallow_start_on_batteries) {
-            $risks.Add('TASK_CONFIGURED_NOT_TO_START_ON_BATTERY')
+        $required = @('StopIfGoingOnBatteries',
+                      'DisallowStartIfOnBatteries', 'RestartCount')
+        $missing = @($required | Where-Object { $properties -notcontains $_ })
+        if ($null -eq $task.State -or $missing.Count -gt 0) {
+            $report.task_query_status = 'INCOMPLETE'
+            $risks.Add('TASK_PROPERTIES_UNAVAILABLE')
+        } else {
+            $report.task.state = [string]$task.State
+            $report.task.stop_if_going_on_batteries =
+                [bool]$settings.StopIfGoingOnBatteries
+            $report.task.disallow_start_on_batteries =
+                [bool]$settings.DisallowStartIfOnBatteries
+            $report.task.restart_attempts_configured = [int]$settings.RestartCount
+            if ($report.task.stop_if_going_on_batteries) {
+                $risks.Add('TASK_CONFIGURED_TO_STOP_ON_BATTERY')
+            }
+            if ($report.task.disallow_start_on_batteries) {
+                $risks.Add('TASK_CONFIGURED_NOT_TO_START_ON_BATTERY')
+            }
         }
         try {
             $info = Get-ScheduledTaskInfo -InputObject $task -ErrorAction Stop
@@ -88,7 +107,7 @@ try {
         }
     }
 } catch {
-    $report.task_query_status = Get-FailureCategory $_
+    $report.task_query_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-ScheduledTask'
     if ($report.task_query_status -eq 'NOT_FOUND') {
         $report.task.exists = $false
     } else {
@@ -98,18 +117,19 @@ try {
 
 try {
     $operational = Get-WinEvent -ListLog 'Microsoft-Windows-TaskScheduler/Operational' -ErrorAction Stop
+    $report.history_query_status = 'OK'
     $report.task_scheduler_history_enabled = [bool]$operational.IsEnabled
     if (-not $operational.IsEnabled) {
         $risks.Add('TASK_SCHEDULER_OPERATIONAL_HISTORY_DISABLED')
     }
 } catch {
+    $report.history_query_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-WinEvent'
     $risks.Add('TASK_SCHEDULER_HISTORY_STATUS_UNAVAILABLE')
 }
 
 try {
-    # Query all listening connections so absence of this port is not treated
-    # as a provider ObjectNotFound error. Never emit socket addresses or PIDs.
-    $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction Stop |
+    # Query only the requested port; the exact CIM no-match status is ABSENT.
+    $listeners = @(Get-NetTCPConnection -LocalPort $LoopbackPort -State Listen -ErrorAction Stop |
                    Where-Object { $_.LocalPort -eq $LoopbackPort })
     $report.listener_query_status = 'OK'
     $report.port_listener_present = ($listeners.Count -gt 0)
@@ -118,15 +138,21 @@ try {
     } else {
         $loopbackCount = 0
         $nonLoopbackCount = 0
+        $unknownCount = 0
         foreach ($listener in $listeners) {
+            $parsed = $null
             $address = [string]$listener.LocalAddress
-            if ($address -eq '::1' -or $address -match '^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$') {
+            if (-not [System.Net.IPAddress]::TryParse($address, [ref]$parsed)) {
+                $unknownCount++
+            } elseif ([System.Net.IPAddress]::IsLoopback($parsed)) {
                 $loopbackCount++
             } else {
                 $nonLoopbackCount++
             }
         }
-        if ($loopbackCount -gt 0 -and $nonLoopbackCount -gt 0) {
+        if ($unknownCount -gt 0) {
+            $report.listener_binding = 'UNKNOWN'
+        } elseif ($loopbackCount -gt 0 -and $nonLoopbackCount -gt 0) {
             $report.listener_binding = 'MIXED'
         } elseif ($nonLoopbackCount -gt 0) {
             $report.listener_binding = 'WILDCARD_OR_NON_LOOPBACK'
@@ -135,13 +161,23 @@ try {
         }
     }
 } catch {
-    $report.listener_query_status = Get-FailureCategory $_
-    $risks.Add('LISTENER_QUERY_UNAVAILABLE')
+    $status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-NetTCPConnection'
+    if ($status -eq 'NOT_FOUND') {
+        $report.listener_query_status = 'OK'
+        $report.port_listener_present = $false
+        $report.listener_binding = 'ABSENT'
+    } else {
+        $report.listener_query_status = $status
+        $risks.Add('LISTENER_QUERY_UNAVAILABLE')
+    }
 }
 
 if ($report.task_query_status -notin @('OK', 'NOT_FOUND') -or
-    $report.listener_query_status -ne 'OK') {
+    $report.listener_query_status -ne 'OK' -or $report.listener_binding -eq 'UNKNOWN') {
     $report.summary = 'OBSERVATION_INCOMPLETE'
+    if ($report.listener_binding -eq 'UNKNOWN') {
+        $risks.Add('LISTENER_BINDING_UNRESOLVED')
+    }
 } elseif ($report.listener_binding -in @('MIXED', 'WILDCARD_OR_NON_LOOPBACK')) {
     $report.summary = 'LISTENER_PRESENT_NON_LOOPBACK_NOT_HEALTH_PROOF'
     $risks.Add('LISTENER_MAY_BE_EXPOSED_BEYOND_LOOPBACK')
