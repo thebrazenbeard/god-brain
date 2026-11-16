@@ -21,7 +21,9 @@ function browser(fetcher) {
     };
   }
   let calls = [];
+  const windowEvents = {};
   const context = {
+    window: {addEventListener(type, fn) {windowEvents[type] = fn;}},
     document: {getElementById: id => elements[id]},
     fetch: async (url, options) => {
       calls.push({url, options});
@@ -29,7 +31,7 @@ function browser(fetcher) {
     }
   };
   vm.runInNewContext(source, context, {timeout: 1000});
-  return {elements, calls};
+  return {elements, calls, windowEvents};
 }
 function fill(els, consent=true) {
   els["sender-name"].value = "Visitor";
@@ -110,4 +112,26 @@ test("a successful native submit stays latched while browser navigation complete
                "Send must remain disabled until browser navigation");
   await b.elements["dialogue-form"].callbacks.submit(event);
   assert.equal(b.calls.length, 1, "Only one anonymous ticket may be requested");
+});
+
+test("BFCache return preserves draft but clears submission latch and consent", async () => {
+  const b = browser();
+  fill(b.elements);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.elements["dialogue-form"].posted, true);
+  assert.equal(b.elements["send-message"].disabled, true);
+  assert.equal(typeof b.windowEvents.pageshow, "function");
+  b.windowEvents.pageshow({persisted: true});
+  assert.equal(b.elements["privacy-approval"].checked, false);
+  assert.equal(b.elements["csrf-value"].value, "");
+  assert.equal(b.elements["initial-token"].value, "");
+  assert.equal(b.elements["request-key"].value, "");
+  assert.equal(b.elements["send-message"].disabled, true);
+  assert.match(b.elements["send-status"].textContent, /may already have been sent/i);
+  assert.equal(b.elements["draft-message"].value, "A real dialogue request");
+  b.elements["privacy-approval"].checked = true;
+  b.elements["privacy-approval"].callbacks.change();
+  assert.equal(b.elements["send-message"].disabled, false);
+  await b.elements["dialogue-form"].callbacks.submit(event);
+  assert.equal(b.calls.length, 2);
 });
