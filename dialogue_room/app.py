@@ -533,19 +533,71 @@ class MessageStore:
 
 
 def _page(title: str, content: str, *, head_links: str = "") -> bytes:
-    return ("""<!doctype html><html lang="en"><head><meta charset="utf-8">
+    """Render a same-origin, no-script interface. Private threads stay on this host."""
+    return ("""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>God Brain · """ + escape(title) + "</title>" + head_links + """
-<style>body{background:#111827;color:#eee;font:16px system-ui;max-width:760px;
-margin:2rem auto;padding:0 1rem}article,form,.notice{background:#1f2937;
-padding:1rem;border-radius:12px;margin:1rem 0;overflow-wrap:anywhere}
-.notice{border-left:4px solid #fbbf24}small{color:#bec8d7}
-input,textarea{display:block;width:100%;box-sizing:border-box;margin:.5rem 0;
-padding:.6rem}button{padding:.7rem 1.2rem}a{color:#93c5fd}
-.body{white-space:pre-wrap}input[type=checkbox]{display:inline;width:auto;margin-right:.5rem}
-</style></head><body><h1>God Brain · Dialogue Room</h1>
-""" + content + "</body></html>").encode("utf-8")
-
+<meta name="theme-color" content="#07141e">
+<meta name="referrer" content="same-origin">
+<title>God Brain — """ + escape(title) + "</title>" + head_links + """
+<style>
+:root{color-scheme:dark;--bg:#07141e;--surface:#102630;--surface2:#0d2029;--line:#36545b;--ink:#f0f2ea;--muted:#b7c8c8;--sea:#a8e1cb;--gold:#dabb84}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 75% -20%,#20504f 0%,#0b202a 47%,var(--bg) 76%);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--sea);overflow-wrap:anywhere}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.skip{position:absolute;left:1rem;top:-8rem;padding:.6rem;background:var(--sea);color:var(--bg)}
+.skip:focus{top:.7rem}
+.site-head{border-bottom:1px solid var(--line);background:#081821e8}
+.site-head-inner{max-width:1060px;margin:auto;padding:1.2rem clamp(1rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap}
+.logo{font-weight:800;text-decoration:none;color:var(--ink);letter-spacing:.12em;font-size:.85rem}
+.logo span{color:var(--gold)}
+.site-head nav{display:flex;gap:1.3rem;flex-wrap:wrap;font-size:.79rem}
+.wrap{max-width:1060px;margin:0 auto;padding:3rem clamp(1rem,4vw,2rem) 5rem}
+.eyebrow{color:var(--sea);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:.65rem}
+h1,h2{font-family:Georgia,serif;font-weight:400;letter-spacing:-.03em;line-height:1.12}
+h1{font-size:clamp(2.9rem,7vw,5.3rem);margin:0 0 1.5rem;max-width:810px}
+h2{font-size:clamp(1.65rem,3vw,2.1rem);margin:2.2rem 0 1rem}
+h3{font-size:.9rem;margin:.45rem 0 .6rem}
+p{margin:.6rem 0 1.2rem}
+article,.notice,form{background:var(--surface);border:1px solid var(--line);padding:clamp(1rem,3vw,1.7rem);border-radius:13px;margin:1rem 0;overflow-wrap:anywhere}
+article h2{margin-top:0}
+article p:last-child{margin-bottom:0}
+.notice{background:#28271d;border-color:#8e7749;color:#f2e5cc}
+small{color:var(--muted)}
+form{background:var(--surface2);display:grid;gap:.6rem;max-width:800px}
+label{font-weight:650;color:#d9ece7;font-size:.93rem;display:block}
+input,textarea{font:inherit;background:#081820;border:1px solid #547077;color:var(--ink);display:block;width:100%;box-sizing:border-box;margin:.4rem 0 .8rem;border-radius:7px;padding:.8rem 1rem}
+textarea{resize:vertical;min-height:130px;line-height:1.6}
+input[type=checkbox]{display:inline-block;width:auto;accent-color:var(--sea);margin:0 .55rem 0 0;vertical-align:middle}
+button{justify-self:start;border:0;border-radius:7px;padding:.8rem 1.4rem;background:var(--sea);color:#08241f;font:750 .9rem/1.4 system-ui;cursor:pointer;min-height:46px}
+button:hover{background:#c7f4df}
+button:focus-visible{outline-color:var(--gold)}
+.body{white-space:pre-wrap;overflow-wrap:anywhere}
+.message{max-width:85%;margin:1.1rem auto 1.1rem 0;border-radius:14px 14px 14px 4px;border-color:#44726a;background:#0f3035}
+.message--owner{margin-right:0;margin-left:auto;border-color:#ad9169;background:#302b24;border-radius:14px 14px 4px 14px}
+.message--held{border-style:dashed}
+.message small{display:block;font-size:.76rem;color:#c3d7d2}
+.message--owner small{color:#e4d2b2}
+.message h3{color:var(--sea)}
+.message--owner h3{color:var(--gold)}
+.message .body{margin:.4rem 0 0}
+nav a{margin-right:.4rem}
+.foot{border-top:1px solid var(--line);padding:1.3rem 1rem;color:var(--muted);text-align:center;font-size:.76rem}
+@media(max-width:640px){.wrap{padding-top:2rem}.message{max-width:100%}.site-head-inner{align-items:flex-start}.site-head nav{gap:.6rem}form{padding:1rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head><body>
+<a class="skip" href="#main">Skip to dialogue</a>
+<header class="site-head"><div class="site-head-inner">
+<a class="logo" href="/">GOD <span>BRAIN</span> / DIALOGUE</a>
+<nav aria-label="Site navigation"><a href="/">Start conversation</a>
+<a href="https://thebrazenbeard.github.io/god-brain/" rel="noreferrer">Research site</a></nav>
+</div></header><main class="wrap" id="main">
+<p class="eyebrow">Open inquiry · Private correspondence</p>
+<h1>God Brain <span style="color:var(--gold)">Dialogue Room</span></h1>
+""" + content + """</main>
+<footer class="foot">Human-operated, experimental communication channel. A submitted message is not proof of the sender's identity or origin.</footer>
+</body></html>""").encode("utf-8")
 
 def render_home(token: str, initial_token: str | None = None,
                 request_key: str | None = None, *, public_mode: bool = False) -> bytes:
@@ -573,7 +625,7 @@ def render_home(token: str, initial_token: str | None = None,
     content = (
         "<article><h2>Open invitation</h2><p>" + escape(INVITATION) + "</p></article>"
         "<p class='notice'>" + escape(scope_notice) + "</p>"
-        "<h2>Begin a private conversation</h2>"
+        "<h2 id='new-conversation'>Begin a private conversation</h2>"
         "<p>Your text is stored locally and held for operator review, not displayed "
         "on the public page. You receive a private return link; save it, because "
         "losing it means losing access. Anyone with the link can read and reply. "
@@ -663,8 +715,14 @@ def render_thread(messages, token: str, csrf_token: str,
         state = ("Held for review" if status == "held" else
                  "Not accepted" if status == "rejected" else
                  "Reviewed" if status == "reviewed" else "Owner response")
+        if speaker == "PROJECT_OWNER":
+            card_class = "message--owner"
+        elif status == "held":
+            card_class = "message--held"
+        else:
+            card_class = "message--visitor"
         items.append(
-            f"<article><small>#{msg_id} · {escape(created)} · {state}</small>"
+            f"<article class='message {card_class}'><small>#{msg_id} · {escape(created)} · {state}</small>"
             f"<h3>{who}</h3><p class='body'>{escape(body)}</p></article>"
         )
     return_link = base_url + "/t/" + token
@@ -676,7 +734,7 @@ def render_thread(messages, token: str, csrf_token: str,
         f"{escape(return_link)}</a></p>"
         "<p>Check this link manually for replies. There is no notification service "
         "and no response is guaranteed.</p>"
-        "<h2>Your conversation</h2>" + "\n".join(items)
+        "<h2 id='conversation-history'>Your conversation</h2>" + "\n".join(items)
     )
     if older_before is not None:
         content += (
