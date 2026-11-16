@@ -321,5 +321,63 @@ function Get-WinEvent { [CmdletBinding()]param($ListLog)
         self.assertIs(report["port_listener_present"], False)
 
 
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_null_last_run_timestamp_does_not_report_info_ok(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=$null} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_info_status"], "INCOMPLETE")
+        self.assertIsNone(report["task"]["last_result_hex"])
+        self.assertIsNone(report["task"]["last_run_local"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_malformed_last_run_cannot_leave_partial_result(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime='not-a-timestamp'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_info_status"], "INCOMPLETE")
+        self.assertIsNone(report["task"]["last_result_hex"])
+        self.assertIsNone(report["task"]["last_run_local"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_history_nonboolean_false_string_not_coerced_to_true(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled='False'} }
+""")
+        self.assertEqual(report["history_query_status"], "INCOMPLETE")
+        self.assertIsNone(report["task_scheduler_history_enabled"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+
 if __name__ == "__main__":
     unittest.main()

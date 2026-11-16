@@ -111,19 +111,37 @@ try {
         $report.task_info_status = 'ERROR'
         try {
             $info = Get-ScheduledTaskInfo -InputObject $task -ErrorAction Stop
-            if ($null -eq $info -or $null -eq $info.LastTaskResult) {
+            $resultValue = $null
+            $validResult = $false
+            if ($null -ne $info) {
+                $resultValue = $info.LastTaskResult
+                if ($null -ne $resultValue) {
+                    $validResult = (
+                        [System.Type]::GetTypeCode($resultValue.GetType()).ToString() -in
+                        @('Byte', 'SByte', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64') -and
+                        [decimal]$resultValue -ge -2147483648 -and
+                        [decimal]$resultValue -le 4294967295)
+                }
+            }
+            if (-not $validResult -or $info.LastRunTime -isnot [datetime] -or
+                $info.LastRunTime.Year -lt 2000) {
                 $report.task_info_status = 'INCOMPLETE'
                 $risks.Add('TASK_LAST_RUN_INFO_UNAVAILABLE')
             } else {
+                # Compute locally; publish all fields only after validation.
+                $hex = ('0x{0:X8}' -f [uint32](([int64]$resultValue) -band 4294967295))
+                $local = $info.LastRunTime.ToString('yyyy-MM-ddTHH:mm:ss')
+                $kind = [string]$info.LastRunTime.Kind
+                $report.task.last_result_hex = $hex
+                $report.task.last_run_local = $local
+                $report.task.last_run_time_kind = $kind
                 $report.task_info_status = 'OK'
-                $report.task.last_result_hex = ('0x{0:X8}' -f [uint32]$info.LastTaskResult)
-                if ($null -ne $info.LastRunTime -and $info.LastRunTime.Year -ge 2000) {
-                    # Scheduler may return an unspecified DateTime, not a UTC instant.
-                    $report.task.last_run_local = $info.LastRunTime.ToString('yyyy-MM-ddTHH:mm:ss')
-                    $report.task.last_run_time_kind = [string]$info.LastRunTime.Kind
-                }
             }
         } catch {
+            # A partial evaluation must never leave a success-looking result.
+            $report.task.last_result_hex = $null
+            $report.task.last_run_local = $null
+            $report.task.last_run_time_kind = $null
             $report.task_info_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-ScheduledTaskInfo'
             $risks.Add('TASK_LAST_RUN_INFO_UNAVAILABLE')
         }
@@ -139,7 +157,7 @@ try {
 
 try {
     $operational = Get-WinEvent -ListLog 'Microsoft-Windows-TaskScheduler/Operational' -ErrorAction Stop
-    if ($null -eq $operational -or $null -eq $operational.IsEnabled) {
+    if ($null -eq $operational -or $operational.IsEnabled -isnot [bool]) {
         $report.history_query_status = 'INCOMPLETE'
         $risks.Add('TASK_SCHEDULER_HISTORY_STATUS_UNAVAILABLE')
     } else {
