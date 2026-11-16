@@ -40,6 +40,7 @@ $report = [ordered]@{
     task_query_status = 'ERROR'
     listener_query_status = 'ERROR'
     history_query_status = 'ERROR'
+    task_info_status = 'NOT_APPLICABLE'
     task = [ordered]@{
         exists = $null
         state = $null
@@ -77,7 +78,20 @@ try {
         $required = @('StopIfGoingOnBatteries',
                       'DisallowStartIfOnBatteries', 'RestartCount')
         $missing = @($required | Where-Object { $properties -notcontains $_ })
-        if ($null -eq $task.State -or $missing.Count -gt 0) {
+        $stateText = [string]$task.State
+        $settingsValid = $false
+        if ($missing.Count -eq 0) {
+            $restart = $settings.RestartCount
+            $numeric = ($null -ne $restart -and
+                [System.Type]::GetTypeCode($restart.GetType()).ToString() -in
+                @('Byte', 'SByte', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64'))
+            $settingsValid = (
+                $settings.StopIfGoingOnBatteries -is [bool] -and
+                $settings.DisallowStartIfOnBatteries -is [bool] -and
+                $numeric -and $restart -ge 0 -and $restart -le 999)
+        }
+        if ($stateText -notin @('Ready', 'Running', 'Queued', 'Disabled') -or
+            -not $settingsValid) {
             $report.task_query_status = 'INCOMPLETE'
             $risks.Add('TASK_PROPERTIES_UNAVAILABLE')
         } else {
@@ -94,15 +108,23 @@ try {
                 $risks.Add('TASK_CONFIGURED_NOT_TO_START_ON_BATTERY')
             }
         }
+        $report.task_info_status = 'ERROR'
         try {
             $info = Get-ScheduledTaskInfo -InputObject $task -ErrorAction Stop
-            $report.task.last_result_hex = ('0x{0:X8}' -f [uint32]$info.LastTaskResult)
-            if ($null -ne $info.LastRunTime -and $info.LastRunTime.Year -ge 2000) {
-                # Scheduler may return an unspecified DateTime, not a UTC instant.
-                $report.task.last_run_local = $info.LastRunTime.ToString('yyyy-MM-ddTHH:mm:ss')
-                $report.task.last_run_time_kind = [string]$info.LastRunTime.Kind
+            if ($null -eq $info -or $null -eq $info.LastTaskResult) {
+                $report.task_info_status = 'INCOMPLETE'
+                $risks.Add('TASK_LAST_RUN_INFO_UNAVAILABLE')
+            } else {
+                $report.task_info_status = 'OK'
+                $report.task.last_result_hex = ('0x{0:X8}' -f [uint32]$info.LastTaskResult)
+                if ($null -ne $info.LastRunTime -and $info.LastRunTime.Year -ge 2000) {
+                    # Scheduler may return an unspecified DateTime, not a UTC instant.
+                    $report.task.last_run_local = $info.LastRunTime.ToString('yyyy-MM-ddTHH:mm:ss')
+                    $report.task.last_run_time_kind = [string]$info.LastRunTime.Kind
+                }
             }
         } catch {
+            $report.task_info_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-ScheduledTaskInfo'
             $risks.Add('TASK_LAST_RUN_INFO_UNAVAILABLE')
         }
     }
@@ -117,10 +139,15 @@ try {
 
 try {
     $operational = Get-WinEvent -ListLog 'Microsoft-Windows-TaskScheduler/Operational' -ErrorAction Stop
-    $report.history_query_status = 'OK'
-    $report.task_scheduler_history_enabled = [bool]$operational.IsEnabled
-    if (-not $operational.IsEnabled) {
-        $risks.Add('TASK_SCHEDULER_OPERATIONAL_HISTORY_DISABLED')
+    if ($null -eq $operational -or $null -eq $operational.IsEnabled) {
+        $report.history_query_status = 'INCOMPLETE'
+        $risks.Add('TASK_SCHEDULER_HISTORY_STATUS_UNAVAILABLE')
+    } else {
+        $report.history_query_status = 'OK'
+        $report.task_scheduler_history_enabled = [bool]$operational.IsEnabled
+        if (-not $operational.IsEnabled) {
+            $risks.Add('TASK_SCHEDULER_OPERATIONAL_HISTORY_DISABLED')
+        }
     }
 } catch {
     $report.history_query_status = Get-FailureCategory $_ -ExpectedCmdlet 'Get-WinEvent'
@@ -173,6 +200,8 @@ try {
 }
 
 if ($report.task_query_status -notin @('OK', 'NOT_FOUND') -or
+    $report.task_info_status -notin @('OK', 'NOT_APPLICABLE') -or
+    $report.history_query_status -ne 'OK' -or
     $report.listener_query_status -ne 'OK' -or $report.listener_binding -eq 'UNKNOWN') {
     $report.summary = 'OBSERVATION_INCOMPLETE'
     if ($report.listener_binding -eq 'UNKNOWN') {

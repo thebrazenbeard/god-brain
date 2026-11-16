@@ -225,5 +225,101 @@ function Get-WinEvent { [CmdletBinding()]param($ListLog)
         self.assertEqual(report["summary"], "LISTENER_PRESENT_NON_LOOPBACK_NOT_HEALTH_PROOF")
         self.assertIn("LISTENER_MAY_BE_EXPOSED_BEYOND_LOOPBACK", report["risks"])
 
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_null_settings_values_are_unknown_not_false(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$null;DisallowStartIfOnBatteries=$null;RestartCount=$null}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_query_status"], "INCOMPLETE")
+        self.assertIsNone(report["task"]["stop_if_going_on_batteries"])
+        self.assertIsNone(report["task"]["disallow_start_on_batteries"])
+        self.assertIsNone(report["task"]["restart_attempts_configured"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_empty_task_state_is_not_validated(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_query_status"], "INCOMPLETE")
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_task_info_permission_failure_is_explicit(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ throw [System.UnauthorizedAccessException]::new('denied') }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_info_status"], "ACCESS_DENIED")
+        self.assertIsNone(report["task"]["last_result_hex"])
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_history_denial_marks_summary_incomplete(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{State='Ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ throw [System.UnauthorizedAccessException]::new('denied') }
+""")
+        self.assertEqual(report["history_query_status"], "ACCESS_DENIED")
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell 5.1 required")
+    def test_real_absent_port_reports_absent_not_provider_error(self):
+        port = 18769
+        probe = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command",
+             f"Get-NetTCPConnection -LocalPort {port} -State Listen -ErrorAction SilentlyContinue"],
+            capture_output=True, text=True, timeout=12, check=False)
+        if probe.stdout.strip():
+            self.skipTest(f"port {port} currently occupied")
+        result = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy",
+             "Bypass", "-File", str(SCRIPT),
+             "-TaskName", "GodBrainDiagnosticKnownMissingTask20261116",
+             "-LoopbackPort", str(port)],
+            capture_output=True, text=True, timeout=25, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["listener_query_status"], "OK")
+        self.assertEqual(report["listener_binding"], "ABSENT")
+        self.assertIs(report["port_listener_present"], False)
+
+
 if __name__ == "__main__":
     unittest.main()
