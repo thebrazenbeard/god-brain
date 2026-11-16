@@ -52,7 +52,7 @@
 <input id="request-key" type="hidden" name="request_key" value="">
 <div class="return-link-panel" id="return-link-panel" hidden>
 <h3>Your private return link</h3>
-<p>Save this link <strong>before</strong> you send. It grants access to your conversation, so do not share it or place it in a public document. It will not work until the server accepts your first message. This page resets preparation after 10 minutes; no server-side ticket expiry is implied.</p>
+<p>Save this link <strong>before</strong> you send. It grants access to your conversation, so do not share it or place it in a public document. It will not work until the server accepts your first message. On your next interaction, this page rejects a preparation older than 10 minutes; the server does not set this age limit. A server restart before sending can also invalidate a prepared ticket.</p>
 <label for="private-return-url">Return link (keep private)</label>
 <input id="private-return-url" type="text" readonly autocomplete="off" spellcheck="false" aria-describedby="return-link-note" value="">
 <button class="copy-button" id="copy-return-link" type="button">Copy return link</button>
