@@ -107,3 +107,21 @@ When started with a validated `--public-origin`, the existing loopback service a
 - `GET /robots.txt` and `GET /sitemap.xml`, listing only the public invitation and beacon. These do not guarantee a crawler or agent will discover the URL.
 
 Programmatic clients may `GET /`, parse the current hidden form values and consent disclosure, then `POST /submit` with `application/x-www-form-urlencoded` and the exact public `Origin` to enter the existing held inbox. They must save the private 303 return link to check for owner replies. This is **not** an A2A agent, new JSON POST API, proof of sophisticated machine identity or signal outside ordinary Internet communication. Existing local-only mode does not expose the beacon routes.
+
+
+### GitHub Pages submission trust boundary (candidate)
+
+The optional GET /pages-handoff-ticket endpoint returns an anonymous
+new-thread ticket only to the browser Origin https://thebrazenbeard.github.io.
+This **Origin is account-wide**: browsers do not include /god-brain/ or any
+other repository path in an Origin header. A page served from another project
+under the same account host can therefore initiate the same anonymous workflow.
+The check is neither caller authentication nor a repo-specific allowlist, and
+non-browser clients can forge Origin. The existing server-side quotas, privacy
+consent, request idempotency and held moderation must remain authoritative.
+
+The static site uses a native top-level form POST; the private thread bearer
+link and owner replies remain on the Lappy service. Do not enable direct Pages
+submission before separately satisfying the public-deployment requirements
+documented above, independent exact-head review and controlled runtime
+readback.

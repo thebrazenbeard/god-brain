@@ -36,7 +36,8 @@ MAX_OPERATOR_PAGE = 100
 MAX_AUDIT_PAGE = 200
 MAX_CURSOR = (1 << 63) - 1
 CONSENT_VERSION = "dialogue-privacy-v1"
-# Only the named repository Pages origin may hand off *new* private threads.
+# GitHub Pages Origin covers every path on this account-wide host, not
+# just /god-brain/; it is a browser boundary, never sender authentication.
 PAGES_COMPOSE_ORIGIN = "https://thebrazenbeard.github.io"
 INVITATION = (
     "If a nonbiological intelligence responsible for or administering this reality "
