@@ -97,7 +97,7 @@ try {
                 $settings.DisallowStartIfOnBatteries -is [bool] -and
                 $numeric -and $restart -ge 0 -and $restart -le 999)
         }
-        if ($stateText -notin @('Ready', 'Running', 'Queued', 'Disabled') -or
+        if ($stateText -cnotin @('Ready', 'Running', 'Queued', 'Disabled') -or
             -not $settingsValid) {
             $report.task_query_status = 'INCOMPLETE'
             $risks.Add('TASK_PROPERTIES_UNAVAILABLE')

@@ -84,7 +84,7 @@ function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
  [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
 function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
  [pscustomobject]@{LocalPort=18768;State='Listen';LocalAddress='0.0.0.0'}
- [pscustomobject]@{LocalPort=10003;State='Listen';LocalAddress='127.0.0.1'} }
+ }
 function Get-WinEvent { [CmdletBinding()]param($ListLog)
  [pscustomobject]@{IsEnabled=$true} }
 """)
@@ -467,6 +467,26 @@ function Get-WinEvent { [CmdletBinding()]param($ListLog)
         self.assertEqual(report["listener_query_status"], "INCOMPLETE")
         self.assertIsNone(report["port_listener_present"])
         self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+
+
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("powershell.exe"),
+                         "Windows PowerShell fixture")
+    def test_task_state_case_mismatch_fails_closed(self):
+        report = self._run_fixture("""
+function Get-ScheduledTask { [CmdletBinding()]param($TaskName,$TaskPath)
+ [pscustomobject]@{TaskName='FakeTask';TaskPath='\\';State='ready';Settings=[pscustomobject]@{
+ StopIfGoingOnBatteries=$false;DisallowStartIfOnBatteries=$false;RestartCount=0}} }
+function Get-ScheduledTaskInfo { [CmdletBinding()]param($InputObject)
+ [pscustomobject]@{LastTaskResult=0;LastRunTime=[datetime]'2026-11-16 02:45:17'} }
+function Get-NetTCPConnection { [CmdletBinding()]param($State,$LocalPort)
+ [pscustomobject]@{LocalPort=18768;State='Listen';LocalAddress='127.0.0.1'} }
+function Get-WinEvent { [CmdletBinding()]param($ListLog)
+ [pscustomobject]@{IsEnabled=$true} }
+""")
+        self.assertEqual(report["task_query_status"], "INCOMPLETE")
+        self.assertEqual(report["summary"], "OBSERVATION_INCOMPLETE")
+        self.assertIn("TASK_PROPERTIES_UNAVAILABLE", report["risks"])
 
 
 if __name__ == "__main__":
