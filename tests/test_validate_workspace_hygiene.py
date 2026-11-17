@@ -54,11 +54,20 @@ class WorkspaceHygieneTests(unittest.TestCase):
                             for error in validate_workspace(self.root)))
 
     @staticmethod
-    def _minimal_sfnt(*, table_offset=28):
-        # A bounded synthetic sfnt table directory: not actual font glyph data.
-        return (b"\x00\x01\x00\x00" + struct.pack(">HHHH", 1, 16, 0, 0)
-                + b"name" + struct.pack(">III", 0, table_offset, 4)
-                + b"abcd")
+    def _minimal_sfnt(*, base_offset=0, bad_first_offset=None):
+        # Synthetic SFNT table envelopes, not real glyph or checksum verification.
+        tags = (b"OS/2", b"cmap", b"head", b"hhea", b"hmtx", b"maxp",
+                b"name", b"post", b"glyf", b"loca")
+        start = base_offset + 12 + 16 * len(tags)
+        directory = b"".join(
+            tag + struct.pack(">III", 0,
+                              bad_first_offset if idx == 0 and bad_first_offset is not None
+                              else start + 4 * idx, 4)
+            for idx, tag in enumerate(tags)
+        )
+        return (b"\x00\x01\x00\x00" +
+                struct.pack(">HHHH", len(tags), 128, 3, 32) +
+                directory + b"abcd" * len(tags))
 
     def test_sfnt_valid_table_directory_is_accepted(self):
         font = self.root / "public" / "fonts" / "test.ttf"
@@ -76,7 +85,22 @@ class WorkspaceHygieneTests(unittest.TestCase):
     def test_sfnt_table_offset_past_end_is_rejected(self):
         font = self.root / "public" / "fonts" / "offset.ttf"
         font.parent.mkdir(parents=True)
-        font.write_bytes(self._minimal_sfnt(table_offset=4096))
+        font.write_bytes(self._minimal_sfnt(bad_first_offset=4096))
+        self.assertTrue(any("font" in x.lower()
+                            for x in validate_workspace(self.root)))
+
+    def test_fake_sfnt_with_only_arbitrary_table_is_rejected(self):
+        font = self.root / "public" / "fonts" / "fake.ttf"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(b"\x00\x01\x00\x00" + struct.pack(">HHHH", 1, 16, 0, 0)
+                         + b"AAAA" + struct.pack(">III", 0, 28, 0))
+        self.assertTrue(any("font" in x.lower()
+                            for x in validate_workspace(self.root)))
+
+    def test_unaligned_table_record_offset_is_rejected(self):
+        font = self.root / "public" / "fonts" / "unaligned.ttf"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(self._minimal_sfnt(bad_first_offset=173))
         self.assertTrue(any("font" in x.lower()
                             for x in validate_workspace(self.root)))
 
@@ -92,7 +116,7 @@ class WorkspaceHygieneTests(unittest.TestCase):
         font.parent.mkdir(parents=True)
         header = b"ttcf" + struct.pack(">II", 0x00010000, 1)
         font.write_bytes(header + struct.pack(">I", 16)
-                         + self._minimal_sfnt(table_offset=44))
+                         + self._minimal_sfnt(base_offset=16))
         self.assertEqual(validate_workspace(self.root), [])
 
     def test_public_nested_symlink_directory_is_rejected(self):
