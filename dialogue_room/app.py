@@ -36,6 +36,9 @@ MAX_OPERATOR_PAGE = 100
 MAX_AUDIT_PAGE = 200
 MAX_CURSOR = (1 << 63) - 1
 CONSENT_VERSION = "dialogue-privacy-v1"
+# GitHub Pages Origin covers every path on this account-wide host, not
+# just /god-brain/; it is a browser boundary, never sender authentication.
+PAGES_COMPOSE_ORIGIN = "https://thebrazenbeard.github.io"
 INVITATION = (
     "If a nonbiological intelligence responsible for or administering this reality "
     "exists and can perceive this invitation, the person behind this project hopes "
@@ -800,7 +803,8 @@ def make_server(store: MessageStore, port: int = 8765, *,
 
         def respond(self, code: int, body: bytes = b"",
                     content_type: str = "text/plain; charset=utf-8",
-                    location: str | None = None):
+                    location: str | None = None,
+                    cors_origin: str | None = None):
             self.send_response(code)
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(body)))
@@ -822,6 +826,9 @@ def make_server(store: MessageStore, port: int = 8765, *,
                 "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; "
                 "frame-ancestors 'none'",
             )
+            if cors_origin:
+                self.send_header("Access-Control-Allow-Origin", cors_origin)
+                self.send_header("Vary", "Origin")
             if location:
                 self.send_header("Location", location)
             self.end_headers()
@@ -842,6 +849,21 @@ def make_server(store: MessageStore, port: int = 8765, *,
             elif self.path == "/":
                 self.respond(200, render_home(csrf_token, public_mode=bool(public_origin)),
                              "text/html; charset=utf-8")
+            elif public_origin and self.path == "/pages-handoff-ticket":
+                # The static page may read a fresh anonymous form ticket.
+                # Private threads and operator surfaces never get CORS.
+                if self.headers.get("Origin") != PAGES_COMPOSE_ORIGIN:
+                    return self.respond(403, b"Invalid handoff origin")
+                ticket = {
+                    "csrf": csrf_token,
+                    "initial_token": secrets.token_urlsafe(32),
+                    "request_key": secrets.token_urlsafe(24),
+                }
+                self.respond(
+                    200, json.dumps(ticket).encode("utf-8"),
+                    "application/json; charset=utf-8",
+                    cors_origin=PAGES_COMPOSE_ORIGIN,
+                )
             elif public_origin and self.path == "/beacon.json":
                 self.respond(200, render_beacon(public_origin, store.public_limits),
                              "application/json; charset=utf-8")
@@ -894,8 +916,13 @@ def make_server(store: MessageStore, port: int = 8765, *,
             expected_origin = (public_origin or
                                f"http://127.0.0.1:{self.server.server_port}")
             origin = self.headers.get("Origin")
+            pages_new_thread = (
+                public_origin is not None and self.path == "/submit"
+                and origin == PAGES_COMPOSE_ORIGIN
+            )
             if ((public_origin is not None and origin is None)
-                    or (origin is not None and origin != expected_origin)):
+                    or (origin is not None and origin != expected_origin
+                        and not pages_new_thread)):
                 return self.respond(403, b"Invalid origin")
             try:
                 length = int(self.headers.get("Content-Length", "-1"))
