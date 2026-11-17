@@ -26,7 +26,7 @@ class PagesDialogueComposeTests(unittest.TestCase):
     def test_drafts_remain_local_until_explicitly_submitted(self):
         html = (SITE / "dialogue.html").read_text(encoding="utf-8")
         js = (SITE / "dialogue.js").read_text(encoding="utf-8")
-        self.assertIn("Nothing is sent until you explicitly", html)
+        self.assertIn("Nothing is sent until you first prepare and save a return link", html)
         self.assertIn("clipboard history", html)
         self.assertIn("browser may restore form values", html)
         self.assertIn("paste", html.lower())

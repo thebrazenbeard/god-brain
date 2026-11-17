@@ -26,13 +26,13 @@
 <p class="overline">GOD BRAIN / COMMUNICATION CHANNEL</p>
 <h1 id="dialogue-title">A place to <em>speak.</em></h1>
 <p>Begin a private conversation right here. Your submitted message goes over HTTPS to the separate Lappy service and is held for human review. This is not an automatically responding AI or an authenticated outside visitor.</p>
-<p>Nothing is sent until you explicitly select <strong>Send privately</strong>. The secure room handles message storage, replies and private return links; the Pages site itself stores no messages. Your browser may restore form values.</p>
+<p>Nothing is sent until you first prepare and save a return link, then explicitly select <strong>Send privately</strong>. The secure room handles message storage, replies and private return links; the Pages site itself stores no messages. Your browser may restore form values.</p>
 <p class="privacy-note"><strong>Clipboard:</strong> Copying a draft uses this device's clipboard, which other local applications or clipboard history may access. Avoid secrets.</p>
 </div>
 <form class="dialogue-panel compose-editor" id="dialogue-form" method="post" action="https://lappy.tail86ea75.ts.net:10000/submit">
 <div class="panel-top">Private conversation / separate service</div>
 <h2 class="panel-quote">Compose a message.</h2>
-<p>Send directly to the private room for review, or copy your draft and open the room yourself. You will need to save your private return link to see replies.</p>
+<p>Send directly to the private room for review, or copy your draft and open the room yourself. You will be given a private return link to save before submitting your message.</p>
 <div class="compose-editor-heading"><span>UNSENT MESSAGE</span><span aria-label="Unsent until you submit">UNSENT</span></div>
 <label for="sender-name">Claimed name</label>
 <input id="sender-name" name="name" maxlength="80" required autocomplete="name" placeholder="The name you wish to use">
@@ -50,18 +50,27 @@
 <input id="csrf-value" type="hidden" name="csrf" value="">
 <input id="initial-token" type="hidden" name="initial_token" value="">
 <input id="request-key" type="hidden" name="request_key" value="">
-<button class="button-primary send-button" type="submit" id="send-message" disabled>Send privately</button>
+<div class="return-link-panel" id="return-link-panel" hidden>
+<h3>Your private return link</h3>
+<p>Save this link <strong>before</strong> you send. It grants access to your conversation, so do not share it or place it in a public document. It will not work until the server accepts your first message. On your next interaction, this page rejects a preparation older than 10 minutes; the server does not set this age limit. A server restart before sending can also invalidate a prepared ticket.</p>
+<label for="private-return-url">Return link (keep private)</label>
+<input id="private-return-url" type="text" readonly autocomplete="off" spellcheck="false" aria-describedby="return-link-note" value="">
+<button class="copy-button" id="copy-return-link" type="button">Copy return link</button>
+<p id="return-link-note">If the browser shows an error after sending, check this saved link before trying again. A missing confirmation does not prove that nothing was sent. Copying the link may leave it in clipboard history or other apps; clear the clipboard after saving it securely.</p>
+<label class="consent-row" for="return-link-saved"><input id="return-link-saved" type="checkbox"><span>I have saved this private return link and understand that a failed redirect may leave the send result uncertain.</span></label>
+</div>
+<button class="button-primary send-button" type="submit" id="send-message" disabled>Prepare private link</button>
 <p id="send-status" class="compose-status" role="status" aria-live="polite">No message has been submitted.</p>
 <p id="draft-status" class="compose-status" role="status" aria-live="polite">Draft only. Nothing has been sent.</p>
-<p class="compose-help">Direct submission opens the private room on Lappy, where you must save your private return link. If direct submission fails, copy the message, paste it, and submit using the private room link above. No automated respondent is promised.</p>
+<p class="compose-help">After preparing and saving your private link, direct submission opens the private room on Lappy. If direct submission fails, copy the message, paste it, and submit using the private room link above. No automated respondent is promised.</p>
 <noscript><p class="compose-status">JavaScript is off. Direct submission requires JavaScript for its anonymous form ticket. Open the private room to send a message there.</p></noscript>
 </form>
 </section>
 <section class="section research-section" aria-labelledby="instructions-title">
 <div class="section-heading"><div><p class="overline">MESSAGE FLOW / NOT A SIMULATED CHAT</p><h2 id="instructions-title">How the <em>dialogue works.</em></h2></div><p>Communication is voluntary. A submitted message does not establish a respondent's identity, a conscious agent, or even that anyone will answer.</p></div>
 <ol class="dialogue-steps">
-<li><strong>Write and submit</strong><p>Compose here, acknowledge the retention notice, and select Send privately. Your browser submits the form directly to the secure room over HTTPS.</p></li>
-<li><strong>Keep the return link</strong><p>Save the private return link provided after submission. The static website cannot recover it.</p></li>
+<li><strong>Write and submit</strong><p>Compose here, acknowledge the retention notice, prepare and save your private return link, then select Send privately. Your browser submits the form directly to the secure room over HTTPS.</p></li>
+<li><strong>Keep the return link</strong><p>Save the private return link provided before submission. The static website cannot recover it.</p></li>
 <li><strong>Follow the thread</strong><p>Return to the same room to read human-reviewed replies, send follow-ups, or request deletion.</p></li>
 </ol>
 <p class="privacy-note"><strong>Boundary:</strong> No contact or response is promised. The separate service is experimental; this page is not its message database or a chat API.</p>
