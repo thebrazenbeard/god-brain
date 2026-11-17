@@ -34,10 +34,15 @@ class DialogueEntryTests(unittest.TestCase):
         self.assertIn("separate service", html)
         self.assertIn("return link", html)
         self.assertNotIn("<iframe", html.lower())
-        self.assertNotIn("<form", html.lower())
+        self.assertIn('id="dialogue-form"', html)
+        self.assertIn('action="' + ROOM + 'submit"', html)
+        self.assertIn('name="privacy_consent"', html)
+        self.assertIn('id="send-message"', html)
+        self.assertIn('src="./dialogue-submit.js"', html)
         self.assertNotIn("fetch(", html)
-        self.assertIn("connect-src 'none'", html)
-        self.assertIn("form-action 'none'", html)
+        self.assertIn("connect-src " + ROOM.rstrip("/"), html)
+        self.assertIn("form-action " + ROOM.rstrip("/"), html)
+        self.assertNotIn("automatically responding AI</strong>", html)
 
 
 if __name__ == "__main__":
