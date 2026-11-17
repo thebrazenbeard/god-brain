@@ -15,6 +15,8 @@ SFNT_HEADERS = (b"\x00\x01\x00\x00", b"OTTO", b"true", b"typ1")
 MAX_JSON_BYTES = 1024 * 1024
 MAX_FONT_TABLES = 256
 MAX_COLLECTION_FONTS = 256
+COMMON_FONT_TABLES = frozenset({b"OS/2", b"cmap", b"head", b"hhea",
+                                b"hmtx", b"maxp", b"name", b"post"})
 
 
 def _json(path: Path, errors: list[str], root: Path):
@@ -58,12 +60,22 @@ def _sfnt_directory_is_bounded(fp, file_size: int, header_offset: int) -> bool:
     if len(directory) != table_count * 16:
         return False
     tags = set()
+    table_lengths = {}
     for index in range(table_count):
         tag, _, offset, length = struct.unpack_from(">4sIII", directory, index * 16)
         if tag in tags or any(c < 32 or c > 126 for c in tag):
             return False
         tags.add(tag)
-        if offset > file_size or length > file_size - offset:
+        table_lengths[tag] = length
+        if offset % 4 != 0 or offset > file_size or length > file_size - offset:
+            return False
+    if header[:4] in (b"\x00\x01\x00\x00", b"OTTO"):
+        if any(table_lengths.get(tag, 0) == 0 for tag in COMMON_FONT_TABLES):
+            return False
+        if header[:4] == b"OTTO":
+            if not (table_lengths.get(b"CFF ", 0) or table_lengths.get(b"CFF2", 0)):
+                return False
+        elif not (table_lengths.get(b"glyf", 0) and table_lengths.get(b"loca", 0)):
             return False
     return True
 
