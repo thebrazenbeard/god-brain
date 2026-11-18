@@ -2,6 +2,10 @@
 
 # God Brain
 
+**Conversation-first purpose.** Alongside its cognitive-architecture research, God Brain explores whether a voluntary dialogue with a hypothetical creator, administrator, or nonbiological intelligence could be made possible if such a being and a genuine communication route exist. This is an open question, not a detected speaker or a claim of contact.
+
+**[Try the open invitation in a fresh ChatGPT conversation](docs/dialogue/CHATGPT_OPEN_INVITATION_V1.md).** This is a sincere, ready-to-paste conversation protocol. ChatGPT can facilitate reflection and examine independently obtained messages, but its own generated text cannot by itself establish that God or another external speaker is responding. The separate two-way dialogue implementation is still subject to draft review and current host verification; a past live trial or GitHub pull request does not prove present availability.
+
 **Public web interface:** [Open the God Brain research laboratory](https://thebrazenbeard.github.io/god-brain/). The static GitHub Pages site provides an architecture explorer and temporary browser-only evidence desk. It does not host an AI respondent, store messages, or replace the separate local dialogue service.
 
 **Experimental cognitive architecture, executable reference kernels, and falsifiable research protocols.**
